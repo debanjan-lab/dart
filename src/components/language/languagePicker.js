@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Picker, Icon } from "native-base";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default class LanguagePicker extends Component {

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  ScrollView
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
@@ -21,7 +22,6 @@ import HeaderCurve from "../includes/headercurve";
 import httpService from "../../services/http/httpService";
 import CommonService from "../../services/common/commonService";
 import { ErrorTemplate } from "../../components/error/errorComponent";
-import { Container, Content } from "native-base";
 const width = Math.round(Dimensions.get("window").width);
 const height = Math.round(Dimensions.get("window").height);
 const statusBarBackgroundColor = "#1CCBE6";
@@ -147,7 +147,9 @@ class CompletedCircle extends Component {
 
   render() {
     return (
-      <Container>
+
+
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
         <View style={[styles.container]}>
           <StatusBar
             backgroundColor={statusBarBackgroundColor}
@@ -187,182 +189,182 @@ class CompletedCircle extends Component {
                       />
                     </View>
                   ) : (
-                    <FlatList
-                      showsHorizontalScrollIndicator={false}
-                      showsVerticalScrollIndicator={false}
-                      keyExtractor={(item) => item.id.toString()}
-                      ListHeaderComponent={<View style={{ height: 10 }} />}
-                      ListFooterComponent={<View style={{ height: 10 }} />}
-                      data={this.state.getList}
-                      numColumns={1}
-                      renderItem={({ item, index }) => (
-                        <TouchableOpacity
-                          key={index}
-                          activeOpacity={1}
-                          onPress={() => this.goToDetails(item)}
-                        >
-                          <View style={[styles.listItemWrapper]}>
-                            <View style={styles.listLeftWrapper}>
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                    ]["circle"]
-                                  }{" "}
-                                  :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  {item.circle_code}
-                                </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                    ]["circle_admin"]
-                                  }{" "}
-                                  :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  {item.admin}
-                                </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                    ]["participants"]
-                                  }{" "}
-                                  :{" "}
-                                </Text>
-                                <Text
-                                  numberOfLines={1}
-                                  style={[
-                                    styles.listRightText,
-                                    { paddingRight: 20 },
-                                  ]}
+                      <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        keyExtractor={(item) => item.id.toString()}
+                        ListHeaderComponent={<View style={{ height: 10 }} />}
+                        ListFooterComponent={<View style={{ height: 10 }} />}
+                        data={this.state.getList}
+                        numColumns={1}
+                        renderItem={({ item, index }) => (
+                          <TouchableOpacity
+                            key={index}
+                            activeOpacity={1}
+                            onPress={() => this.goToDetails(item)}
+                          >
+                            <View style={[styles.listItemWrapper]}>
+                              <View style={styles.listLeftWrapper}>
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
                                 >
-                                  {this.getNames(item.get_users)}
-                                </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
                                       "dashboard_screen"
-                                    ]["amount"]
-                                  }{" "}
+                                      ]["circle"]
+                                    }{" "}
                                   :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  €{item.target_achive}
-                                </Text>
-                              </View>
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    {item.circle_code}
+                                  </Text>
+                                </View>
 
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
                                       "dashboard_screen"
-                                    ]["launch_date"]
-                                  }{" "}
+                                      ]["circle_admin"]
+                                    }{" "}
                                   :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  {CommonService.formatDate(item.start_date)}
-                                </Text>
-                              </View>
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    {item.admin}
+                                  </Text>
+                                </View>
 
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
                                       "dashboard_screen"
-                                    ]["last_round_date"]
-                                  }{" "}
+                                      ]["participants"]
+                                    }{" "}
                                   :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  {CommonService.formatDate(item.end_date)}
-                                </Text>
-                              </View>
+                                  </Text>
+                                  <Text
+                                    numberOfLines={1}
+                                    style={[
+                                      styles.listRightText,
+                                      { paddingRight: 20 },
+                                    ]}
+                                  >
+                                    {this.getNames(item.get_users)}
+                                  </Text>
+                                </View>
 
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text style={styles.listLeftText}>
-                                  {
-                                    Language[this.state.selectedLanguage][
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
+                                      "dashboard_screen"
+                                      ]["amount"]
+                                    }{" "}
+                                  :{" "}
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    €{item.target_achive}
+                                  </Text>
+                                </View>
+
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
+                                      "dashboard_screen"
+                                      ]["launch_date"]
+                                    }{" "}
+                                  :{" "}
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    {CommonService.formatDate(item.start_date)}
+                                  </Text>
+                                </View>
+
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
+                                      "dashboard_screen"
+                                      ]["last_round_date"]
+                                    }{" "}
+                                  :{" "}
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    {CommonService.formatDate(item.end_date)}
+                                  </Text>
+                                </View>
+
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Text style={styles.listLeftText}>
+                                    {
+                                      Language[this.state.selectedLanguage][
                                       "common"
-                                    ]["status"]
-                                  }{" "}
+                                      ]["status"]
+                                    }{" "}
                                   :{" "}
-                                </Text>
-                                <Text style={styles.listRightText}>
-                                  {item.status == 5 ? (
-                                    <Text style={styles.completedText}>
-                                      {
-                                        Language[this.state.selectedLanguage][
+                                  </Text>
+                                  <Text style={styles.listRightText}>
+                                    {item.status == 5 ? (
+                                      <Text style={styles.completedText}>
+                                        {
+                                          Language[this.state.selectedLanguage][
                                           "common"
-                                        ]["completed"]
-                                      }
-                                    </Text>
-                                  ) : (
-                                    <Text style={styles.rejectText}>
-                                      {
-                                        Language[this.state.selectedLanguage][
-                                          "common"
-                                        ]["rejected"]
-                                      }
-                                    </Text>
-                                  )}
-                                </Text>
+                                          ]["completed"]
+                                        }
+                                      </Text>
+                                    ) : (
+                                        <Text style={styles.rejectText}>
+                                          {
+                                            Language[this.state.selectedLanguage][
+                                            "common"
+                                            ]["rejected"]
+                                          }
+                                        </Text>
+                                      )}
+                                  </Text>
+                                </View>
                               </View>
                             </View>
-                          </View>
-                        </TouchableOpacity>
-                      )}
-                    />
-                  )}
+                          </TouchableOpacity>
+                        )}
+                      />
+                    )}
                 </View>
               </View>
             </View>
@@ -371,7 +373,7 @@ class CompletedCircle extends Component {
 
           <FooterTabComponent props={this.props} />
         </View>
-      </Container>
+      </ScrollView>
     );
   }
 }

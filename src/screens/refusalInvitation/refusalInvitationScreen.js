@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { Container, Content, Icon } from "native-base";
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from "react-native";
 import refusalInvitationStyle from "./refusalInvitationStyle";
 
 import URL from "../../config/url";
@@ -173,26 +172,25 @@ export default class RefusalInvitationScreen extends Component {
   render() {
     const item = this.state.details;
     return (
-      <Container>
-        <Content>
-          <HeaderCurve
-            //title={"Create Circle"}
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={true}
-          />
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+        <HeaderCurve
+          //title={"Create Circle"}
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={true}
+        />
 
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center", marginTop: "50%" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center", marginTop: "50%" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={refusalInvitationStyle.mainContent}>
               {this.state.apiExecute ? (
                 <View>
@@ -200,13 +198,13 @@ export default class RefusalInvitationScreen extends Component {
                     <Text style={refusalInvitationStyle.title}>
                       {
                         Language[this.state.selectedLanguage][
-                          "dashboard_screen"
+                        "dashboard_screen"
                         ]["circle"]
                       }
                       ({item.circle_code})
                       {
                         Language[this.state.selectedLanguage][
-                          "circle_refusal_screen"
+                        "circle_refusal_screen"
                         ]["refusal"]
                       }
                     </Text>
@@ -216,7 +214,7 @@ export default class RefusalInvitationScreen extends Component {
                       <Text style={{ fontSize: 20 }}>
                         {
                           Language[this.state.selectedLanguage][
-                            "circle_refusal_screen"
+                          "circle_refusal_screen"
                           ]["reason_for_refusal"]
                         }
                         :
@@ -277,7 +275,7 @@ export default class RefusalInvitationScreen extends Component {
                                     <Text numberOfLines={1}>
                                       {
                                         Language[this.state.selectedLanguage][
-                                          "circle_join_reason_list"
+                                        "circle_join_reason_list"
                                         ][reason_item.reason_alias]
                                       }
                                     </Text>
@@ -296,7 +294,7 @@ export default class RefusalInvitationScreen extends Component {
                         <Text style={{ fontSize: 20 }}>
                           {
                             Language[this.state.selectedLanguage][
-                              "accept_invitation_screen"
+                            "accept_invitation_screen"
                             ]["other_reason"]
                           }
                           :
@@ -345,7 +343,7 @@ export default class RefusalInvitationScreen extends Component {
                         <Text style={refusalInvitationStyle.paymentText}>
                           {
                             Language[this.state.selectedLanguage]["common"][
-                              "send"
+                            "send"
                             ]
                           }
                         </Text>
@@ -356,8 +354,7 @@ export default class RefusalInvitationScreen extends Component {
               ) : null}
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
     );
   }
 }

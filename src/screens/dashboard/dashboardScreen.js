@@ -23,7 +23,6 @@ import HeaderCurve from "../includes/headercurve";
 import httpService from "../../services/http/httpService";
 import CommonService from "../../services/common/commonService";
 import { ErrorTemplate } from "../../components/error/errorComponent";
-import { Container, Content } from "native-base";
 const width = Math.round(Dimensions.get("window").width);
 const height = Math.round(Dimensions.get("window").height);
 const statusBarBackgroundColor = "#1CCBE6";
@@ -161,9 +160,9 @@ class DashboardScreen extends Component {
       tabName: "",
     });
 
-    AsyncStorage.multiSet([["circle_code", circle_code]], function(error) {
+    AsyncStorage.multiSet([["circle_code", circle_code]], function (error) {
       setTimeout(
-        function() {
+        function () {
           that.setState(
             {
               loader: false,
@@ -281,7 +280,7 @@ class DashboardScreen extends Component {
 
   render() {
     return (
-      <Container>
+      <View style={{ flex: 1 }}>
         <View style={[styles.container]}>
           <StatusBar
             backgroundColor={statusBarBackgroundColor}
@@ -314,20 +313,6 @@ class DashboardScreen extends Component {
                 props={this.props}
               />
 
-              {/* <View style={styles.headerMenu}>
-                <View style={styles.containerBackBlock} />
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Text style={styles.headingBold}>Welcome Dashboard</Text>
-                </View>
-                <View style={styles.containerBackBlock} />
-              </View>  */}
-
               <View style={{ flex: 1 }}>
                 <View
                   style={{
@@ -344,7 +329,7 @@ class DashboardScreen extends Component {
                     <Text style={styles.sendButtonText}>
                       {
                         Language[this.state.selectedLanguage][
-                          "dashboard_screen"
+                        "dashboard_screen"
                         ]["launch_new_circle"]
                       }
                     </Text>
@@ -377,7 +362,7 @@ class DashboardScreen extends Component {
                       >
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["waiting"]
                         }
                       </Text>
@@ -402,7 +387,7 @@ class DashboardScreen extends Component {
                       >
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["ongoing"]
                         }
                       </Text>
@@ -427,7 +412,7 @@ class DashboardScreen extends Component {
                       >
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["blocked"]
                         }
                       </Text>
@@ -452,7 +437,7 @@ class DashboardScreen extends Component {
                       >
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["suspended"]
                         }
                       </Text>
@@ -466,18 +451,18 @@ class DashboardScreen extends Component {
                       />
                     </View>
                   ) : (
-                    <View>
-                      {this.state.waitingApiCalled
-                        ? this.waitinglistComponent(this.state.getList)
-                        : this.state.ongoingApiCalled
-                        ? this.onGoingListComponent(this.state.getList)
-                        : this.state.blockedApiCalled
-                        ? this.blockListComponent(this.state.getList)
-                        : this.state.suspendApiCalled
-                        ? this.suspendListComponent(this.state.getList)
-                        : null}
-                    </View>
-                  )}
+                      <View>
+                        {this.state.waitingApiCalled
+                          ? this.waitinglistComponent(this.state.getList)
+                          : this.state.ongoingApiCalled
+                            ? this.onGoingListComponent(this.state.getList)
+                            : this.state.blockedApiCalled
+                              ? this.blockListComponent(this.state.getList)
+                              : this.state.suspendApiCalled
+                                ? this.suspendListComponent(this.state.getList)
+                                : null}
+                      </View>
+                    )}
                 </View>
               </View>
             </View>
@@ -485,7 +470,7 @@ class DashboardScreen extends Component {
           </KeyboardAwareScrollView>
           <FooterTabComponent props={this.props} />
         </View>
-      </Container>
+      </View>
     );
   }
 
@@ -510,7 +495,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle"
+                      "circle"
                       ]
                     }{" "}
                     :{" "}
@@ -522,7 +507,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle_admin"
+                      "circle_admin"
                       ]
                     }{" "}
                     :{" "}
@@ -534,7 +519,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "participants"
+                      "participants"
                       ]
                     }{" "}
                     :{" "}
@@ -551,7 +536,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "amount"
+                      "amount"
                       ]
                     }{" "}
                     :{" "}
@@ -565,7 +550,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "launch_date"
+                      "launch_date"
                       ]
                     }{" "}
                     :{" "}
@@ -579,7 +564,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "last_round_date"
+                      "last_round_date"
                       ]
                     }{" "}
                     :{" "}
@@ -634,7 +619,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle"
+                      "circle"
                       ]
                     }{" "}
                     :{" "}
@@ -646,7 +631,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle_admin"
+                      "circle_admin"
                       ]
                     }{" "}
                     :{" "}
@@ -658,7 +643,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "participants"
+                      "participants"
                       ]
                     }{" "}
                     :{" "}
@@ -675,7 +660,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "amount"
+                      "amount"
                       ]
                     }{" "}
                     :{" "}
@@ -698,7 +683,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "launch_date"
+                      "launch_date"
                       ]
                     }{" "}
                     :{" "}
@@ -711,7 +696,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "expected_payment_recieved"
+                      "expected_payment_recieved"
                       ]
                     }{" "}
                     :{" "}
@@ -725,7 +710,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "next_expected_payment"
+                      "next_expected_payment"
                       ]
                     }{" "}
                     :{" "}
@@ -806,7 +791,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle"
+                      "circle"
                       ]
                     }{" "}
                     :{" "}
@@ -818,7 +803,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle_admin"
+                      "circle_admin"
                       ]
                     }{" "}
                     :{" "}
@@ -830,7 +815,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "participants"
+                      "participants"
                       ]
                     }{" "}
                     :{" "}
@@ -847,7 +832,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "amount"
+                      "amount"
                       ]
                     }{" "}
                     :{" "}
@@ -861,7 +846,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "launch_date"
+                      "launch_date"
                       ]
                     }{" "}
                     :{" "}
@@ -875,7 +860,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "last_round_date"
+                      "last_round_date"
                       ]
                     }{" "}
                     :{" "}
@@ -889,7 +874,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "progress_status"
+                      "progress_status"
                       ]
                     }{" "}
                     :{" "}
@@ -898,21 +883,21 @@ class DashboardScreen extends Component {
                     <Text style={styles.listRightText}>
                       {
                         Language[this.state.selectedLanguage]["common"][
-                          "completed"
+                        "completed"
                         ]
                       }
                     </Text>
                   ) : (
-                    <Text style={styles.listRightText}>
-                      {item.completed_round +
-                        " " +
-                        Language[this.state.selectedLanguage][
+                      <Text style={styles.listRightText}>
+                        {item.completed_round +
+                          " " +
+                          Language[this.state.selectedLanguage][
                           "circle_completed_screen"
-                        ]["round_over_out"] +
-                        " " +
-                        item.estimate_round}
-                    </Text>
-                  )}
+                          ]["round_over_out"] +
+                          " " +
+                          item.estimate_round}
+                      </Text>
+                    )}
                 </View>
               </View>
 
@@ -970,7 +955,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle"
+                      "circle"
                       ]
                     }{" "}
                     :{" "}
@@ -982,7 +967,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle_admin"
+                      "circle_admin"
                       ]
                     }{" "}
                     :{" "}
@@ -994,7 +979,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "participants"
+                      "participants"
                       ]
                     }{" "}
                     :{" "}
@@ -1011,7 +996,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "amount"
+                      "amount"
                       ]
                     }{" "}
                     :{" "}
@@ -1025,7 +1010,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "launch_date"
+                      "launch_date"
                       ]
                     }{" "}
                     :{" "}
@@ -1039,7 +1024,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "last_round_date"
+                      "last_round_date"
                       ]
                     }{" "}
                     :{" "}
@@ -1053,7 +1038,7 @@ class DashboardScreen extends Component {
                   <Text style={styles.listLeftText}>
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "progress_status"
+                      "progress_status"
                       ]
                     }{" "}
                     :{" "}
@@ -1065,16 +1050,16 @@ class DashboardScreen extends Component {
                         item.estimate_round}
                     </Text>
                   ) : (
-                    <Text style={styles.listRightText}>
-                      {item.completed_round +
-                        " " +
-                        Language[this.state.selectedLanguage][
+                      <Text style={styles.listRightText}>
+                        {item.completed_round +
+                          " " +
+                          Language[this.state.selectedLanguage][
                           "circle_completed_screen"
-                        ]["round_over_out"] +
-                        " " +
-                        item.estimate_round}
-                    </Text>
-                  )}
+                          ]["round_over_out"] +
+                          " " +
+                          item.estimate_round}
+                      </Text>
+                    )}
                 </View>
               </View>
 

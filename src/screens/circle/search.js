@@ -13,6 +13,7 @@ import {
   FlatList,
   PermissionsAndroid,
   Keyboard,
+  ScrollView
 } from "react-native";
 import { ToastMessage } from "../../components/ToastMessage";
 
@@ -71,21 +72,31 @@ export default class SearchParticipantsScreen extends Component {
 
   async goToContactPage() {
     global.update_contact_data = false;
-    this.setState({ loadContact: true });
 
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({ loadContact: false });
-        this.props.navigation.navigate("phoneContactPage");
-      } else {
+    if (Platform.OS === 'ios') {
+      this.props.navigation.navigate("phoneContactPage");
+    } else {
+      this.setState({ loadContact: true });
+
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          this.setState({ loadContact: false });
+          this.props.navigation.navigate("phoneContactPage");
+        } else {
+
+          this.setState({ loadContact: false });
+        }
+      } catch (err) {
+        console.log("permission contact", err)
         this.setState({ loadContact: false });
       }
-    } catch (err) {
-      this.setState({ loadContact: false });
     }
+
+
+
   }
   __getContact() {
     let data = global.perticipant_info;
@@ -135,8 +146,8 @@ export default class SearchParticipantsScreen extends Component {
               that.setState({
                 errorMessage: response.data.message
                   ? Language[this.state.selectedLanguage]["status"][
-                      response.data.message
-                    ]
+                  response.data.message
+                  ]
                   : "",
                 participants: [],
               });
@@ -159,8 +170,8 @@ export default class SearchParticipantsScreen extends Component {
               that.setState({
                 successMessage: response.data.message
                   ? Language[this.state.selectedLanguage]["status"][
-                      response.data.message
-                    ]
+                  response.data.message
+                  ]
                   : "",
                 participants: [],
                 countSelected: global.perticipant_info.length,
@@ -209,7 +220,7 @@ export default class SearchParticipantsScreen extends Component {
           Authorization: "Bearer " + that.state.rememberToken,
         },
       })
-      .then(function(response) {
+      .then(function (response) {
         console.log("response===============" + JSON.stringify(response));
         //return false
 
@@ -224,8 +235,8 @@ export default class SearchParticipantsScreen extends Component {
               that.setState({
                 errorMessage: response.data.message
                   ? Language[that.state.selectedLanguage]["status"][
-                      response.data.message
-                    ]
+                  response.data.message
+                  ]
                   : "",
                 participants: [],
                 //countSelected: this.state.countSelected + 1
@@ -250,8 +261,8 @@ export default class SearchParticipantsScreen extends Component {
               that.setState({
                 successMessage: response.data.message
                   ? Language[that.state.selectedLanguage]["status"][
-                      response.data.message
-                    ]
+                  response.data.message
+                  ]
                   : "",
                 participants: [],
                 countSelected: global.perticipant_info.length,
@@ -260,8 +271,8 @@ export default class SearchParticipantsScreen extends Component {
           );
         }
       })
-      .catch(function(error) {})
-      .finally(function() {
+      .catch(function (error) { })
+      .finally(function () {
         that.setState({
           loader: false,
         });
@@ -300,7 +311,7 @@ export default class SearchParticipantsScreen extends Component {
     }
 
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           let that = this;
           let obj = {
@@ -328,8 +339,8 @@ export default class SearchParticipantsScreen extends Component {
                     that.setState({
                       errorMessage: response.data.message
                         ? Language[this.state.selectedLanguage]["status"][
-                            response.data.message
-                          ]
+                        response.data.message
+                        ]
                         : "",
                     });
                   }
@@ -348,8 +359,8 @@ export default class SearchParticipantsScreen extends Component {
                 );
               }
             })
-            .catch(function(error) {})
-            .finally(function() {
+            .catch(function (error) { })
+            .finally(function () {
               that.setState({
                 loaderSearchPhone: false,
               });
@@ -375,7 +386,7 @@ export default class SearchParticipantsScreen extends Component {
       ? styles.searchInputRequired
       : styles.searchInput;
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
         <NavigationEvents onDidFocus={() => this.__getContact()} />
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
@@ -395,7 +406,7 @@ export default class SearchParticipantsScreen extends Component {
             <HeaderCurve
               title={
                 Language[this.state.selectedLanguage]["search_screen"][
-                  "search_participants"
+                "search_participants"
                 ]
               }
               navigation={this.props.navigation}
@@ -423,7 +434,7 @@ export default class SearchParticipantsScreen extends Component {
                   >
                     {
                       Language[this.state.selectedLanguage]["search_screen"][
-                        "total_contact"
+                      "total_contact"
                       ]
                     }{" "}
                     : {this.state.countSelected.toString()}
@@ -436,7 +447,7 @@ export default class SearchParticipantsScreen extends Component {
                     onChangeText={(mobile) => this.setState({ mobile })}
                     placeholder={
                       Language[this.state.selectedLanguage]["register_screen1"][
-                        "phone"
+                      "phone"
                       ]
                     }
                     keyboardType={"number-pad"}
@@ -455,22 +466,22 @@ export default class SearchParticipantsScreen extends Component {
                       <ActivityIndicator size="small" color={"#5ac6c6"} />
                     </View>
                   ) : (
-                    <TouchableOpacity
-                      style={{
-                        position: "absolute",
-                        left: width - 100,
-                      }}
-                      onPress={() => this._doSearch()}
-                    >
-                      <Image
-                        source={require("../../../assets/images/search.png")}
+                      <TouchableOpacity
                         style={{
-                          width: 25,
-                          height: 25,
+                          position: "absolute",
+                          left: width - 100,
                         }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                        onPress={() => this._doSearch()}
+                      >
+                        <Image
+                          source={require("../../../assets/images/search.png")}
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    )}
 
                   {this.state.loadContact ? (
                     <View
@@ -482,22 +493,22 @@ export default class SearchParticipantsScreen extends Component {
                       <ActivityIndicator size="small" color={"#5ac6c6"} />
                     </View>
                   ) : (
-                    <TouchableOpacity
-                      style={{
-                        position: "absolute",
-                        left: width - 60,
-                      }}
-                      onPress={() => this.goToContactPage()}
-                    >
-                      <Image
-                        source={require("../../../assets/images/phonebook.png")}
+                      <TouchableOpacity
                         style={{
-                          width: 25,
-                          height: 25,
+                          position: "absolute",
+                          left: width - 60,
                         }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                        onPress={() => this.goToContactPage()}
+                      >
+                        <Image
+                          source={require("../../../assets/images/phonebook.png")}
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    )}
                 </View>
 
                 {this.state.errorMessage ? (
@@ -609,7 +620,7 @@ export default class SearchParticipantsScreen extends Component {
                           >
                             {
                               Language[this.state.selectedLanguage]["common"][
-                                "select"
+                              "select"
                               ]
                             }
                           </Text>
@@ -656,7 +667,7 @@ export default class SearchParticipantsScreen extends Component {
 
           <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -26,7 +26,6 @@ const barStyle = "light-content";
 import HeaderCurve from "../includes/headercurve";
 import httpService from "../../services/http/httpService";
 
-import OneSignal from "react-native-onesignal";
 import Language from "../../translations/index";
 export default class RegisterOneScreen extends Component {
   _didFocusSubscription;
@@ -62,42 +61,26 @@ export default class RegisterOneScreen extends Component {
       selectedLanguage: "en",
     };
 
-    OneSignal.setLogLevel(6, 0);
-    OneSignal.inFocusDisplaying(2);
-    OneSignal.init("192b5885-9d77-4e2d-b5eb-d641e8e74bba", {
-      kOSSettingsKeyAutoPrompt: true,
-      kOSSettingsKeyInFocusDisplayOption: 2,
-    });
 
-    OneSignal.addEventListener("ids", this.onIds);
   }
 
   async componentDidMount() {
     this.updateInfo();
-    // const device_token = await AsyncStorage.getItem("device_token");
-    // console.log("regis token", device_token);
-    // alert(device_token);
-    // this.setState({ device_token: device_token });
+    const device_token = await AsyncStorage.getItem("device_token");
+
+    this.setState({ device_token: device_token });
     this._willBlurSubscription = this.props.navigation.addListener(
       "willBlur",
       (payload) =>
         BackHandler.removeEventListener("hardwareBackPress", this.onGoBack)
     );
-    OneSignal.addEventListener("ids", (device) => {
-      // console.log("[OneSignal]>>ids: ", device);
-      //alert(device.userId);
-      if (device.userId) {
-        this.setState({
-          device_token: device.userId,
-        });
-      }
-    });
+
     this.setState({
       selectedLanguage: "fr",
     });
   }
   componentWillUnmount() {
-    OneSignal.removeEventListener("ids", this.onIds);
+
   }
 
   _doRegister = () => {
@@ -144,7 +127,7 @@ export default class RegisterOneScreen extends Component {
         this.setState({
           errorMessage:
             Language[this.state.selectedLanguage]["common"][
-              "device_token_not_found"
+            "device_token_not_found"
             ],
         });
       }
@@ -171,7 +154,7 @@ export default class RegisterOneScreen extends Component {
       }
     }
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           let that = this;
           let thatNavigation = this.props.navigation;
@@ -208,8 +191,8 @@ export default class RegisterOneScreen extends Component {
                     that.setState({
                       errorMessage: response.message
                         ? Language[this.state.selectedLanguage]["status"][
-                            response.message
-                          ]
+                        response.message
+                        ]
                         : "",
                       loader: false,
                     });
@@ -225,8 +208,8 @@ export default class RegisterOneScreen extends Component {
                     that.setState({
                       successMessage: response.message
                         ? Language[this.state.selectedLanguage]["status"][
-                            response.message
-                          ]
+                        response.message
+                        ]
                         : "",
                       loader: false,
                     });
@@ -347,7 +330,7 @@ export default class RegisterOneScreen extends Component {
             <HeaderCurve
               title={
                 Language[this.state.selectedLanguage]["register_screen1"][
-                  "create_account"
+                "create_account"
                 ]
               }
               navigation={this.props.navigation}
@@ -395,7 +378,7 @@ export default class RegisterOneScreen extends Component {
                     onChangeText={(email) => this.setState({ email })}
                     placeholder={
                       Language[this.state.selectedLanguage]["login_screen"][
-                        "email"
+                      "email"
                       ]
                     }
                     autoCapitalize="none"
@@ -433,7 +416,7 @@ export default class RegisterOneScreen extends Component {
                     textProps={{
                       placeholder:
                         Language[this.state.selectedLanguage][
-                          "register_screen1"
+                        "register_screen1"
                         ]["phone"],
                       fontSize: 18,
                     }}
@@ -483,7 +466,7 @@ export default class RegisterOneScreen extends Component {
                     onChangeText={(password) => this.setState({ password })}
                     placeholder={
                       Language[this.state.selectedLanguage]["login_screen"][
-                        "password"
+                      "password"
                       ]
                     }
                     secureTextEntry={this.state.isSecured}
@@ -539,16 +522,16 @@ export default class RegisterOneScreen extends Component {
                       {this.state.successMessage}
                     </Text>
                   ) : (
-                    <Text
-                      style={{
-                        color: "red",
+                      <Text
+                        style={{
+                          color: "red",
 
-                        fontSize: 16,
-                      }}
-                    >
-                      {this.state.errorMessage}
-                    </Text>
-                  )}
+                          fontSize: 16,
+                        }}
+                      >
+                        {this.state.errorMessage}
+                      </Text>
+                    )}
                 </View>
 
                 <TouchableOpacity
@@ -559,7 +542,7 @@ export default class RegisterOneScreen extends Component {
                   <Text style={styles.sendButtonText}>
                     {
                       Language[this.state.selectedLanguage]["register_screen1"][
-                        "create_account"
+                      "create_account"
                       ]
                     }
                   </Text>

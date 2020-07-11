@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { Container, Content, Icon } from "native-base";
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import acceptInvitaionStyle from "./acceptInvitaionStyle";
 
 import URL from "../../config/url";
@@ -32,7 +31,7 @@ export default class AcceptInvitaionScreen extends Component {
       reasonId: 9,
       reasonTxt: "Other",
       otherReason: "",
-      selectedLanguage:'en'
+      selectedLanguage: 'en'
     };
   }
 
@@ -60,7 +59,7 @@ export default class AcceptInvitaionScreen extends Component {
           },
           user_id: response[4][1],
           details: selectedDetails,
-          selectedLanguage:'fr'
+          selectedLanguage: 'fr'
         },
         () => {
           this.getReason();
@@ -91,7 +90,7 @@ export default class AcceptInvitaionScreen extends Component {
       .then(res => {
         Loading.hide(this.loading);
 
-        console.log("res11============="+JSON.stringify(res))
+        console.log("res11=============" + JSON.stringify(res))
 
 
 
@@ -128,32 +127,31 @@ export default class AcceptInvitaionScreen extends Component {
   render() {
     const item = this.state.details;
     return (
-      <Container>
-        <Content>
-          <HeaderCurve
-            //title={"Create Circle"}
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={true}
-          />
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+        <HeaderCurve
+          //title={"Create Circle"}
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={true}
+        />
 
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center", marginTop: "50%" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center", marginTop: "50%" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={acceptInvitaionStyle.mainContent}>
               {this.state.apiExecute ? (
                 <View>
                   <View style={acceptInvitaionStyle.headerText}>
                     <Text style={acceptInvitaionStyle.title}>
-                    {Language[this.state.selectedLanguage]['dashboard_screen']['circle']}({item.circle_code})
+                      {Language[this.state.selectedLanguage]['dashboard_screen']['circle']}({item.circle_code})
                     {Language[this.state.selectedLanguage]['accept_invitation_screen']['accept_invitation']}
                     </Text>
                   </View>
@@ -216,13 +214,13 @@ export default class AcceptInvitaionScreen extends Component {
                                     }
                                   >
                                     <Text>
-                                      
 
-                                      
+
+
                                       {Language[this.state.selectedLanguage]['circle_join_reason_list'][reason_item.reason_alias]}
-                                      
-                                      
-                                      </Text>
+
+
+                                    </Text>
                                   </View>
                                 </View>
                               </TouchableOpacity>
@@ -280,8 +278,8 @@ export default class AcceptInvitaionScreen extends Component {
               ) : null}
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
+
     );
   }
 }

@@ -77,7 +77,7 @@ export default class LoginScreen extends Component {
     }
 
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           let that = this;
           let thatNavigation = this.props.navigation;
@@ -95,7 +95,7 @@ export default class LoginScreen extends Component {
             loader: true,
           });
 
-          //console.log("request=="+JSON.stringify(obj))
+          console.log("request==login" + JSON.stringify(obj));
 
           httpService
             .postHttpCall(obj)

@@ -183,6 +183,9 @@ export default class EditProfileScreen extends Component {
   _openImagePicker = () => {
     let thatRef = this.refs;
     let that = this;
+
+
+
     ImagePicker.openPicker({
       width: 200,
       height: 200,
@@ -346,7 +349,7 @@ export default class EditProfileScreen extends Component {
     }
 
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           let thatRef = this.refs;
           let that = this;
@@ -405,7 +408,7 @@ export default class EditProfileScreen extends Component {
                     ["mobile_number", response.result.mobile_number.toString()],
                     ["avatar_location", response.result.avatar_location],
                   ],
-                  function(error) {
+                  function (error) {
                     that.setState({ loader: false });
                     setTimeout(() => {
                       thatNavigation.navigate("homeStack");
@@ -472,7 +475,7 @@ export default class EditProfileScreen extends Component {
             <HeaderCurve
               title={
                 Language[this.state.selectedLanguage]["profile_screen"][
-                  "update_profile"
+                "update_profile"
                 ]
               }
               navigation={this.props.navigation}
@@ -542,7 +545,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={[styles.frmLabel, { width: width / 2.5 }]}>
                     {
                       Language[this.state.selectedLanguage]["login_screen"][
-                        "email"
+                      "email"
                       ]
                     }
                   </Text>
@@ -560,7 +563,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={[styles.frmLabel, { width: width / 2.5 }]}>
                     {
                       Language[this.state.selectedLanguage]["register_screen1"][
-                        "phone"
+                      "phone"
                       ]
                     }
                   </Text>
@@ -574,7 +577,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage]["register_screen2"][
-                        "first_name"
+                      "first_name"
                       ]
                     }
                   </Text>
@@ -589,7 +592,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage]["register_screen2"][
-                        "last_name"
+                      "last_name"
                       ]
                     }
                   </Text>
@@ -604,7 +607,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage]["profile_screen"][
-                        "iban"
+                      "iban"
                       ]
                     }
                   </Text>
@@ -625,7 +628,7 @@ export default class EditProfileScreen extends Component {
                     <Text style={styles.frmLabel}>
                       {
                         Language[this.state.selectedLanguage][
-                          "register_screen2"
+                        "register_screen2"
                         ]["date_of_birth"]
                       }
                     </Text>
@@ -661,7 +664,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage]["login_screen"][
-                        "password"
+                      "password"
                       ]
                     }
                   </Text>
@@ -691,7 +694,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage]["profile_screen"][
-                        "confirm_password"
+                      "confirm_password"
                       ]
                     }
                   </Text>
@@ -729,7 +732,7 @@ export default class EditProfileScreen extends Component {
                   <Text style={styles.sendButtonText}>
                     {
                       Language[this.state.selectedLanguage]["profile_screen"][
-                        "update_now"
+                      "update_now"
                       ]
                     }
                   </Text>

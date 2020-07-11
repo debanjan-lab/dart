@@ -7,12 +7,12 @@ import {
   Text,
   ActivityIndicator,
   Image,
+  ScrollView,
 } from "react-native";
 import { ToastMessage } from "../../components/ToastMessage";
 import StatusBarComponent from "../../components/statusBar/statusBarComponent";
 import HeaderCurve from "../includes/headercurve";
 import SearchBar from "react-native-searchbar";
-import { Container, Content } from "native-base";
 import Contacts from "react-native-contacts";
 import CommonService from "../../services/common/commonService";
 import Loading from "react-native-loader-overlay";
@@ -84,9 +84,15 @@ export default class PhoneContacsScreen extends PureComponent {
     let arrContacts = [];
     for (var a = 0; a < this.state.allContacts.length; a++) {
       let obj = {};
-      let displayName = this.state.allContacts[a].displayName;
+      let displayName =
+        Platform.OS === "ios"
+          ? this.state.allContacts[a].familyName
+          : this.state.allContacts[a].displayName;
       let givenName = this.state.allContacts[a].givenName;
-      let rawContactId = this.state.allContacts[a].rawContactId;
+      let rawContactId =
+        Platform.OS === "ios"
+          ? this.state.allContacts[a].recordID
+          : this.state.allContacts[a].rawContactId;
       let phoneNumbers = this.state.allContacts[a].phoneNumbers[0]
         ? this.state.allContacts[a].phoneNumbers[0].number
         : "";
@@ -104,7 +110,7 @@ export default class PhoneContacsScreen extends PureComponent {
         arrContacts.push(obj);
       }
     }
-    let sortedContact = arrContacts.sort(function(a, b) {
+    let sortedContact = arrContacts.sort(function (a, b) {
       var nameA = a.displayName.toUpperCase(); // ignore upper and lowercase
       var nameB = b.displayName.toUpperCase();
       if (nameA < nameB) {
@@ -159,7 +165,6 @@ export default class PhoneContacsScreen extends PureComponent {
         mobileNumber = mobile.replace("0", this.state.mobile_country_code);
       } else {
         //Alert.alert("",`Not a valid number 1 , selected phone number ${mobile} , position of "mobile[1]" is ${mobile[1]}`);
-        Alert.alert(`Not a valid number`);
       }
     } else if (mobile.indexOf(this.state.mobile_country_code) > -1) {
       mobileNumber = mobile;
@@ -198,10 +203,22 @@ export default class PhoneContacsScreen extends PureComponent {
         }
       } else {
         //Alert.alert("You can't choose your own number");
+
+        Alert.alert(
+          Language[this.state.selectedLanguage]["phone_contact_screen"][
+            "you_cannot_choose_your_own_number"
+          ]
+        );
       }
     } else {
       //Alert.alert("",`Not a valid number 4 , selected phone number ${mobile} , my country code ${this.state.mobile_country_code}`);
       // Alert.alert(`Not a valid number`);
+
+      Alert.alert(
+        Language[this.state.selectedLanguage]["phone_contact_screen"][
+          "not_a_valid_number"
+        ]
+      );
     }
   };
 
@@ -247,63 +264,87 @@ export default class PhoneContacsScreen extends PureComponent {
   };
 
   render() {
+    console.log("selected list", this.state.selectedLists);
     console.log("mobile_country_code", this.state.mobile_country_code);
     return (
-      <Container>
-        <Content>
-          <StatusBarComponent />
-          <View style={{ flex: 1, position: "relative", height: 120 }}>
-            {this.state.defaultIcon ? (
-              <HeaderCurve
-                title={
-                  Language[this.state.selectedLanguage]["phone_contact_screen"][
-                    "phone_contacts"
-                  ]
-                }
-                navigation={this.props.navigation}
-                searchIcon={true}
-                showSearchBar={this.showSearchBar}
-                backButton={true}
-                bellIcon={true}
-              />
-            ) : (
-              <HeaderCurve
-                navigation={this.props.navigation}
-                searchIcon={true}
-                showSearchBar={this.showSearchBar}
-                bellIcon={false}
-              />
-            )}
-            <SearchBar
-              ref={(ref) => (this.searchBar = ref)}
-              handleChangeText={this.search}
-              backgroundColor={"transparent"}
-              iconColor={"white"}
-              textColor={"white"}
-              placeholderTextColor={"white"}
-              heightAdjust={16}
-              onBack={() => this.hideSearchBar()}
-            />
-          </View>
+      <>
+        <ScrollView
+          contentContainerStyle={{ backgroundColor: "#fff", flexGrow: 1 }}
+        >
+          <View>
+            <StatusBarComponent />
+            <View style={{ flex: 1, position: "relative", height: 120 }}>
+              {this.state.defaultIcon ? (
+                <HeaderCurve
+                  title={
+                    Language[this.state.selectedLanguage][
+                      "phone_contact_screen"
+                    ]["phone_contacts"]
+                  }
+                  navigation={this.props.navigation}
+                  searchIcon={true}
+                  showSearchBar={this.showSearchBar}
+                  backButton={true}
+                  bellIcon={true}
+                />
+              ) : (
+                <HeaderCurve
+                  navigation={this.props.navigation}
+                  searchIcon={true}
+                  showSearchBar={this.showSearchBar}
+                  bellIcon={false}
+                />
+              )}
 
-          {this.state.selectLoader && <ActivityIndicator />}
-
-          {!this.state.isLoading ? (
-            <View>
-              <FlatList
-                data={this.state.searchedList}
-                renderItem={({ item }) =>
-                  this.listItem(item, this.state.selectedLists)
+              <SearchBar
+                ref={(ref) => (this.searchBar = ref)}
+                handleChangeText={this.search}
+                backgroundColor={"transparent"}
+                iconColor={"white"}
+                textColor={"white"}
+                placeholderTextColor={"white"}
+                heightAdjust={16}
+                onBack={() => this.hideSearchBar()}
+                backButton={
+                  <Image
+                    source={require("../../../assets/images/arrow.png")}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
                 }
-                keyExtractor={(item) => item.key.toString()}
-                removeClippedSubviews={true}
-                extraData={this.state}
+                closeButton={
+                  <Image
+                    source={require("../../../assets/images/close.png")}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                }
               />
             </View>
-          ) : (
-            <ActivityIndicator />
-          )}
-        </Content>
+
+            {this.state.selectLoader && <ActivityIndicator />}
+
+            {!this.state.isLoading ? (
+              <View>
+                <FlatList
+                  data={this.state.searchedList}
+                  renderItem={({ item }) =>
+                    this.listItem(item, this.state.selectedLists)
+                  }
+                  keyExtractor={(item) => item.key.toString()}
+                  removeClippedSubviews={true}
+                  extraData={this.state}
+                />
+              </View>
+            ) : (
+              <ActivityIndicator />
+            )}
+          </View>
+        </ScrollView>
 
         {this.state.selectedLists.length ? (
           <TouchableOpacity
@@ -326,7 +367,7 @@ export default class PhoneContacsScreen extends PureComponent {
             />
           </TouchableOpacity>
         ) : null}
-      </Container>
+      </>
     );
   }
 

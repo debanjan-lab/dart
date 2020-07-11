@@ -11,6 +11,7 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
+  ScrollView
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
@@ -64,9 +65,9 @@ export default class WaitingListScreen extends Component {
       loader: true,
     });
 
-    AsyncStorage.multiSet([["circle_code", circle_code]], function(error) {
+    AsyncStorage.multiSet([["circle_code", circle_code]], function (error) {
       setTimeout(
-        function() {
+        function () {
           that.setState(
             {
               loader: false,
@@ -99,13 +100,13 @@ export default class WaitingListScreen extends Component {
     this.props.navigation.navigate("ongoingListPage");
   };
 
-  _getBlockedList = () => {};
+  _getBlockedList = () => { };
 
-  _getSuspendedList = () => {};
+  _getSuspendedList = () => { };
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
@@ -268,7 +269,7 @@ export default class WaitingListScreen extends Component {
           <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
         <FooterTabComponent props={this.props} />
-      </View>
+      </ScrollView>
     );
   }
 }

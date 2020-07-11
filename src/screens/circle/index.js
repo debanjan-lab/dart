@@ -28,13 +28,13 @@ export default class App extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
@@ -209,7 +209,7 @@ export default class App extends Component {
             </ScrollView>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

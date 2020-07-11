@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Picker } from "react-native";
-import { Container, Content, Icon } from "native-base";
+import { View, Text, TouchableOpacity, Picker, ScrollView, TextInput } from "react-native";
 import bankDetailsStyle from "./bankDetailsStyle";
 import moment from "moment";
 import URL from "../../config/url";
@@ -12,7 +11,7 @@ import httpService from "../../services/http/httpService";
 import Loading from "react-native-loader-overlay";
 import { ErrorTemplate } from "../../components/error/errorComponent";
 import OnlinePaymentModal from "../../components/onlinePayment/onlinePayment";
-
+import ModalSelector from 'react-native-modal-selector'
 let selectedId = 1;
 import CreateCircle from "../../components/createCircle";
 import Language from "../../translations/index";
@@ -32,7 +31,7 @@ export default class BankDetailsScreen extends Component {
       apiExecute: false,
       bankDetails: [],
       optionId: 1,
-      optionTxt: "",
+      optionTxt: "offline",
       reasonId: "",
       otherReason: "",
       errPaymentMsg: "",
@@ -79,17 +78,23 @@ export default class BankDetailsScreen extends Component {
           this.setState({});
           this.getBankDetails();
           this.setState({
-            paymentTypes: [
-              Language[this.state.selectedLanguage]["bank_details_screen"][
-                "offline"
+            paymentTypes:
+              [
+                {
+                  index: 0,
+                  option: Language[this.state.selectedLanguage]["bank_details_screen"]["offline"],
+                  value: 'offline'
+                },
+                {
+                  index: 1,
+                  option: Language[this.state.selectedLanguage]["bank_details_screen"]["online"],
+                  value: 'online'
+                }
+
               ],
-              Language[this.state.selectedLanguage]["bank_details_screen"][
-                "online"
-              ],
-            ],
             randamCircleNum:
               Language[this.state.selectedLanguage]["bank_details_screen"][
-                "payment_circle"
+              "payment_circle"
               ] +
               " - " +
               Math.floor(Math.random() * 1000000) +
@@ -142,12 +147,29 @@ export default class BankDetailsScreen extends Component {
       });
   }
 
-  selectOption(id, txt) {
-    selectedId = id + 1;
-    //alert(selectedId)
+  selectOption(itemIndex) {
 
+    let selectedId = this.state.paymentTypes[itemIndex].value == 'offline' ? 1 : 2;
+    let txt = this.state.paymentTypes[itemIndex].value.toString();
+
+    // selectedId = id + 1;
+    // alert(selectedId)
+    // console.log("======", txt)
+
+    // if (Language[this.state.selectedLanguage]["bank_details_screen"]["offline"] == 'Offline'
+    //   || Language[this.state.selectedLanguage]["bank_details_screen"]["offline"] == 'Par virement bancaire') {
+    //   selectedId = 1;
+    //   this.setState({ optionId: selectedId, optionTxt: txt, errPaymentMsg: "" });
+    // } else {
+    //   selectedId = 2;
+    //   this.setState({ optionId: selectedId, optionTxt: txt, errPaymentMsg: "" });
+    // }
+
+    //alert(selectedId)
     this.setState({ optionId: selectedId, optionTxt: txt, errPaymentMsg: "" });
   }
+
+
 
   doPaymentDeposit() {
     let item = this.state.details;
@@ -398,29 +420,29 @@ export default class BankDetailsScreen extends Component {
     const item = this.state.details;
 
     const paymentType = this.state.paymentTypes.map((s, i) => {
-      return <Picker.Item key={i} value={s} label={s} />;
+      return <Picker.Item key={i} value={s.value} label={s.option} />;
     });
 
     return (
-      <Container>
-        <Content>
-          <HeaderCurve
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={true}
-          />
 
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+        <HeaderCurve
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={true}
+        />
+
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={bankDetailsStyle.mainContent}>
               {this.state.apiExecute ? (
                 <View>
@@ -428,7 +450,7 @@ export default class BankDetailsScreen extends Component {
                     <Text style={bankDetailsStyle.title}>
                       {
                         Language[this.state.selectedLanguage][
-                          "bank_details_screen"
+                        "bank_details_screen"
                         ]["bank_details"]
                       }
                     </Text>
@@ -437,7 +459,7 @@ export default class BankDetailsScreen extends Component {
                     <Text>
                       {
                         Language[this.state.selectedLanguage][
-                          "dashboard_screen"
+                        "dashboard_screen"
                         ]["circle"]
                       }{" "}
                       ({item.circle_code})
@@ -448,7 +470,7 @@ export default class BankDetailsScreen extends Component {
                       <Text style={{ fontSize: 14 }}>
                         {
                           Language[this.state.selectedLanguage][
-                            "bank_details_screen"
+                          "bank_details_screen"
                           ]["payment_mode"]
                         }
                         :
@@ -457,15 +479,52 @@ export default class BankDetailsScreen extends Component {
                     <View style={[bankDetailsStyle.rowViewRightItem]}>
                       <View>
                         <View style={bankDetailsStyle.unSelectText}>
-                          <Picker
-                            selectedValue={this.state.optionTxt}
-                            style={{ height: 50, width: "100%", marginLeft: 5 }}
-                            onValueChange={(type, index) => {
-                              this.selectOption(index, type);
-                            }}
-                          >
-                            {paymentType}
-                          </Picker>
+
+
+
+
+
+                          {
+                            Platform.OS == 'ios' ?
+                              <ModalSelector
+                                optionTextStyle={{
+                                  fontSize: 14,
+                                  color: "#000000",
+                                }}
+                                data={this.state.paymentTypes}
+                                initValue={this.state.optionTxt}
+                                onChange={(option) => this.selectOption(option.index)}
+                                keyExtractor={option => option.option}
+                                labelExtractor={option => option.option}
+                                cancelText={Language[this.state.selectedLanguage][
+                                  "common"
+                                ]["cancel"]}
+                                overlayStyle={{ flex: 1, padding: '5%', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}
+                              >
+                                <TextInput
+                                  style={{
+                                    fontSize: 14,
+                                    color: "#000000",
+                                  }}
+                                  editable={false}
+                                  value={Language[this.state.selectedLanguage]["bank_details_screen"][this.state.optionTxt]} />
+
+                              </ModalSelector>
+                              :
+
+                              <Picker
+                                selectedValue={this.state.optionTxt}
+                                style={{ height: 50, width: "100%", marginLeft: 5 }}
+                                onValueChange={(itemValue, itemIndex) => {
+                                  this.selectOption(itemIndex);
+                                }}
+                              >
+                                {paymentType}
+                              </Picker>
+                          }
+
+
+
                         </View>
                       </View>
                     </View>
@@ -478,7 +537,7 @@ export default class BankDetailsScreen extends Component {
                           {" "}
                           {
                             Language[this.state.selectedLanguage]["common"][
-                              "details"
+                            "details"
                             ]
                           }
                         </Text>
@@ -492,7 +551,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.rowText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["account_number"]
                               }
                               :
@@ -514,7 +573,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.rowText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["payment_reason"]
                               }
                               :
@@ -536,7 +595,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.rowText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["bank_address"]
                               }
                               :
@@ -558,7 +617,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.rowText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["ifsc_code"]
                               }
                               :
@@ -584,7 +643,7 @@ export default class BankDetailsScreen extends Component {
                               {" "}
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["pay_deposit"]
                               }
                             </Text>
@@ -601,7 +660,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["pay_your_round"]
                               }
                             </Text>
@@ -618,7 +677,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["pay_my_round"]
                               }
                             </Text>
@@ -635,7 +694,7 @@ export default class BankDetailsScreen extends Component {
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][
-                                  "bank_details_screen"
+                                "bank_details_screen"
                                 ]["suspend_pay"]
                               }
                             </Text>
@@ -643,67 +702,67 @@ export default class BankDetailsScreen extends Component {
                         ) : null}
                       </View>
                     ) : (
-                      <View>
-                        {this.state.navigateFrom == "accept_screen" ? (
-                          <OnlinePaymentModal
-                            buttonText={
-                              Language[this.state.selectedLanguage][
+                        <View>
+                          {this.state.navigateFrom == "accept_screen" ? (
+                            <OnlinePaymentModal
+                              buttonText={
+                                Language[this.state.selectedLanguage][
                                 "bank_details_screen"
-                              ]["pay_deposit"]
-                            }
-                            circle_code={this.state.details.circle_code}
-                            amount={this.state.details.round_set}
-                            mobileNo={this.state.details.login_user_mobile}
-                            token={this.state.rememberToken}
-                            navigation={this.props.navigation}
-                            current_round={this.state.details.current_round}
-                            item={item}
-                          />
-                        ) : this.state.navigateFrom == "on_going_details" ? (
-                          <OnlinePaymentModal
-                            buttonText={
-                              Language[this.state.selectedLanguage][
+                                ]["pay_deposit"]
+                              }
+                              circle_code={this.state.details.circle_code}
+                              amount={this.state.details.round_set}
+                              mobileNo={this.state.details.login_user_mobile}
+                              token={this.state.rememberToken}
+                              navigation={this.props.navigation}
+                              current_round={this.state.details.current_round}
+                              item={item}
+                            />
+                          ) : this.state.navigateFrom == "on_going_details" ? (
+                            <OnlinePaymentModal
+                              buttonText={
+                                Language[this.state.selectedLanguage][
                                 "bank_details_screen"
-                              ]["pay_your_round"]
-                            }
-                            circle_code={this.state.details.circle_code}
-                            amount={this.state.details.round_set}
-                            mobileNo={this.state.details.login_user_mobile}
-                            token={this.state.rememberToken}
-                            navigation={this.props.navigation}
-                            current_round={this.state.details.current_round}
-                          />
-                        ) : this.state.navigateFrom == "block_details" ? (
-                          <OnlinePaymentModal
-                            buttonText={
-                              Language[this.state.selectedLanguage][
+                                ]["pay_your_round"]
+                              }
+                              circle_code={this.state.details.circle_code}
+                              amount={this.state.details.round_set}
+                              mobileNo={this.state.details.login_user_mobile}
+                              token={this.state.rememberToken}
+                              navigation={this.props.navigation}
+                              current_round={this.state.details.current_round}
+                            />
+                          ) : this.state.navigateFrom == "block_details" ? (
+                            <OnlinePaymentModal
+                              buttonText={
+                                Language[this.state.selectedLanguage][
                                 "bank_details_screen"
-                              ]["pay_my_round"]
-                            }
-                            circle_code={this.state.details.circle_code}
-                            amount={this.state.details.round_set}
-                            mobileNo={this.state.details.login_user_mobile}
-                            token={this.state.rememberToken}
-                            navigation={this.props.navigation}
-                            current_round={this.state.details.current_round}
-                          />
-                        ) : this.state.navigateFrom === "suspend_details" ? (
-                          <OnlinePaymentModal
-                            buttonText={
-                              Language[this.state.selectedLanguage][
+                                ]["pay_my_round"]
+                              }
+                              circle_code={this.state.details.circle_code}
+                              amount={this.state.details.round_set}
+                              mobileNo={this.state.details.login_user_mobile}
+                              token={this.state.rememberToken}
+                              navigation={this.props.navigation}
+                              current_round={this.state.details.current_round}
+                            />
+                          ) : this.state.navigateFrom === "suspend_details" ? (
+                            <OnlinePaymentModal
+                              buttonText={
+                                Language[this.state.selectedLanguage][
                                 "bank_details_screen"
-                              ]["suspend_pay"]
-                            }
-                            circle_code={this.state.details.circle_code}
-                            amount={item.refund_amount}
-                            mobileNo={this.state.details.login_user_mobile}
-                            token={this.state.rememberToken}
-                            navigation={this.props.navigation}
+                                ]["suspend_pay"]
+                              }
+                              circle_code={this.state.details.circle_code}
+                              amount={item.refund_amount}
+                              mobileNo={this.state.details.login_user_mobile}
+                              token={this.state.rememberToken}
+                              navigation={this.props.navigation}
                             //current_round = {this.state.details.current_round}
-                          />
-                        ) : null}
-                      </View>
-                    )}
+                            />
+                          ) : null}
+                        </View>
+                      )}
 
                     <View style={bankDetailsStyle.paymentButtonView}>
                       <View
@@ -728,8 +787,8 @@ export default class BankDetailsScreen extends Component {
               ) : null}
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
+
     );
   }
 }

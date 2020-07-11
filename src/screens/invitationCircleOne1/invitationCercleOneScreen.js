@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StatusBar } from "react-native";
-import { Container, Content } from "native-base";
 import invitationCercleOneStyle from "./invitationCercleOneStyle";
-import Icon from "react-native-vector-icons/Ionicons";
 
 export default class InvitationCercleOneScreen extends Component {
   constructor(props) {
@@ -11,8 +9,8 @@ export default class InvitationCercleOneScreen extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
+      <View>
+        <View>
           <StatusBar backgroundColor="#1CCBE6" />
           <View style={invitationCercleOneStyle.mainContent}>
             <View style={invitationCercleOneStyle.headerText}>
@@ -173,8 +171,8 @@ export default class InvitationCercleOneScreen extends Component {
               </View>
             </View>
           </View>
-        </Content>
-      </Container>
+        </View>
+      </View>
     );
   }
 }

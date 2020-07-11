@@ -101,6 +101,8 @@ export default {
   },
   phone_contact_screen: {
     phone_contacts: "Annuaire téléphonique",
+    not_a_valid_number: "Pas un numéro valide",
+    you_cannot_choose_your_own_number: "Vous ne pouvez pas choisir votre propre numéro"
   },
   circle_preview_screen: {
     create_circle_preview: "Validation de mon cercle",

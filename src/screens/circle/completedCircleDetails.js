@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { Container, Content } from "native-base";
 import onGoingCircleStyle from "../onGoingCircle/onGoingCircleStyle";
 import URL from "../../config/url";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -59,27 +58,27 @@ export default class CompletedCircleDetails extends Component {
   render() {
     const item = this.state.details;
     return (
-      <Container>
-        <Content>
-          {/* <HeaderCurve/> */}
-          <HeaderCurve
-            //title={"Create Circle"}
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={false}
-            props={this.props}
-          />
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center", marginTop: "50%" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+
+        <HeaderCurve
+          //title={"Create Circle"}
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={false}
+          props={this.props}
+        />
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center", marginTop: "50%" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={onGoingCircleStyle.mainContent}>
               <View>
                 <View style={{ alignItems: "center" }}>
@@ -94,18 +93,18 @@ export default class CompletedCircleDetails extends Component {
                   >
                     {
                       Language[this.state.selectedLanguage]["dashboard_screen"][
-                        "circle"
+                      "circle"
                       ]
                     }{" "}
                     {item.status === 5
                       ? Language[this.state.selectedLanguage]["common"][
-                          "completed"
-                        ]
+                      "completed"
+                      ]
                       : item.status === 4
-                      ? Language[this.state.selectedLanguage]["common"][
-                          "rejected"
+                        ? Language[this.state.selectedLanguage]["common"][
+                        "rejected"
                         ]
-                      : null}
+                        : null}
                   </Text>
                   <Text>N° {item.circle_code}</Text>
                 </View>
@@ -121,7 +120,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["circle_admin"]
                         }
                         :
@@ -148,7 +147,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "dashboard_screen"
+                          "dashboard_screen"
                           ]["amount"]
                         }
                         :
@@ -165,7 +164,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
+                          "circle_preview_screen"
                           ]["round_settlement"]
                         }
                         :
@@ -183,7 +182,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "create_circle_screen"
+                          "create_circle_screen"
                           ]["periodicity_of_round"]
                         }
                         :
@@ -191,7 +190,8 @@ export default class CompletedCircleDetails extends Component {
                     </View>
                     <View style={onGoingCircleStyle.rowViewRightItem}>
                       <Text style={onGoingCircleStyle.rowTextValue}>
-                        {item.p_round}
+
+                        {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
                       </Text>
                     </View>
                   </View>
@@ -201,7 +201,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "ongoing_circle_screen"
+                          "ongoing_circle_screen"
                           ]["start_date"]
                         }
                         :
@@ -221,7 +221,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "ongoing_circle_screen"
+                          "ongoing_circle_screen"
                           ]["end_date"]
                         }
                         :
@@ -239,7 +239,7 @@ export default class CompletedCircleDetails extends Component {
                     <Text style={onGoingCircleStyle.rowText}>
                       {
                         Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
+                        "circle_preview_screen"
                         ]["circle_participants"]
                       }
                       :
@@ -252,21 +252,21 @@ export default class CompletedCircleDetails extends Component {
                     >
                       {item.get_users !== undefined
                         ? item.get_users.map((user_item, user_index) => (
+                          <View
+                            key={user_index}
+                            style={{ flexDirection: "row" }}
+                          >
                             <View
-                              key={user_index}
-                              style={{ flexDirection: "row" }}
+                              style={onGoingCircleStyle.nextRowViewLeftItem}
                             >
-                              <View
-                                style={onGoingCircleStyle.nextRowViewLeftItem}
-                              >
-                                <Text style={onGoingCircleStyle.rowTextValue}>
-                                  {user_index + 1}.{user_item.username}(
+                              <Text style={onGoingCircleStyle.rowTextValue}>
+                                {user_index + 1}.{user_item.username}(
                                   {user_item.mobile_country_code}
-                                  {user_item.mobile_number})
+                                {user_item.mobile_number})
                                 </Text>
-                              </View>
                             </View>
-                          ))
+                          </View>
+                        ))
                         : null}
                     </View>
                   </View>
@@ -275,7 +275,7 @@ export default class CompletedCircleDetails extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage]["common"][
-                            "progress"
+                          "progress"
                           ]
                         }
                         :
@@ -286,7 +286,7 @@ export default class CompletedCircleDetails extends Component {
                         <Text style={onGoingCircleStyle.rowTextValue}>
                           {
                             Language[this.state.selectedLanguage]["common"][
-                              "completed"
+                            "completed"
                             ]
                           }
                         </Text>
@@ -295,7 +295,7 @@ export default class CompletedCircleDetails extends Component {
                           {item.completed_round +
                             " " +
                             Language[this.state.selectedLanguage][
-                              "circle_completed_screen"
+                            "circle_completed_screen"
                             ]["round_over_out"] +
                             " " +
                             item.estimate_round}
@@ -305,7 +305,7 @@ export default class CompletedCircleDetails extends Component {
                           {item.completed_round +
                             " " +
                             Language[this.state.selectedLanguage][
-                              "circle_completed_screen"
+                            "circle_completed_screen"
                             ]["round_over_out"] +
                             " " +
                             item.estimate_round}
@@ -313,18 +313,7 @@ export default class CompletedCircleDetails extends Component {
                       ) : null}
                     </View>
                   </View>
-                  {/* <View style={{ flexDirection: "row", paddingTop: 3 }}>
-                    <View style={onGoingCircleStyle.rowViewLeftItem}>
-                      <Text style={onGoingCircleStyle.rowText}>End date:</Text>
-                    </View>
-                    <View style={onGoingCircleStyle.rowViewRightItem}>
-                      {item.end_date ? (
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          {CommonService.formatDate(item.end_date)}
-                        </Text>
-                      ) : null}
-                    </View>
-                  </View> */}
+
                 </View>
                 {item.status === 4 ? (
                   <View style={onGoingCircleStyle.tableContent}>
@@ -339,7 +328,7 @@ export default class CompletedCircleDetails extends Component {
                           >
                             {
                               Language[this.state.selectedLanguage][
-                                "circle_completed_screen"
+                              "circle_completed_screen"
                               ]["rejected_by"]
                             }
                             :{" "}
@@ -363,7 +352,7 @@ export default class CompletedCircleDetails extends Component {
                                         {user.username}:
                                         {
                                           Language[this.state.selectedLanguage][
-                                            "circle_join_reason_list"
+                                          "circle_join_reason_list"
                                           ][user.reject_reason_slug]
                                         }
                                       </Text>
@@ -381,8 +370,8 @@ export default class CompletedCircleDetails extends Component {
               </View>
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
+
     );
   }
 

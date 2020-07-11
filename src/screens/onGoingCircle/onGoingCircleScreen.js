@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { Container, Content } from "native-base";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import onGoingCircleStyle from "./onGoingCircleStyle";
 var moment = require("moment");
 import URL from "../../config/url";
@@ -181,28 +180,26 @@ export default class OnGoingCircleScreen extends Component {
     const item = this.state.details;
     console.log("ongoing item", item);
     return (
-      <Container>
-        <Content>
-          {/* <HeaderCurve/> */}
-          <HeaderCurve
-            //title={"Create Circle"}
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={true}
-            props={this.props}
-          />
 
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center", marginTop: "50%" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+        <HeaderCurve
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={true}
+          props={this.props}
+        />
+
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center", marginTop: "50%" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={onGoingCircleStyle.mainContent}>
               {this.state.apiExecute ? (
                 <View>
@@ -218,11 +215,11 @@ export default class OnGoingCircleScreen extends Component {
                     >
                       {item.completed_round == item.estimate_round
                         ? Language[this.state.selectedLanguage]["common"][
-                            "circle_completed"
-                          ]
+                        "circle_completed"
+                        ]
                         : Language[this.state.selectedLanguage]["common"][
-                            "circle_ongoing"
-                          ]}
+                        "circle_ongoing"
+                        ]}
                     </Text>
                     <Text>N° {item.circle_code}</Text>
                   </View>
@@ -238,7 +235,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "dashboard_screen"
+                            "dashboard_screen"
                             ]["circle_admin"]
                           }
                           :
@@ -265,7 +262,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["target_achieve"]
                           }
                           :
@@ -282,7 +279,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["round_settlement"]
                           }
                           :
@@ -300,7 +297,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["periodicity_of_round"]
                           }
                           :
@@ -308,7 +305,8 @@ export default class OnGoingCircleScreen extends Component {
                       </View>
                       <View style={onGoingCircleStyle.rowViewRightItem}>
                         <Text style={onGoingCircleStyle.rowTextValue}>
-                          {item.p_round}
+
+                          {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
                         </Text>
                       </View>
                     </View>
@@ -318,7 +316,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["start_date"]
                           }
                           :
@@ -336,7 +334,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "circle_preview_screen"
+                            "circle_preview_screen"
                             ]["end_date"]
                           }
                           :
@@ -352,7 +350,7 @@ export default class OnGoingCircleScreen extends Component {
                       <Text style={onGoingCircleStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
+                          "circle_preview_screen"
                           ]["circle_participants"]
                         }
                         :
@@ -365,21 +363,21 @@ export default class OnGoingCircleScreen extends Component {
                       >
                         {item.circleUsers !== undefined
                           ? item.circleUsers.map((user_item, user_index) => (
+                            <View
+                              key={user_index}
+                              style={{ flexDirection: "row" }}
+                            >
                               <View
-                                key={user_index}
-                                style={{ flexDirection: "row" }}
+                                style={onGoingCircleStyle.nextRowViewLeftItem}
                               >
-                                <View
-                                  style={onGoingCircleStyle.nextRowViewLeftItem}
-                                >
-                                  <Text style={onGoingCircleStyle.rowTextValue}>
-                                    {user_index + 1}.{user_item.username}(
+                                <Text style={onGoingCircleStyle.rowTextValue}>
+                                  {user_index + 1}.{user_item.username}(
                                     {user_item.mobile_country_code}
-                                    {user_item.mobile_number})
+                                  {user_item.mobile_number})
                                   </Text>
-                                </View>
                               </View>
-                            ))
+                            </View>
+                          ))
                           : null}
                       </View>
                     </View>
@@ -388,7 +386,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage]["common"][
-                              "progress"
+                            "progress"
                             ]
                           }
                           :
@@ -399,7 +397,7 @@ export default class OnGoingCircleScreen extends Component {
                           <Text style={onGoingCircleStyle.rowTextValue}>
                             {
                               Language[this.state.selectedLanguage]["common"][
-                                "completed"
+                              "completed"
                               ]
                             }
                           </Text>
@@ -408,7 +406,7 @@ export default class OnGoingCircleScreen extends Component {
                             {item.completed_round +
                               " " +
                               Language[this.state.selectedLanguage][
-                                "circle_completed_screen"
+                              "circle_completed_screen"
                               ]["round_over_out"] +
                               " " +
                               item.estimate_round}
@@ -418,7 +416,7 @@ export default class OnGoingCircleScreen extends Component {
                             {item.completed_round +
                               " " +
                               Language[this.state.selectedLanguage][
-                                "circle_completed_screen"
+                              "circle_completed_screen"
                               ]["round_over_out"] +
                               " " +
                               item.estimate_round}
@@ -431,7 +429,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "circle_preview_screen"
+                            "circle_preview_screen"
                             ]["end_date"]
                           }
                           :
@@ -457,7 +455,7 @@ export default class OnGoingCircleScreen extends Component {
                           >
                             {
                               Language[this.state.selectedLanguage]["common"][
-                                "round"
+                              "round"
                               ]
                             }{" "}
                             {item.current_round}-{" "}
@@ -471,11 +469,11 @@ export default class OnGoingCircleScreen extends Component {
                           >
                             {item.completed_round == item.estimate_round
                               ? Language[this.state.selectedLanguage]["common"][
-                                  "completed"
-                                ]
+                              "completed"
+                              ]
                               : Language[this.state.selectedLanguage][
-                                  "dashboard_screen"
-                                ]["ongoing"]}
+                              "dashboard_screen"
+                              ]["ongoing"]}
                           </Text>
                         </Text>
 
@@ -495,29 +493,29 @@ export default class OnGoingCircleScreen extends Component {
                                   <Text style={{ color: "#E15862" }}>
                                     {
                                       Language[this.state.selectedLanguage][
-                                        "ongoing_circle_screen"
+                                      "ongoing_circle_screen"
                                       ]["not_paid"]
                                     }{" "}
                                   </Text>
                                 ) : user_item.current_round_payment_status ==
                                   3 ? (
-                                  <Text style={{ color: "#E15862" }}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                        "common"
-                                      ]["pending"]
-                                    }
-                                  </Text>
-                                ) : user_item.current_round_payment_status ==
-                                  1 ? (
-                                  <Text style={{ color: "#23CB97" }}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                        "common"
-                                      ]["paid"]
-                                    }
-                                  </Text>
-                                ) : null}
+                                      <Text style={{ color: "#E15862" }}>
+                                        {
+                                          Language[this.state.selectedLanguage][
+                                          "common"
+                                          ]["pending"]
+                                        }
+                                      </Text>
+                                    ) : user_item.current_round_payment_status ==
+                                      1 ? (
+                                        <Text style={{ color: "#23CB97" }}>
+                                          {
+                                            Language[this.state.selectedLanguage][
+                                            "common"
+                                            ]["paid"]
+                                          }
+                                        </Text>
+                                      ) : null}
                               </View>
                             </View>
                           ))}
@@ -525,7 +523,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={{ fontWeight: "bold" }}>
                           {
                             Language[this.state.selectedLanguage][
-                              "ongoing_circle_screen"
+                            "ongoing_circle_screen"
                             ]["start_date"]
                           }{" "}
                           :{item.round_start_date}
@@ -533,7 +531,7 @@ export default class OnGoingCircleScreen extends Component {
                         <Text style={{ fontWeight: "bold" }}>
                           {
                             Language[this.state.selectedLanguage][
-                              "ongoing_circle_screen"
+                            "ongoing_circle_screen"
                             ]["end_date"]
                           }{" "}
                           :{item.round_end_date}
@@ -554,27 +552,27 @@ export default class OnGoingCircleScreen extends Component {
                   </View>
 
                   {item.login_user_current_round_payment_status == 0 &&
-                  this.state.paybuttonVisible ? ( //
-                    <View style={onGoingCircleStyle.paymentButtonView}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.props.navigation.navigate("bankDetailsPage", {
-                            result: this.state.details,
-                            navigate_from: "on_going_details",
-                          })
-                        }
-                        style={[onGoingCircleStyle.paymentButton]}
-                      >
-                        <Text style={onGoingCircleStyle.paymentText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                              "bank_details_screen"
-                            ]["pay_your_round"]
+                    this.state.paybuttonVisible ? ( //
+                      <View style={onGoingCircleStyle.paymentButtonView}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate("bankDetailsPage", {
+                              result: this.state.details,
+                              navigate_from: "on_going_details",
+                            })
                           }
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : null}
+                          style={[onGoingCircleStyle.paymentButton]}
+                        >
+                          <Text style={onGoingCircleStyle.paymentText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "bank_details_screen"
+                              ]["pay_your_round"]
+                            }
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
 
                   {item.round_complete
                     .map((user_round, round_index) => (
@@ -592,7 +590,7 @@ export default class OnGoingCircleScreen extends Component {
                             >
                               {
                                 Language[this.state.selectedLanguage]["common"][
-                                  "round"
+                                "round"
                                 ]
                               }{" "}
                               {user_round.round}-{" "}
@@ -606,7 +604,7 @@ export default class OnGoingCircleScreen extends Component {
                             >
                               {
                                 Language[this.state.selectedLanguage]["common"][
-                                  "completed"
+                                "completed"
                                 ]
                               }
                             </Text>
@@ -626,7 +624,7 @@ export default class OnGoingCircleScreen extends Component {
                               <Text style={{ fontWeight: "bold" }}>
                                 {
                                   Language[this.state.selectedLanguage][
-                                    "ongoing_circle_screen"
+                                  "ongoing_circle_screen"
                                   ]["end_date"]
                                 }
                                 : {""}
@@ -644,8 +642,8 @@ export default class OnGoingCircleScreen extends Component {
               ) : null}
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
+
     );
   }
 

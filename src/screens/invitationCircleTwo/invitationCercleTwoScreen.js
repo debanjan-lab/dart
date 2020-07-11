@@ -6,9 +6,9 @@ import {
   StatusBar,
   Image,
   ActivityIndicator,
+  ScrollView
 } from "react-native";
 import { ToastMessage } from "../../components/ToastMessage";
-import { Container, Content } from "native-base";
 import invitationCercleTwoStyle from "./invitationCercleTwoStyle";
 import HeaderCurve from "../includes/headercurve";
 import URL from "../../config/url";
@@ -231,26 +231,26 @@ export default class InvitationCercleTwoScreen extends Component {
 
     console.log("item", item);
     return (
-      <Container>
-        <Content>
-          <HeaderCurve
-            navigation={this.props.navigation}
-            avatar_location={this.state.avatar_location}
-            backButton={true}
-            first_name={this.state.first_name}
-            admin={item.is_admin}
-            bellIcon={false}
-            props={this.props}
-          />
-          <StatusBar backgroundColor="#1CCBE6" />
-          {this.state.errorText != "" ? (
-            <View style={{ alignItems: "center", marginTop: "50%" }}>
-              <ErrorTemplate
-                message={this.state.errorText}
-                subMessage={this.state.subMessage}
-              />
-            </View>
-          ) : (
+
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+        <HeaderCurve
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          admin={item.is_admin}
+          bellIcon={false}
+          props={this.props}
+        />
+        <StatusBar backgroundColor="#1CCBE6" />
+        {this.state.errorText != "" ? (
+          <View style={{ alignItems: "center", marginTop: "50%" }}>
+            <ErrorTemplate
+              message={this.state.errorText}
+              subMessage={this.state.subMessage}
+            />
+          </View>
+        ) : (
             <View style={invitationCercleTwoStyle.mainContent}>
               {this.state.apiExecute ? (
                 <View>
@@ -258,11 +258,11 @@ export default class InvitationCercleTwoScreen extends Component {
                     <Text style={invitationCercleTwoStyle.title}>
                       {item.is_rejected
                         ? Language[this.state.selectedLanguage]["common"][
-                            "circle_refused"
-                          ]
+                        "circle_refused"
+                        ]
                         : Language[this.state.selectedLanguage]["common"][
-                            "circle_waiting"
-                          ]}
+                        "circle_waiting"
+                        ]}
                     </Text>
                     <Text>N° {item.circle_code}</Text>
                   </View>
@@ -272,7 +272,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "dashboard_screen"
+                            "dashboard_screen"
                             ]["circle_admin"]
                           }
                           :
@@ -296,22 +296,22 @@ export default class InvitationCercleTwoScreen extends Component {
                           item.admin_mobile_code + item.admin_mobile,
                           item.login_user_mobile_code + item.login_user_mobile
                         ) ? (
-                          <TouchableOpacity
-                            onPress={() =>
-                              CommonService.openWhatsApp(
-                                item.admin_mobile_code + item.admin_mobile
-                              )
-                            }
-                          >
-                            <Image
-                              source={require("../../../assets/images/whatsapp.png")}
-                              style={{
-                                width: 20,
-                                height: 20,
-                              }}
-                            />
-                          </TouchableOpacity>
-                        ) : null}
+                            <TouchableOpacity
+                              onPress={() =>
+                                CommonService.openWhatsApp(
+                                  item.admin_mobile_code + item.admin_mobile
+                                )
+                              }
+                            >
+                              <Image
+                                source={require("../../../assets/images/whatsapp.png")}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          ) : null}
                       </View>
                     </View>
                     <View style={invitationCercleTwoStyle.rowView}>
@@ -319,7 +319,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["target_achieve"]
                           }
                           :
@@ -336,7 +336,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["round_settlement"]
                           }
                           :
@@ -353,7 +353,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["periodicity_of_round"]
                           }
                           :
@@ -361,7 +361,8 @@ export default class InvitationCercleTwoScreen extends Component {
                       </View>
                       <View style={invitationCercleTwoStyle.rowViewRightItem}>
                         <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {item.p_round}
+
+                          {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
                         </Text>
                       </View>
                     </View>
@@ -370,7 +371,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["reason"]
                           }
                           :
@@ -385,7 +386,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "create_circle_screen"
+                            "create_circle_screen"
                             ]["start_date"]
                           }
                           :
@@ -401,7 +402,7 @@ export default class InvitationCercleTwoScreen extends Component {
                       <Text style={invitationCercleTwoStyle.rowText}>
                         {
                           Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
+                          "circle_preview_screen"
                           ]["circle_participants"]
                         }
                         :
@@ -414,60 +415,60 @@ export default class InvitationCercleTwoScreen extends Component {
                       >
                         {item.circleUsers !== undefined
                           ? item.circleUsers.map((user_item, user_index) => {
-                              return (
+                            return (
+                              <View
+                                key={user_index}
+                                style={{ flexDirection: "row" }}
+                              >
                                 <View
-                                  key={user_index}
-                                  style={{ flexDirection: "row" }}
+                                  style={
+                                    invitationCercleTwoStyle.nextRowViewLeftItem
+                                  }
                                 >
-                                  <View
+                                  <Text
                                     style={
-                                      invitationCercleTwoStyle.nextRowViewLeftItem
+                                      invitationCercleTwoStyle.rowTextValue
                                     }
                                   >
-                                    <Text
-                                      style={
-                                        invitationCercleTwoStyle.rowTextValue
-                                      }
-                                    >
-                                      {user_index + 1}.{user_item.username} (
+                                    {user_index + 1}.{user_item.username} (
                                       {user_item.mobile_country_code}
-                                      {user_item.mobile_number})
+                                    {user_item.mobile_number})
                                     </Text>
-                                  </View>
-                                  <View
-                                    style={
-                                      invitationCercleTwoStyle.rowViewMiddleItem
-                                    }
-                                  >
-                                    {user_item.accept_status == 1 ? (
-                                      <Image
-                                        source={require("../../../assets/images/success.png")}
-                                        style={{
-                                          width: 15,
-                                          height: 15,
-                                        }}
-                                      />
-                                    ) : null}
+                                </View>
+                                <View
+                                  style={
+                                    invitationCercleTwoStyle.rowViewMiddleItem
+                                  }
+                                >
+                                  {user_item.accept_status == 1 ? (
+                                    <Image
+                                      source={require("../../../assets/images/success.png")}
+                                      style={{
+                                        width: 15,
+                                        height: 15,
+                                      }}
+                                    />
+                                  ) : null}
 
-                                    {user_item.accept_status == 3 ? (
-                                      <Image
-                                        source={require("../../../assets/images/clock.png")}
-                                        style={{
-                                          width: 20,
-                                          height: 20,
-                                        }}
-                                      />
-                                    ) : null}
-                                  </View>
-                                  <View
-                                    style={
-                                      invitationCercleTwoStyle.nextRowViewRightItem
-                                    }
-                                  >
-                                    {!this.whatsppIconEnable(
-                                      user_item.mobile_number,
-                                      item.login_user_mobile
-                                    ) ? (
+                                  {user_item.accept_status == 3 ? (
+                                    <Image
+                                      source={require("../../../assets/images/clock.png")}
+                                      style={{
+                                        width: 20,
+                                        height: 20,
+                                      }}
+                                    />
+                                  ) : null}
+                                </View>
+                                <View
+                                  style={
+                                    invitationCercleTwoStyle.nextRowViewRightItem
+                                  }
+                                >
+                                  {!this.whatsppIconEnable(
+                                    user_item.mobile_number,
+                                    item.login_user_mobile
+                                  ) ? (
                                       <TouchableOpacity
                                         onPress={() =>
                                           CommonService.openWhatsApp(
@@ -485,10 +486,10 @@ export default class InvitationCercleTwoScreen extends Component {
                                         />
                                       </TouchableOpacity>
                                     ) : null}
-                                  </View>
                                 </View>
-                              );
-                            })
+                              </View>
+                            );
+                          })
                           : null}
                       </View>
                     </View>
@@ -497,7 +498,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "dashboard_screen"
+                            "dashboard_screen"
                             ]["expected_payment_recieved"]
                           }
                           :
@@ -514,7 +515,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "circle_preview_screen"
+                            "circle_preview_screen"
                             ]["num_round"]
                           }
                           :
@@ -531,7 +532,7 @@ export default class InvitationCercleTwoScreen extends Component {
                         <Text style={invitationCercleTwoStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
-                              "circle_preview_screen"
+                            "circle_preview_screen"
                             ]["end_date"]
                           }
                           :
@@ -575,54 +576,54 @@ export default class InvitationCercleTwoScreen extends Component {
                                   >
                                     {
                                       Language[this.state.selectedLanguage][
-                                        "bank_details_screen"
+                                      "bank_details_screen"
                                       ]["pay_deposit"]
                                     }
                                   </Text>
                                 </TouchableOpacity>
                               </View>
                             ) : (
-                              <View style={invitationCercleTwoStyle.buttonView}>
-                                <TouchableOpacity
-                                  style={invitationCercleTwoStyle.rejectButton}
-                                  onPress={() =>
-                                    this.props.navigation.navigate(
-                                      "refusalPage",
-                                      { result: item }
-                                    )
-                                  }
-                                >
-                                  <Text
-                                    style={invitationCercleTwoStyle.buttonText}
-                                  >
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                        "common"
-                                      ]["reject"]
+                                <View style={invitationCercleTwoStyle.buttonView}>
+                                  <TouchableOpacity
+                                    style={invitationCercleTwoStyle.rejectButton}
+                                    onPress={() =>
+                                      this.props.navigation.navigate(
+                                        "refusalPage",
+                                        { result: item }
+                                      )
                                     }
-                                  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  style={invitationCercleTwoStyle.joinButton}
-                                  onPress={() =>
-                                    this.props.navigation.navigate(
-                                      "acceptInvitaionPage",
-                                      { result: item }
-                                    )
-                                  }
-                                >
-                                  <Text
-                                    style={invitationCercleTwoStyle.buttonText}
                                   >
-                                    {
-                                      Language[this.state.selectedLanguage][
+                                    <Text
+                                      style={invitationCercleTwoStyle.buttonText}
+                                    >
+                                      {
+                                        Language[this.state.selectedLanguage][
                                         "common"
-                                      ]["join"]
+                                        ]["reject"]
+                                      }
+                                    </Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity
+                                    style={invitationCercleTwoStyle.joinButton}
+                                    onPress={() =>
+                                      this.props.navigation.navigate(
+                                        "acceptInvitaionPage",
+                                        { result: item }
+                                      )
                                     }
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            )}
+                                  >
+                                    <Text
+                                      style={invitationCercleTwoStyle.buttonText}
+                                    >
+                                      {
+                                        Language[this.state.selectedLanguage][
+                                        "common"
+                                        ]["join"]
+                                      }
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              )}
                           </View>
                         ) : item.is_admin == 1 && item.status == 0 ? (
                           <View style={invitationCercleTwoStyle.sendButtonView}>
@@ -635,7 +636,7 @@ export default class InvitationCercleTwoScreen extends Component {
                               >
                                 {
                                   Language[this.state.selectedLanguage][
-                                    "invitation_circle_screen"
+                                  "invitation_circle_screen"
                                   ]["send_reminder"]
                                 }
                               </Text>
@@ -653,7 +654,7 @@ export default class InvitationCercleTwoScreen extends Component {
                           <Text>
                             {
                               Language[this.state.selectedLanguage][
-                                "invitation_circle_screen"
+                              "invitation_circle_screen"
                               ]["note"]
                             }
                           </Text>
@@ -665,8 +666,8 @@ export default class InvitationCercleTwoScreen extends Component {
               ) : null}
             </View>
           )}
-        </Content>
-      </Container>
+      </ScrollView>
+
     );
   }
 }

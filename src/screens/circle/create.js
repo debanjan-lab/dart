@@ -15,6 +15,7 @@ import {
   Keyboard,
   Alert,
   BackHandler,
+  ScrollView
 } from "react-native";
 
 import { ToastMessage } from "../../components/ToastMessage";
@@ -27,6 +28,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import ModalSelector from 'react-native-modal-selector'
 
 const width = Math.round(Dimensions.get("window").width);
 const height = Math.round(Dimensions.get("window").height);
@@ -117,20 +119,29 @@ export default class CreateCircleScreen extends Component {
         () => {
           this.setState({
             roundTypes: [
-              Language[this.state.selectedLanguage]["create_circle_screen"][
-                "weekly"
-              ],
-              Language[this.state.selectedLanguage]["create_circle_screen"][
-                "bi-weekly"
-              ],
-              Language[this.state.selectedLanguage]["create_circle_screen"][
-                "every-10-days"
-              ],
-              Language[this.state.selectedLanguage]["create_circle_screen"][
-                "monthly"
-              ],
+
+              {
+                option: Language[this.state.selectedLanguage]["create_circle_screen"]["weekly"],
+                value: "weekly"
+              },
+              {
+                option: Language[this.state.selectedLanguage]["create_circle_screen"]["bi-weekly"],
+                value: "bi-weekly"
+              },
+              {
+                option: Language[this.state.selectedLanguage]["create_circle_screen"]["every-10-days"],
+                value: "every-10-days"
+              },
+              {
+                option: Language[this.state.selectedLanguage]["create_circle_screen"]["monthly"],
+                value: "monthly"
+              }
             ],
           });
+
+
+
+
         }
       );
     });
@@ -186,7 +197,7 @@ export default class CreateCircleScreen extends Component {
   }
 
   _doContinue = () => {
-    Keyboard.dismiss();
+    //Keyboard.dismiss();
     this.setState({
       errorTargetAmount: false,
       errorRoundSettlement: false,
@@ -199,6 +210,12 @@ export default class CreateCircleScreen extends Component {
       this.state.round_settelment == "" ||
       this.state.start_date == ""
     ) {
+
+
+
+
+
+
       if (this.state.target_amount == "") {
         this.setState({
           errorTargetAmount: true,
@@ -223,70 +240,77 @@ export default class CreateCircleScreen extends Component {
         this.setState({
           errorMessage:
             Language[this.state.selectedLanguage]["create_circle_screen"][
-              "please_assign_user"
+            "please_assign_user"
             ],
         });
       }
+
+
+
+
     } else {
-      if (
-        this.convertToSlug(this.state.periodicity) ==
-          Language[this.state.selectedLanguage]["create_circle_screen"][
-            "weekly"
-          ] &&
-        this.state.round_settelment > 500
-      ) {
-        this.setState({
-          errorMessage:
-            Language[this.state.selectedLanguage]["create_circle_screen"][
-              "instalment_hint1"
-            ],
-        });
-      }
 
-      if (
-        this.convertToSlug(this.state.periodicity) ==
-          Language[this.state.selectedLanguage]["create_circle_screen"][
-            "bi-weekly"
-          ] &&
-        this.state.round_settelment > 750
-      ) {
-        this.setState({
-          errorMessage:
-            Language[this.state.selectedLanguage]["create_circle_screen"][
-              "instalment_hint2"
-            ],
-        });
-      }
 
-      if (
-        this.convertToSlug(this.state.periodicity) ==
-          Language[this.state.selectedLanguage]["create_circle_screen"][
-            "every-10-days"
-          ] &&
-        this.state.round_settelment > 750
-      ) {
-        this.setState({
-          errorMessage:
-            Language[this.state.selectedLanguage]["create_circle_screen"][
-              "instalment_hint3"
-            ],
-        });
-      }
 
-      if (
-        this.convertToSlug(this.state.periodicity) ==
-          Language[this.state.selectedLanguage]["create_circle_screen"][
-            "monthly"
-          ] &&
-        this.state.round_settelment > 1000
-      ) {
-        this.setState({
-          errorMessage:
-            Language[this.state.selectedLanguage]["create_circle_screen"][
-              "instalment_hint4"
-            ],
-        });
-      }
+      // if (
+      //   this.convertToSlug(this.state.periodicity) ==
+      //   Language[this.state.selectedLanguage]["create_circle_screen"][
+      //   "weekly"
+      //   ] &&
+      //   this.state.round_settelment > 500
+      // ) {
+      //   this.setState({
+      //     errorMessage:
+      //       Language[this.state.selectedLanguage]["create_circle_screen"][
+      //       "instalment_hint1"
+      //       ],
+      //   });
+      // }
+
+      // if (
+      //   this.convertToSlug(this.state.periodicity) ==
+      //   Language[this.state.selectedLanguage]["create_circle_screen"][
+      //   "bi-weekly"
+      //   ] &&
+      //   this.state.round_settelment > 750
+      // ) {
+      //   this.setState({
+      //     errorMessage:
+      //       Language[this.state.selectedLanguage]["create_circle_screen"][
+      //       "instalment_hint2"
+      //       ],
+      //   });
+      // }
+
+      // if (
+      //   this.convertToSlug(this.state.periodicity) ==
+      //   Language[this.state.selectedLanguage]["create_circle_screen"][
+      //   "every-10-days"
+      //   ] &&
+      //   this.state.round_settelment > 750
+      // ) {
+      //   this.setState({
+      //     errorMessage:
+      //       Language[this.state.selectedLanguage]["create_circle_screen"][
+      //       "instalment_hint3"
+      //       ],
+      //   });
+      // }
+
+      // if (
+      //   this.convertToSlug(this.state.periodicity) ==
+      //   Language[this.state.selectedLanguage]["create_circle_screen"][
+      //   "monthly"
+      //   ] &&
+      //   this.state.round_settelment > 1000
+      // ) {
+      //   this.setState({
+      //     errorMessage:
+      //       Language[this.state.selectedLanguage]["create_circle_screen"][
+      //       "instalment_hint4"
+      //       ],
+      //   });
+      // }
 
       if (
         Number(this.state.round_settelment) >= Number(this.state.target_amount)
@@ -294,7 +318,7 @@ export default class CreateCircleScreen extends Component {
         this.setState({
           errorMessage:
             Language[this.state.selectedLanguage]["create_circle_screen"][
-              "target_amount_hint1"
+            "target_amount_hint1"
             ],
         });
       }
@@ -302,37 +326,36 @@ export default class CreateCircleScreen extends Component {
         this.setState({
           errorMessage:
             Language[this.state.selectedLanguage]["create_circle_screen"][
-              "please_assign_user"
+            "please_assign_user"
             ],
         });
       }
     }
 
-    //alert(this.convertToSlug(this.state.periodicity));
-    //return false;
 
-    //Language['en']['create_circle_screen']['target_amount_hint1']
-
-    // alert(Language[this.state.selectedLanguage]['create_circle_screen'].indexOf(this.convertToSlug(this.state.periodicity)));
-
-    // Object.keys(Language[this.state.selectedLanguage]['create_circle_screen']).find(key => object[key] === value)
-
-    // alert(this.getKeyByValue(Language[this.state.selectedLanguage]['create_circle_screen'],this.state.periodicity))
-
-    // return false
 
     if (!this.state.errorMessage) {
       let obj = {
         circle_code: this.state.cicle_code,
         target_achive: this.state.target_amount,
         round_set: this.state.round_settelment,
-        p_round: this.getKeyByValue(
-          Language[this.state.selectedLanguage]["create_circle_screen"],
-          this.state.periodicity
-        ),
+
+
+        p_round: this.state.periodicity,
+
+
+
         start_date: this.state.start_date,
         reason_for_circle: this.state.reason,
       };
+
+
+
+
+      console.log("obj", obj);
+
+
+
       this.setState({
         loader: true,
       });
@@ -355,8 +378,8 @@ export default class CreateCircleScreen extends Component {
                 that.setState({
                   errorMessage: response.data.message
                     ? Language[this.state.selectedLanguage]["status"][
-                        response.data.message
-                      ]
+                    response.data.message
+                    ]
                     : "",
                 });
               }
@@ -375,7 +398,7 @@ export default class CreateCircleScreen extends Component {
                       Language[this.state.selectedLanguage]["common"]["yes"],
                     message:
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["hin1"],
                     title: "Please confirm",
                   };
@@ -409,10 +432,10 @@ export default class CreateCircleScreen extends Component {
             );
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           ToastMessage(error.response);
         })
-        .finally(function() {
+        .finally(function () {
           that.setState({
             loader: false,
           });
@@ -483,9 +506,9 @@ export default class CreateCircleScreen extends Component {
     Alert.alert(
       Language[this.state.selectedLanguage]["delete_circle"]["delete_request"],
       `${
-        Language[this.state.selectedLanguage]["delete_circle"][
-          "delete_request_alert"
-        ]
+      Language[this.state.selectedLanguage]["delete_circle"][
+      "delete_request_alert"
+      ]
       } ${contact.username}`,
       [
         {
@@ -520,18 +543,18 @@ export default class CreateCircleScreen extends Component {
 
                   ToastMessage(
                     Language[this.state.selectedLanguage]["status"][
-                      res.data.message
+                    res.data.message
                     ]
                   );
                 } else {
                   ToastMessage(
                     Language[this.state.selectedLanguage]["status"][
-                      res.data.message
+                    res.data.message
                     ]
                   );
                 }
               })
-              .catch((err) => {});
+              .catch((err) => { });
           },
         },
       ],
@@ -559,11 +582,13 @@ export default class CreateCircleScreen extends Component {
     minDate.setDate(minDate.getDate() + 10);
 
     const roundType = this.state.roundTypes.map((s, i) => {
-      return <Picker.Item key={i} value={s} label={s} />;
+      return <Picker.Item key={i} value={s.value} label={s.option} />;
     });
 
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+
+
         <NavigationEvents onWillFocus={() => this.temporaryData()} />
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
@@ -588,10 +613,10 @@ export default class CreateCircleScreen extends Component {
               bellIcon={true}
               backAlert={
                 this.state.tempData.length ||
-                this.state.reason != "" ||
-                this.state.target_amount != "" ||
-                this.state.round_settelment != "" ||
-                this.state.start_date != ""
+                  this.state.reason != "" ||
+                  this.state.target_amount != "" ||
+                  this.state.round_settelment != "" ||
+                  this.state.start_date != ""
                   ? true
                   : false
               }
@@ -621,7 +646,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={styles.headingText}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["create_circle"]
                     }
                   </Text>
@@ -631,7 +656,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={[styles.frmLabel, { width: width / 2 }]}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["target_achieve"]
                     }
                   </Text>
@@ -654,7 +679,7 @@ export default class CreateCircleScreen extends Component {
                     keyboardType="numeric"
                     autoCapitalize="none"
                     returnKeyType="next"
-                    //onSubmitEditing={() => this.sattelment.focus()}
+                  //onSubmitEditing={() => this.sattelment.focus()}
                   />
                 </View>
 
@@ -662,7 +687,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={[styles.frmLabel, { width: width / 2 }]}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["round_settlement"]
                     }
                   </Text>
@@ -686,7 +711,7 @@ export default class CreateCircleScreen extends Component {
                     keyboardType="numeric"
                     autoCapitalize="none"
                     returnKeyType="next"
-                    //onSubmitEditing={() => this.picker.focus()}
+                  //onSubmitEditing={() => this.picker.focus()}
                   />
                 </View>
 
@@ -703,7 +728,7 @@ export default class CreateCircleScreen extends Component {
                     <Text style={styles.frmLabel}>
                       {
                         Language[this.state.selectedLanguage][
-                          "create_circle_screen"
+                        "create_circle_screen"
                         ]["periodicity_of_round"]
                       }
                       :{" "}
@@ -719,26 +744,57 @@ export default class CreateCircleScreen extends Component {
                       flex: 1,
                     }}
                   >
-                    <Picker
-                      //ref={picker => (this.picker = picker)}
-                      selectedValue={this.state.periodicity}
-                      style={{
-                        height: 40,
-                        padding: 5,
-                      }}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({ periodicity: itemValue })
-                      }
-                    >
-                      {/* <Picker.Item label="Weekly" value="weekly" />
-                      <Picker.Item label="Bi-weekly" value="bi-weekly" />
-                      <Picker.Item
-                        label="Every 10 Days"
-                        value="every-10-days"
-                      />
-                      <Picker.Item label="Monthly" value="monthly" /> */}
-                      {roundType}
-                    </Picker>
+                    {
+                      Platform.OS == 'ios' ?
+                        <ModalSelector
+                          optionTextStyle={{
+                            fontSize: 14,
+                            color: "#000000",
+                          }}
+                          data={this.state.roundTypes}
+                          initValue={this.state.periodicity}
+                          onChange={(option) => this.setState({ periodicity: option.option })}
+                          keyExtractor={option => option.option}
+                          labelExtractor={option => option.option}
+                          cancelText={Language[this.state.selectedLanguage][
+                            "common"
+                          ]["cancel"]}
+                          overlayStyle={{ flex: 1, padding: '5%', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}
+                        >
+                          <TextInput
+                            style={{
+                              fontSize: 14,
+                              color: "#000000",
+                            }}
+                            editable={false}
+                            value={this.state.periodicity} />
+
+                        </ModalSelector>
+                        :
+                        <Picker
+                          //ref={picker => (this.picker = picker)}
+                          selectedValue={this.state.periodicity}
+                          style={{
+                            height: 40,
+                            padding: 5,
+                          }}
+                          onValueChange={(itemValue, itemIndex) =>
+                            this.setState({ periodicity: itemValue })
+                          }
+                        >
+                          {roundType}
+                        </Picker>
+                    }
+
+
+
+
+
+
+
+
+
+
                   </View>
                 </View>
 
@@ -746,7 +802,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["reason"]
                     }
                   </Text>
@@ -762,7 +818,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={[styles.frmLabel, { width: width / 2 + 12 }]}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["start_date"]
                     }
                     :
@@ -819,7 +875,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "create_circle_screen"
+                      "create_circle_screen"
                       ]["participants"]
                     }
                   </Text>
@@ -847,7 +903,7 @@ export default class CreateCircleScreen extends Component {
                             {"1"}. {this.state.first_name}(
                             {
                               Language[this.state.selectedLanguage][
-                                "dashboard_screen"
+                              "dashboard_screen"
                               ]["circle_admin"]
                             }
                             ) ({this.state.mobile_country_code}
@@ -940,7 +996,7 @@ export default class CreateCircleScreen extends Component {
                   <Text style={styles.sendButtonText}>
                     {
                       Language[this.state.selectedLanguage]["common"][
-                        "continue"
+                      "continue"
                       ]
                     }
                   </Text>
@@ -956,7 +1012,10 @@ export default class CreateCircleScreen extends Component {
           </View>
           <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
-      </View>
+
+
+      </ScrollView>
+
     );
   }
 }

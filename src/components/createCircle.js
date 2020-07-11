@@ -12,13 +12,13 @@ class CreateCircle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedLanguage: "en"
+      selectedLanguage: "en",
     };
   }
 
   componentDidMount() {
     this.setState({
-      selectedLanguage: "fr"
+      selectedLanguage: "fr",
     });
   }
 
@@ -30,21 +30,25 @@ class CreateCircle extends Component {
       round_set: item.round_set,
       p_round: item.p_round,
       start_date: item.start_date,
-      reason_for_circle: item.reason_for_circle
+      reason_for_circle: item.reason_for_circle,
     };
 
     let that = this;
+
+    console.log(ApiConfig.base_url + "create-circle");
+    console.log("req", obj);
+
     axios
       .post(ApiConfig.base_url + "create-circle", JSON.stringify(obj), {
         headers: {
-          Authorization: "Bearer " + token
-        }
+          Authorization: "Bearer " + token,
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         EventEmitter.emit("validatedCircleCreation", true);
-        CommonService.getSmsPermission(res => {
+        CommonService.getSmsPermission((res) => {
           if (res) {
-            item.unsafe_participants.forEach(element => {
+            item.unsafe_participants.forEach((element) => {
               if (
                 element.mobile_number.toString() !==
                 item.login_user_mobile.toString()
@@ -79,7 +83,7 @@ class CreateCircle extends Component {
             Language[that.state.selectedLanguage]["status"][
               response.data.message
             ],
-            response => {
+            (response) => {
               if (response) {
                 navigation.navigate("dashboardPage");
               }
@@ -87,7 +91,7 @@ class CreateCircle extends Component {
           );
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("err", error);
       });
   }

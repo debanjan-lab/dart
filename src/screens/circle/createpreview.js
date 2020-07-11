@@ -13,6 +13,7 @@ import {
   Button,
   Picker,
   Alert,
+  ScrollView
 } from "react-native";
 import EventEmitter from "react-native-eventemitter";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -120,7 +121,7 @@ export default class CreateCirclePreviewScreen extends Component {
       this.setState({
         errorMessage:
           Language[this.state.selectedLanguage]["circle_preview_screen"][
-            "circle_validation_hint1"
+          "circle_validation_hint1"
           ],
       });
     } else {
@@ -201,7 +202,7 @@ export default class CreateCirclePreviewScreen extends Component {
 
   render() {
     const participants = this.props.navigation.getParam("participants", {});
-    const joinParticipantList = participants.map(function(data, i) {
+    const joinParticipantList = participants.map(function (data, i) {
       return (
         <Text key={i} style={[styles.frmLabelRight, { marginTop: 5 }]}>
           {i + 1}. {data.username} ({data.mobile_country_code}
@@ -225,7 +226,7 @@ export default class CreateCirclePreviewScreen extends Component {
       "0"
     );
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
@@ -246,55 +247,7 @@ export default class CreateCirclePreviewScreen extends Component {
               first_name={this.state.first_name}
               bellIcon={false}
             />
-            {/* <HeaderCurve /> */}
 
-            {/*<View style={styles.headerMenu}>
-               <TouchableOpacity
-                style={styles.containerBackBlock}
-                onPress={() => this._doRedirectLanding()}
-              >
-                <FeatherIcon name="arrow-left" size={25} color="#FFFFFF" />
-              </TouchableOpacity> */}
-
-            {/* <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <View style={styles.avatarImageWrapper}>
-                  <Image
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20
-                    }}
-                    source={this.state.avatar_location}
-                    onError={this.onError.bind(this)}
-                  />
-                </View>
-                <Text style={styles.avatarName}>{this.state.first_name}</Text>
-              </View> */}
-
-            {/* <TouchableOpacity
-                style={styles.containerBackBlock}
-                onPress={() => this.props.navigation.goBack()}
-              >
-                <Image
-                  style={{
-                    width: 20,
-                    height: 20,
-                    alignSelf: "flex-end"
-                  }}
-                  source={require("../../../assets/images/notification.png")}
-                />
-
-                <View style={styles.notificationBadge}>
-                  <Text style={styles.notificationText}>99</Text>
-                </View>
-              </TouchableOpacity> 
-            </View>*/}
 
             <View
               style={{
@@ -319,7 +272,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.headingText}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["create_circle_preview"]
                     }
                   </Text>
@@ -329,7 +282,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["target_achieve"]
                     }
                     :
@@ -340,7 +293,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["round_settlement"]
                     }
                     :
@@ -351,20 +304,20 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["periodicity_round"]
                     }
                     :
                   </Text>
                   <Text style={styles.frmLabelRight}>
-                    {this.capitalizeFirstLetter(p_round)}
+                    {Language[this.state.selectedLanguage]["create_circle_screen"][p_round]}
                   </Text>
                 </View>
                 <View style={styles.frmInputWrapperColumn}>
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["personal_reason"]
                     }
                     :
@@ -377,7 +330,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["wishing_start"]
                     }
                     :
@@ -390,7 +343,7 @@ export default class CreateCirclePreviewScreen extends Component {
                     <Text style={styles.frmLabel}>
                       {
                         Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
+                        "circle_preview_screen"
                         ]["circle_participants"]
                       }
                       :
@@ -405,7 +358,7 @@ export default class CreateCirclePreviewScreen extends Component {
                     <Text style={styles.changeOrderButtonText}>
                       {
                         Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
+                        "circle_preview_screen"
                         ]["change_order"]
                       }
                     </Text>
@@ -416,7 +369,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["num_round"]
                     }
                     :
@@ -428,7 +381,7 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.frmLabel}>
                     {
                       Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
+                      "circle_preview_screen"
                       ]["end_date"]
                     }
                     :
@@ -463,7 +416,7 @@ export default class CreateCirclePreviewScreen extends Component {
                     <Text style={styles.returnButtonText}>
                       {
                         Language[this.state.selectedLanguage]["common"][
-                          "return"
+                        "return"
                         ]
                       }
                     </Text>
@@ -477,7 +430,7 @@ export default class CreateCirclePreviewScreen extends Component {
                     <Text style={styles.validateButtonText}>
                       {
                         Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
+                        "circle_preview_screen"
                         ]["pay_deposit"]
                       }
                     </Text>
@@ -494,7 +447,7 @@ export default class CreateCirclePreviewScreen extends Component {
           </View>
           <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
-      </View>
+      </ScrollView>
     );
   }
 }

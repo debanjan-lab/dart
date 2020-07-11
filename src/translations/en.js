@@ -99,6 +99,8 @@ export default {
   },
   phone_contact_screen: {
     phone_contacts: "Phone Contacts",
+    not_a_valid_number: "Not a valid number",
+    you_cannot_choose_your_own_number: "You can't choose your own number"
   },
   circle_preview_screen: {
     create_circle_preview: "Create Circle Preview",
