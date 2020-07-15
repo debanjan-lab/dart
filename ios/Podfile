@@ -3,6 +3,10 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 target 'dart' do
   # Pods for dart
+
+  target 'OneSignalNotificationServiceExtension' do
+    pod 'OneSignal', '>= 2.9.3', '< 3.0'
+  end
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core', :path => '../node_modules/react-native/React'
   pod 'React-DevSupport', :path => '../node_modules/react-native/React'
@@ -29,20 +33,18 @@ target 'dart' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  target 'dartTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+  
 
   use_native_modules!
 end
 
-target 'dart-tvOS' do
-  # Pods for dart-tvOS
 
-  target 'dart-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+    end
   end
-
 end

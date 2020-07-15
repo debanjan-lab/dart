@@ -15,6 +15,7 @@
     "react": "16.8.6",
     "react-native": "0.60.0",
     "react-native-contacts": "5.0.6",
+    "react-native-device-info": "^5.6.2",
     "react-native-eventemitter": "0.0.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-crop-picker": "^0.25.0",

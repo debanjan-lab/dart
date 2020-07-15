@@ -765,6 +765,7 @@ export default class CreateCircleScreen extends Component {
                             style={{
                               fontSize: 14,
                               color: "#000000",
+                              height: 40,
                             }}
                             editable={false}
                             value={this.state.periodicity} />

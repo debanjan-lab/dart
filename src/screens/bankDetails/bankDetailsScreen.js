@@ -505,6 +505,7 @@ export default class BankDetailsScreen extends Component {
                                   style={{
                                     fontSize: 14,
                                     color: "#000000",
+                                    height: 50,
                                   }}
                                   editable={false}
                                   value={Language[this.state.selectedLanguage]["bank_details_screen"][this.state.optionTxt]} />
