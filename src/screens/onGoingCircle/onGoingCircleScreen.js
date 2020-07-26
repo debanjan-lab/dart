@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import HeaderCurve from "../includes/headercurve";
 import CommonService from "../../services/common/commonService";
 import httpService from "../../services/http/httpService";
-import Loading from "react-native-loader-overlay";
 import { ErrorTemplate } from "../../components/error/errorComponent";
 let flag = false;
 let paybutton = false;
@@ -83,7 +82,6 @@ export default class OnGoingCircleScreen extends Component {
   }
 
   getCircleDetailsByCirlceCode(circleCode, token) {
-    this.loading = Loading.show(CommonService.loaderObj);
     let payload = {
       url: "ongoing-circle-details",
       data: {
@@ -95,7 +93,6 @@ export default class OnGoingCircleScreen extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        Loading.hide(this.loading);
         if (res.status !== undefined) {
           if (res.status === 100) {
             let details = res.result;
@@ -142,7 +139,6 @@ export default class OnGoingCircleScreen extends Component {
         this.setState({ apiExecute: true });
       })
       .catch((err) => {
-        Loading.hide(this.loading);
         this.setState({
           errorText: err.message
             ? Language[this.state.selectedLanguage]["status"][err.message]
@@ -181,7 +177,7 @@ export default class OnGoingCircleScreen extends Component {
     console.log("ongoing item", item);
     return (
 
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <HeaderCurve
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
@@ -191,395 +187,260 @@ export default class OnGoingCircleScreen extends Component {
           bellIcon={true}
           props={this.props}
         />
-
-        {this.state.errorText != "" ? (
-          <View style={{ alignItems: "center", marginTop: "50%" }}>
-            <ErrorTemplate
-              message={this.state.errorText}
-              subMessage={this.state.subMessage}
-            />
-          </View>
-        ) : (
-            <View style={onGoingCircleStyle.mainContent}>
-              {this.state.apiExecute ? (
-                <View>
-                  <View style={{ alignItems: "center" }}>
-                    <Text
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+          {this.state.errorText != "" ? (
+            <View style={{ alignItems: "center", marginTop: "50%" }}>
+              <ErrorTemplate
+                message={this.state.errorText}
+                subMessage={this.state.subMessage}
+              />
+            </View>
+          ) : (
+              <View style={onGoingCircleStyle.mainContent}>
+                {this.state.apiExecute ? (
+                  <View>
+                    <View style={{ alignItems: "center" }}>
+                      <Text
+                        style={{
+                          flex: 5,
+                          fontSize: 20,
+                          fontWeight: "bold",
+                          paddingBottom: 5,
+                          paddingTop: 5,
+                        }}
+                      >
+                        {item.completed_round == item.estimate_round
+                          ? Language[this.state.selectedLanguage]["common"][
+                          "circle_completed"
+                          ]
+                          : Language[this.state.selectedLanguage]["common"][
+                          "circle_ongoing"
+                          ]}
+                      </Text>
+                      <Text>N° {item.circle_code}</Text>
+                    </View>
+                    <View
                       style={{
-                        flex: 5,
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        paddingBottom: 5,
-                        paddingTop: 5,
+                        borderBottomWidth: 1,
+                        borderColor: "#ccc",
+                        padding: 5,
                       }}
                     >
-                      {item.completed_round == item.estimate_round
-                        ? Language[this.state.selectedLanguage]["common"][
-                        "circle_completed"
-                        ]
-                        : Language[this.state.selectedLanguage]["common"][
-                        "circle_ongoing"
-                        ]}
-                    </Text>
-                    <Text>N° {item.circle_code}</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: "#ccc",
-                      padding: 5,
-                    }}
-                  >
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "dashboard_screen"
-                            ]["circle_admin"]
-                          }
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "dashboard_screen"
+                              ]["circle_admin"]
+                            }
                           :
                         </Text>
-                      </View>
-                      <View
-                        style={[
-                          onGoingCircleStyle.rowViewRightItem,
-                          { flexDirection: "row" },
-                        ]}
-                      >
-                        <Text
+                        </View>
+                        <View
                           style={[
-                            onGoingCircleStyle.rowTextValue,
-                            { marginRight: 10 },
+                            onGoingCircleStyle.rowViewRightItem,
+                            { flexDirection: "row" },
                           ]}
                         >
-                          {item.admin}
-                        </Text>
+                          <Text
+                            style={[
+                              onGoingCircleStyle.rowTextValue,
+                              { marginRight: 10 },
+                            ]}
+                          >
+                            {item.admin}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["target_achieve"]
-                          }
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["target_achieve"]
+                            }
                           :
                         </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
+                            €{item.target_achive}
+                          </Text>
+                        </View>
                       </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          €{item.target_achive}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["round_settlement"]
-                          }
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["round_settlement"]
+                            }
                           :
                         </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
+                            €{item.round_set}
+                          </Text>
+                        </View>
                       </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          €{item.round_set}
-                        </Text>
-                      </View>
-                    </View>
 
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["periodicity_of_round"]
-                          }
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["periodicity_of_round"]
+                            }
                           :
                         </Text>
-                      </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
 
-                          {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
-                        </Text>
+                            {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
 
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["start_date"]
-                          }
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["start_date"]
+                            }
                           :
                         </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
+                            {CommonService.formatDate(item.start_date)}
+                          </Text>
+                        </View>
                       </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          {CommonService.formatDate(item.start_date)}
-                        </Text>
-                      </View>
-                    </View>
 
-                    <View style={onGoingCircleStyle.rowView}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
+                      <View style={onGoingCircleStyle.rowView}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "circle_preview_screen"
+                              ]["end_date"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
+                            {CommonService.formatDate(item.end_date)}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{ paddingTop: 20 }}>
                         <Text style={onGoingCircleStyle.rowText}>
                           {
                             Language[this.state.selectedLanguage][
                             "circle_preview_screen"
-                            ]["end_date"]
+                            ]["circle_participants"]
                           }
-                          :
-                        </Text>
-                      </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          {CommonService.formatDate(item.end_date)}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{ paddingTop: 20 }}>
-                      <Text style={onGoingCircleStyle.rowText}>
-                        {
-                          Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
-                          ]["circle_participants"]
-                        }
                         :
                       </Text>
-                      <View
-                        style={[
-                          onGoingCircleStyle.rowViewNew,
-                          { paddingBottom: 20 },
-                        ]}
-                      >
-                        {item.circleUsers !== undefined
-                          ? item.circleUsers.map((user_item, user_index) => (
-                            <View
-                              key={user_index}
-                              style={{ flexDirection: "row" }}
-                            >
-                              <View
-                                style={onGoingCircleStyle.nextRowViewLeftItem}
-                              >
-                                <Text style={onGoingCircleStyle.rowTextValue}>
-                                  {user_index + 1}.{user_item.username}(
-                                    {user_item.mobile_country_code}
-                                  {user_item.mobile_number})
-                                  </Text>
-                              </View>
-                            </View>
-                          ))
-                          : null}
-                      </View>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage]["common"][
-                            "progress"
-                            ]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        {item.completed_round == item.estimate_round ? (
-                          <Text style={onGoingCircleStyle.rowTextValue}>
-                            {
-                              Language[this.state.selectedLanguage]["common"][
-                              "completed"
-                              ]
-                            }
-                          </Text>
-                        ) : item.completed_round > 1 ? (
-                          <Text style={onGoingCircleStyle.rowTextValue}>
-                            {item.completed_round +
-                              " " +
-                              Language[this.state.selectedLanguage][
-                              "circle_completed_screen"
-                              ]["round_over_out"] +
-                              " " +
-                              item.estimate_round}
-                          </Text>
-                        ) : item.completed_round < 2 ? (
-                          <Text style={onGoingCircleStyle.rowTextValue}>
-                            {item.completed_round +
-                              " " +
-                              Language[this.state.selectedLanguage][
-                              "circle_completed_screen"
-                              ]["round_over_out"] +
-                              " " +
-                              item.estimate_round}
-                          </Text>
-                        ) : null}
-                      </View>
-                    </View>
-                    <View style={{ flexDirection: "row", paddingTop: 3 }}>
-                      <View style={onGoingCircleStyle.rowViewLeftItem}>
-                        <Text style={onGoingCircleStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
-                            ]["end_date"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={onGoingCircleStyle.rowViewRightItem}>
-                        <Text style={onGoingCircleStyle.rowTextValue}>
-                          {CommonService.formatDate(item.end_date)}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View style={onGoingCircleStyle.tableContent}>
-                    <ScrollView>
-                      <View style={onGoingCircleStyle.tablePart}>
-                        <Text style={onGoingCircleStyle.baseText}>
-                          <Text
-                            style={[
-                              onGoingCircleStyle.tableText,
-                              { fontWeight: "bold" },
-                            ]}
-                          >
-                            {
-                              Language[this.state.selectedLanguage]["common"][
-                              "round"
-                              ]
-                            }{" "}
-                            {item.current_round}-{" "}
-                          </Text>
-                          <Text
-                            style={[
-                              onGoingCircleStyle.tableText,
-                              { color: "#24D19B" },
-                            ]}
-                            numberOfLines={1}
-                          >
-                            {item.completed_round == item.estimate_round
-                              ? Language[this.state.selectedLanguage]["common"][
-                              "completed"
-                              ]
-                              : Language[this.state.selectedLanguage][
-                              "dashboard_screen"
-                              ]["ongoing"]}
-                          </Text>
-                        </Text>
-
-                        <View>
-                          {item.circleUsers.map((user_item, user_index) => (
-                            <View
-                              key={user_index}
-                              style={onGoingCircleStyle.rowView}
-                            >
-                              <View style={onGoingCircleStyle.rowViewLeftItem}>
-                                <Text style={onGoingCircleStyle.rowTextValue}>
-                                  {user_item.username}
-                                </Text>
-                              </View>
-                              <View style={onGoingCircleStyle.rowViewRightItem}>
-                                {user_item.current_round_payment_status == 0 ? (
-                                  <Text style={{ color: "#E15862" }}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "ongoing_circle_screen"
-                                      ]["not_paid"]
-                                    }{" "}
-                                  </Text>
-                                ) : user_item.current_round_payment_status ==
-                                  3 ? (
-                                      <Text style={{ color: "#E15862" }}>
-                                        {
-                                          Language[this.state.selectedLanguage][
-                                          "common"
-                                          ]["pending"]
-                                        }
-                                      </Text>
-                                    ) : user_item.current_round_payment_status ==
-                                      1 ? (
-                                        <Text style={{ color: "#23CB97" }}>
-                                          {
-                                            Language[this.state.selectedLanguage][
-                                            "common"
-                                            ]["paid"]
-                                          }
-                                        </Text>
-                                      ) : null}
-                              </View>
-                            </View>
-                          ))}
-                        </View>
-                        <Text style={{ fontWeight: "bold" }}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "ongoing_circle_screen"
-                            ]["start_date"]
-                          }{" "}
-                          :{item.round_start_date}
-                        </Text>
-                        <Text style={{ fontWeight: "bold" }}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "ongoing_circle_screen"
-                            ]["end_date"]
-                          }{" "}
-                          :{item.round_end_date}
-                        </Text>
-                        {item.userWillRecieveCurrentRound != "" ? (
-                          <View
-                            style={
-                              onGoingCircleStyle.tableContentReceiverHistory
-                            }
-                          >
-                            <Text style={onGoingCircleStyle.titleTextValue}>
-                              {item.userWillRecieveCurrentRound}
-                            </Text>
-                          </View>
-                        ) : null}
-                      </View>
-                    </ScrollView>
-                  </View>
-
-                  {item.login_user_current_round_payment_status == 0 &&
-                    this.state.paybuttonVisible ? ( //
-                      <View style={onGoingCircleStyle.paymentButtonView}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            this.props.navigation.navigate("bankDetailsPage", {
-                              result: this.state.details,
-                              navigate_from: "on_going_details",
-                            })
-                          }
-                          style={[onGoingCircleStyle.paymentButton]}
+                        <View
+                          style={[
+                            onGoingCircleStyle.rowViewNew,
+                            { paddingBottom: 20 },
+                          ]}
                         >
-                          <Text style={onGoingCircleStyle.paymentText}>
+                          {item.circleUsers !== undefined
+                            ? item.circleUsers.map((user_item, user_index) => (
+                              <View
+                                key={user_index}
+                                style={{ flexDirection: "row" }}
+                              >
+                                <View
+                                  style={onGoingCircleStyle.nextRowViewLeftItem}
+                                >
+                                  <Text style={onGoingCircleStyle.rowTextValue}>
+                                    {user_index + 1}.{user_item.username}(
+                                    {user_item.mobile_country_code}
+                                    {user_item.mobile_number})
+                                  </Text>
+                                </View>
+                              </View>
+                            ))
+                            : null}
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage]["common"][
+                              "progress"
+                              ]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          {item.completed_round == item.estimate_round ? (
+                            <Text style={onGoingCircleStyle.rowTextValue}>
+                              {
+                                Language[this.state.selectedLanguage]["common"][
+                                "completed"
+                                ]
+                              }
+                            </Text>
+                          ) : item.completed_round > 1 ? (
+                            <Text style={onGoingCircleStyle.rowTextValue}>
+                              {item.completed_round +
+                                " " +
+                                Language[this.state.selectedLanguage][
+                                "circle_completed_screen"
+                                ]["round_over_out"] +
+                                " " +
+                                item.estimate_round}
+                            </Text>
+                          ) : item.completed_round < 2 ? (
+                            <Text style={onGoingCircleStyle.rowTextValue}>
+                              {item.completed_round +
+                                " " +
+                                Language[this.state.selectedLanguage][
+                                "circle_completed_screen"
+                                ]["round_over_out"] +
+                                " " +
+                                item.estimate_round}
+                            </Text>
+                          ) : null}
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: "row", paddingTop: 3 }}>
+                        <View style={onGoingCircleStyle.rowViewLeftItem}>
+                          <Text style={onGoingCircleStyle.rowText}>
                             {
                               Language[this.state.selectedLanguage][
-                              "bank_details_screen"
-                              ]["pay_your_round"]
+                              "circle_preview_screen"
+                              ]["end_date"]
                             }
+                          :
+                        </Text>
+                        </View>
+                        <View style={onGoingCircleStyle.rowViewRightItem}>
+                          <Text style={onGoingCircleStyle.rowTextValue}>
+                            {CommonService.formatDate(item.end_date)}
                           </Text>
-                        </TouchableOpacity>
+                        </View>
                       </View>
-                    ) : null}
+                    </View>
 
-                  {item.round_complete
-                    .map((user_round, round_index) => (
-                      <View
-                        key={round_index}
-                        style={onGoingCircleStyle.roundRow}
-                      >
+                    <View style={onGoingCircleStyle.tableContent}>
+                      <ScrollView>
                         <View style={onGoingCircleStyle.tablePart}>
                           <Text style={onGoingCircleStyle.baseText}>
                             <Text
@@ -593,68 +454,194 @@ export default class OnGoingCircleScreen extends Component {
                                 "round"
                                 ]
                               }{" "}
-                              {user_round.round}-{" "}
+                              {item.current_round}-{" "}
                             </Text>
                             <Text
                               style={[
                                 onGoingCircleStyle.tableText,
-                                { color: "#20CC94" },
+                                { color: "#24D19B" },
                               ]}
-                              numberOfLines={5}
+                              numberOfLines={1}
                             >
-                              {
-                                Language[this.state.selectedLanguage]["common"][
+                              {item.completed_round == item.estimate_round
+                                ? Language[this.state.selectedLanguage]["common"][
                                 "completed"
                                 ]
-                              }
+                                : Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["ongoing"]}
                             </Text>
                           </Text>
-                          <View style={onGoingCircleStyle.rowView}>
-                            {user_round.reciever_msg ? (
-                              <Text style={{ fontWeight: "bold" }}>
-                                {user_round.reciever_msg}
+
+                          <View>
+                            {item.circleUsers.map((user_item, user_index) => (
+                              <View
+                                key={user_index}
+                                style={onGoingCircleStyle.rowView}
+                              >
+                                <View style={onGoingCircleStyle.rowViewLeftItem}>
+                                  <Text style={onGoingCircleStyle.rowTextValue}>
+                                    {user_item.username}
+                                  </Text>
+                                </View>
+                                <View style={onGoingCircleStyle.rowViewRightItem}>
+                                  {user_item.current_round_payment_status == 0 ? (
+                                    <Text style={{ color: "#E15862" }}>
+                                      {
+                                        Language[this.state.selectedLanguage][
+                                        "ongoing_circle_screen"
+                                        ]["not_paid"]
+                                      }{" "}
+                                    </Text>
+                                  ) : user_item.current_round_payment_status ==
+                                    3 ? (
+                                        <Text style={{ color: "#E15862" }}>
+                                          {
+                                            Language[this.state.selectedLanguage][
+                                            "common"
+                                            ]["pending"]
+                                          }
+                                        </Text>
+                                      ) : user_item.current_round_payment_status ==
+                                        1 ? (
+                                          <Text style={{ color: "#23CB97" }}>
+                                            {
+                                              Language[this.state.selectedLanguage][
+                                              "common"
+                                              ]["paid"]
+                                            }
+                                          </Text>
+                                        ) : null}
+                                </View>
+                              </View>
+                            ))}
+                          </View>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "ongoing_circle_screen"
+                              ]["start_date"]
+                            }{" "}
+                          :{item.round_start_date}
+                          </Text>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "ongoing_circle_screen"
+                              ]["end_date"]
+                            }{" "}
+                          :{item.round_end_date}
+                          </Text>
+                          {item.userWillRecieveCurrentRound != "" ? (
+                            <View
+                              style={
+                                onGoingCircleStyle.tableContentReceiverHistory
+                              }
+                            >
+                              <Text style={onGoingCircleStyle.titleTextValue}>
+                                {item.userWillRecieveCurrentRound}
                               </Text>
-                            ) : null}
-                            {/* <Text>On {" "}
+                            </View>
+                          ) : null}
+                        </View>
+                      </ScrollView>
+                    </View>
+
+                    {item.login_user_current_round_payment_status == 0 &&
+                      this.state.paybuttonVisible ? ( //
+                        <View style={onGoingCircleStyle.paymentButtonView}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              this.props.navigation.navigate("bankDetailsPage", {
+                                result: this.state.details,
+                                navigate_from: "on_going_details",
+                              })
+                            }
+                            style={[onGoingCircleStyle.paymentButton]}
+                          >
+                            <Text style={onGoingCircleStyle.paymentText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "bank_details_screen"
+                                ]["pay_your_round"]
+                              }
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      ) : null}
+
+                    {item.round_complete
+                      .map((user_round, round_index) => (
+                        <View
+                          key={round_index}
+                          style={onGoingCircleStyle.roundRow}
+                        >
+                          <View style={onGoingCircleStyle.tablePart}>
+                            <Text style={onGoingCircleStyle.baseText}>
+                              <Text
+                                style={[
+                                  onGoingCircleStyle.tableText,
+                                  { fontWeight: "bold" },
+                                ]}
+                              >
+                                {
+                                  Language[this.state.selectedLanguage]["common"][
+                                  "round"
+                                  ]
+                                }{" "}
+                                {user_round.round}-{" "}
+                              </Text>
+                              <Text
+                                style={[
+                                  onGoingCircleStyle.tableText,
+                                  { color: "#20CC94" },
+                                ]}
+                                numberOfLines={5}
+                              >
+                                {
+                                  Language[this.state.selectedLanguage]["common"][
+                                  "completed"
+                                  ]
+                                }
+                              </Text>
+                            </Text>
+                            <View style={onGoingCircleStyle.rowView}>
+                              {user_round.reciever_msg ? (
+                                <Text style={{ fontWeight: "bold" }}>
+                                  {user_round.reciever_msg}
+                                </Text>
+                              ) : null}
+                              {/* <Text>On {" "}
 														{user_round.completion_date}
 															</Text> */}
-                          </View>
-                          <View style={onGoingCircleStyle.rowView}>
-                            <View style={onGoingCircleStyle.rowViewLeftItem}>
-                              <Text style={{ fontWeight: "bold" }}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  "ongoing_circle_screen"
-                                  ]["end_date"]
-                                }
+                            </View>
+                            <View style={onGoingCircleStyle.rowView}>
+                              <View style={onGoingCircleStyle.rowViewLeftItem}>
+                                <Text style={{ fontWeight: "bold" }}>
+                                  {
+                                    Language[this.state.selectedLanguage][
+                                    "ongoing_circle_screen"
+                                    ]["end_date"]
+                                  }
                                 : {""}
-                                {user_round.completion_date !== undefined
-                                  ? user_round.completion_date
-                                  : null}
-                              </Text>
+                                  {user_round.completion_date !== undefined
+                                    ? user_round.completion_date
+                                    : null}
+                                </Text>
+                              </View>
                             </View>
                           </View>
                         </View>
-                      </View>
-                    ))
-                    .reverse()}
-                </View>
-              ) : null}
-            </View>
-          )}
-      </ScrollView>
+                      ))
+                      .reverse()}
+                  </View>
+                ) : null}
+              </View>
+            )}
+        </ScrollView>
+      </View>
 
     );
   }
 
-  getNames(data) {
-    let names = "";
-    data.forEach((element) => {
-      if (element.current_round_payment_status == 0) {
-        names += element.username + ", ";
-      }
-    });
-    names = names.substring(0, names.length - 2);
-    return names + " ";
-  }
 }

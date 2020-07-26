@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,69 +9,63 @@ import {
   Image,
   ActivityIndicator,
   Alert,
-} from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+} from 'react-native';
+import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-community/async-storage";
-import HeaderCurve from "../includes/headercurve";
-const width = Math.round(Dimensions.get("window").width);
-const height = Math.round(Dimensions.get("window").height);
-import httpService from "../../services/http/httpService";
+} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+import HeaderCurve from '../includes/headercurve';
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
+import httpService from '../../services/http/httpService';
 
-import Language from "../../translations/index";
+import Language from '../../translations/index';
 
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isSecured: true,
-      eyeIcon: require("../../../assets/images/eye_cross.png"),
+      eyeIcon: require('../../../assets/images/eye_cross.png'),
       loader: false,
       success: null,
-      email: "",
+      email: '',
       errorEmail: false,
-      password: "",
+      password: '',
       errorPassword: false,
-      errorMessage: "",
-      device_token: "",
-      selectedLanguage: "en",
+      errorMessage: '',
+      device_token: '',
+      selectedLanguage: 'en',
     };
   }
 
   async componentDidMount() {
-    const device_token = await AsyncStorage.getItem("device_token");
-    this.setState({ device_token: device_token, selectedLanguage: "fr" });
-  }
-
-  componentWillUnmount() {
-    let keys = ["notification_data"];
-    AsyncStorage.multiRemove(keys, (err) => {});
+    const device_token = await AsyncStorage.getItem('device_token');
+    this.setState({device_token: device_token, selectedLanguage: 'fr'});
   }
 
   _doLogin = () => {
     this.setState({
       errorEmail: false,
       errorPassword: false,
-      errorMessage: "",
+      errorMessage: '',
     });
-    if (this.state.email == "" || this.state.password == "") {
-      if (this.state.email == "") {
+    if (this.state.email == '' || this.state.password == '') {
+      if (this.state.email == '') {
         this.setState({
           errorEmail: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
 
-      if (this.state.password == "") {
+      if (this.state.password == '') {
         this.setState({
           errorPassword: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
     }
@@ -83,7 +77,7 @@ export default class LoginScreen extends Component {
           let thatNavigation = this.props.navigation;
 
           let obj = {
-            url: "user-authentication",
+            url: 'user-authentication',
             data: {
               email: this.state.email,
               password: this.state.password,
@@ -95,15 +89,15 @@ export default class LoginScreen extends Component {
             loader: true,
           });
 
-          console.log("request==login" + JSON.stringify(obj));
+          console.log('request==login' + JSON.stringify(obj));
 
           httpService
             .postHttpCall(obj)
             .then((response) => {
               console.log(
-                "response.result==" + JSON.stringify(response.result)
+                'response.result==' + JSON.stringify(response.result),
               );
-              console.log("response.status==" + response.status);
+              console.log('response.status==' + response.status);
 
               if (response.status == 300) {
                 that.setState(
@@ -112,14 +106,14 @@ export default class LoginScreen extends Component {
                     loader: false,
                   },
                   () => {
-                    console.log("response=========" + JSON.stringify(response));
+                    console.log('response=========' + JSON.stringify(response));
 
                     that.setState({
                       errorMessage: response.message
-                        ? Language[this.state.selectedLanguage]["status"][
+                        ? Language[this.state.selectedLanguage]['status'][
                             response.message
                           ]
-                        : "",
+                        : '',
                     });
                     if (
                       response.otp_verified !== undefined &&
@@ -127,25 +121,25 @@ export default class LoginScreen extends Component {
                     ) {
                       AsyncStorage.clear();
                       AsyncStorage.multiSet([
-                        ["email", response.result.email],
-                        ["password", this.state.password],
+                        ['email', response.result.email],
+                        ['password', this.state.password],
                         [
-                          "mobile_country_code",
+                          'mobile_country_code',
                           response.result.mobile_country_code,
                         ],
                         [
-                          "mobile_number",
+                          'mobile_number',
                           response.result.mobile_number.toString(),
                         ],
-                        ["rememberToken", response.result.remember_token],
-                        ["user___id", response.result.id.toString()],
+                        ['rememberToken', response.result.remember_token],
+                        ['user___id', response.result.id.toString()],
                       ]).then(() => {
-                        thatNavigation.navigate("otpVerifyPage");
+                        thatNavigation.navigate('otpVerifyPage');
 
                         //alert(response.result.mobile_country_code)
                       });
                     }
-                  }
+                  },
                 );
               } else {
                 if (response.status == 100) {
@@ -153,32 +147,32 @@ export default class LoginScreen extends Component {
 
                   AsyncStorage.clear();
                   AsyncStorage.multiSet([
-                    ["user_id", response.result.id.toString()],
-                    ["rememberToken", response.result.remember_token],
-                    ["first_name", response.result.first_name],
-                    ["last_name", response.result.last_name],
-                    ["dob", response.result.dob],
-                    ["email", response.result.email],
-                    ["iban", response.result.iban],
+                    ['user_id', response.result.id.toString()],
+                    ['rememberToken', response.result.remember_token],
+                    ['first_name', response.result.first_name],
+                    ['last_name', response.result.last_name],
+                    ['dob', response.result.dob],
+                    ['email', response.result.email],
+                    ['iban', response.result.iban],
                     [
-                      "mobile_country_code",
+                      'mobile_country_code',
                       response.result.mobile_country_code,
                     ],
-                    ["mobile_number", response.result.mobile_number.toString()],
-                    ["avatar_location", response.result.avatar_location],
-                    ["loggedIn", "success"],
+                    ['mobile_number', response.result.mobile_number.toString()],
+                    ['avatar_location', response.result.avatar_location],
+                    ['loggedIn', 'success'],
                   ]).then(() => {
-                    let notificationDetails = thatNavigation.getParam("result");
+                    let notificationDetails = thatNavigation.getParam('result');
                     if (
                       notificationDetails !== undefined &&
                       notificationDetails != null &&
-                      notificationDetails != ""
+                      notificationDetails != ''
                     ) {
-                      thatNavigation.navigate("ongingPage", {
+                      thatNavigation.navigate('ongingPage', {
                         result: notificationDetails,
                       });
                     } else {
-                      thatNavigation.navigate("homeStack");
+                      thatNavigation.navigate('App');
                     }
                   });
                 } else {
@@ -186,20 +180,20 @@ export default class LoginScreen extends Component {
               }
             })
             .catch((err) => {
-              that.setState({ errorMessage: err.message, loader: false });
+              that.setState({errorMessage: err.message, loader: false});
             });
         }
       }.bind(this),
-      500
+      500,
     );
   };
 
   _doRedirectForgotPassword = () => {
-    this.props.navigation.navigate("forgotPasswordPage");
+    this.props.navigation.navigate('forgotPasswordPage');
   };
 
   _doRedirectCreateAccount = () => {
-    this.props.navigation.navigate("registerOnePage");
+    this.props.navigation.navigate('registerOnePage');
   };
 
   _doChangeView = () => {
@@ -213,13 +207,9 @@ export default class LoginScreen extends Component {
   };
 
   render() {
-    const toasTStyle = this.state.success
-      ? { backgroundColor: "#00CC2C" }
-      : { backgroundColor: "#A40B0B" };
-
     const eyeIcon = this.state.isSecured
-      ? require("../../../assets/images/eye_cross.png")
-      : require("../../../assets/images/eye.png");
+      ? require('../../../assets/images/eye_cross.png')
+      : require('../../../assets/images/eye.png');
 
     const errorEmail = this.state.errorEmail
       ? styles.inputTextStyleRequired
@@ -231,198 +221,153 @@ export default class LoginScreen extends Component {
 
     return (
       <View style={styles.container}>
+        <HeaderCurve
+          title={
+            Language[this.state.selectedLanguage]['login_screen'][
+              'login_to_your_account'
+            ]
+          }
+          backButton={true}
+          navigation={this.props.navigation}
+        />
         <KeyboardAwareScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps={"handled"}
-        >
-          <View style={{ flex: 1, position: "relative" }}>
-            <HeaderCurve
-              title={
-                Language[this.state.selectedLanguage]["login_screen"][
-                  "login_to_your_account"
-                ]
-              }
-              navigation={this.props.navigation}
-              backButton={true}
-            />
-
-            <View style={{ flex: 1 }}>
-              <View
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps={'handled'}>
+          <View style={{padding: 20, flex: 1, marginBottom: '20%'}}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={require('../../../assets/images/login2.png')}
+                resizeMode={'contain'}
                 style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
+                  width: 200,
+                  height: 200,
                 }}
-              >
-                <View style={styles.imageWrapper}>
-                  <Image
-                    source={require("../../../assets/images/login2.png")}
-                    resizeMode={"contain"}
-                    style={{ width: hp("35%"), height: hp("35%") }}
-                  />
-                </View>
+              />
+            </View>
 
-                <View
+            <View style={styles.inputContainer}>
+              <TextInput
+                autoFocus={true}
+                style={errorEmail}
+                onChangeText={(email) => this.setState({email})}
+                placeholder={
+                  Language[this.state.selectedLanguage]['login_screen']['email']
+                }
+                keyboardType="email-address"
+                autoCapitalize="none"
+                returnKeyType="go"
+                onSubmitEditing={() => this.password.focus()}
+              />
+              <View style={{position: 'absolute'}}>
+                <Image
+                  source={require('../../../assets/images/email.png')}
                   style={{
-                    flexDirection: "row",
-                    position: "relative",
-                    marginTop: 20,
-                    alignItems: "center",
+                    width: 20,
+                    height: 20,
                   }}
-                >
-                  <TextInput
-                    autoFocus={true}
-                    style={errorEmail}
-                    onChangeText={(email) => this.setState({ email })}
-                    placeholder={
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "email"
-                      ]
-                    }
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    returnKeyType="go"
-                    onSubmitEditing={() => this.password.focus()}
-                  />
-                  <View style={{ position: "absolute" }}>
-                    <Image
-                      source={require("../../../assets/images/email.png")}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    position: "relative",
-                    marginTop: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <TextInput
-                    ref={(password) => (this.password = password)}
-                    style={[errorPassword, { paddingRight: 40 }]}
-                    onChangeText={(password) => this.setState({ password })}
-                    placeholder={
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "password"
-                      ]
-                    }
-                    secureTextEntry={this.state.isSecured}
-                    autoCapitalize="none"
-                    returnKeyType="done"
-                    onSubmitEditing={() => this._doLogin()}
-                  />
-
-                  <View style={{ position: "absolute" }}>
-                    <Image
-                      source={require("../../../assets/images/lock.png")}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      left: width - 70,
-                    }}
-                    onPress={() => this._doChangeView()}
-                  >
-                    <Image
-                      source={eyeIcon}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 10,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "red",
-                      fontSize: 16,
-                    }}
-                  >
-                    {this.state.errorMessage}
-                  </Text>
-                </View>
-
-                <View style={styles.forgotPasswordBlock}>
-                  <Text
-                    style={styles.forgotPasswordText}
-                    onPress={() => this._doRedirectForgotPassword()}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "forgot_password"
-                      ]
-                    }
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.sendButtonBlock}
-                  onPress={() => this._doLogin()}
-                  disabled={this.state.loader}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "login"
-                      ]
-                    }
-                  </Text>
-                  {this.state.loader ? (
-                    <View style={styles.loading}>
-                      <ActivityIndicator size="small" color={"#FFFFFF"} />
-                    </View>
-                  ) : null}
-                </TouchableOpacity>
-
-                <View style={[styles.forgotPasswordBlock]}>
-                  <Text
-                    style={[
-                      styles.forgotPasswordText,
-                      { color: "#000000", marginRight: 5 },
-                    ]}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "dont_have_account"
-                      ]
-                    }
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => this._doRedirectCreateAccount()}
-                  >
-                    <Text style={styles.forgotPasswordText}>
-                      {
-                        Language[this.state.selectedLanguage]["login_screen"][
-                          "signup_here"
-                        ]
-                      }
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                />
               </View>
             </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                ref={(password) => (this.password = password)}
+                style={[errorPassword, {paddingRight: 40}]}
+                onChangeText={(password) => this.setState({password})}
+                placeholder={
+                  Language[this.state.selectedLanguage]['login_screen'][
+                    'password'
+                  ]
+                }
+                secureTextEntry={this.state.isSecured}
+                autoCapitalize="none"
+                returnKeyType="done"
+                onSubmitEditing={() => this._doLogin()}
+              />
+
+              <View style={{position: 'absolute'}}>
+                <Image
+                  source={require('../../../assets/images/lock.png')}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  left: width - 70,
+                }}
+                onPress={() => this._doChangeView()}>
+                <Image
+                  source={eyeIcon}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.errorMessageContainer}>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: 16,
+                }}>
+                {this.state.errorMessage}
+              </Text>
+            </View>
+
+            <View style={styles.forgotPasswordBlock}>
+              <Text
+                style={styles.forgotPasswordText}
+                onPress={() => this._doRedirectForgotPassword()}>
+                {
+                  Language[this.state.selectedLanguage]['login_screen'][
+                    'forgot_password'
+                  ]
+                }
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.sendButtonBlock}
+              onPress={() => this._doLogin()}
+              disabled={this.state.loader}>
+              <Text style={styles.sendButtonText}>
+                {Language[this.state.selectedLanguage]['login_screen']['login']}
+              </Text>
+              {this.state.loader ? (
+                <View style={styles.loading}>
+                  <ActivityIndicator size="small" color={'#FFFFFF'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
+
+            <View style={[styles.forgotPasswordBlock, {padding: 20}]}>
+              <Text style={[styles.forgotPasswordText, {color: '#000000'}]}>
+                {
+                  Language[this.state.selectedLanguage]['login_screen'][
+                    'dont_have_account'
+                  ]
+                }
+              </Text>
+              <TouchableOpacity
+                onPress={() => this._doRedirectCreateAccount()}
+                style={{marginTop: 20}}>
+                <Text style={[styles.forgotPasswordText]}>
+                  {
+                    Language[this.state.selectedLanguage]['login_screen'][
+                      'signup_here'
+                    ]
+                  }
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
       </View>
     );
@@ -432,43 +377,44 @@ export default class LoginScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   containerBackBlock: {
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 60,
   },
 
   containerHeaderText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
     right: 10,
   },
 
   containerImageBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
     height: height / 4,
-    backgroundColor: "#C6F3F0",
+    backgroundColor: '#C6F3F0',
   },
 
   forgotPasswordBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
 
   forgotPasswordText: {
-    color: "#12c4cc",
+    color: '#12c4cc',
     fontSize: 16,
   },
 
   inputTextStyleInactive: {
     flex: 1,
     height: 40,
-    borderBottomColor: "#1DC2E0", // normal
+    borderBottomColor: '#1DC2E0', // normal
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 40,
     paddingVertical: 0,
@@ -476,9 +422,9 @@ const styles = StyleSheet.create({
   inputTextStyleRequired: {
     flex: 1,
     height: 40,
-    borderBottomColor: "red", // required
+    borderBottomColor: 'red', // required
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 40,
     paddingVertical: 0,
@@ -489,46 +435,57 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
 
   imageWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-    height: hp("30%"),
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // height: '40%',
   },
   headerMenu: {
-    flexDirection: "row",
-    height: hp("4%"),
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    height: hp('4%'),
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 20,
-    top: hp("4%"),
+    top: hp('4%'),
   },
   headingBold: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   headingLight: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "200",
+    fontWeight: '200',
   },
   loading: {
     marginLeft: 10,
   },
   borderReqired: {
-    borderBottomColor: "red",
+    borderBottomColor: 'red',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    position: 'relative',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  errorMessageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });

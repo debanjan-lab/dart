@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,21 +11,21 @@ import {
   ActivityIndicator,
   Keyboard,
   Alert,
-} from "react-native";
+} from 'react-native';
 
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-community/async-storage";
+} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const statusBarBackgroundColor = "#1CCBE6";
-const barStyle = "light-content";
-import httpService from "../../services/http/httpService";
-import HeaderCurve from "../includes/headercurve";
+const statusBarBackgroundColor = '#1CCBE6';
+const barStyle = 'light-content';
+import httpService from '../../services/http/httpService';
+import HeaderCurve from '../includes/headercurve';
 
-import Language from "../../translations/index";
+import Language from '../../translations/index';
 
 export default class OtpVerifyScreen extends Component {
   constructor(props) {
@@ -33,11 +33,11 @@ export default class OtpVerifyScreen extends Component {
     this.state = {
       loader: false,
       loaderResendOtp: false,
-      rememberToken: "",
+      rememberToken: '',
       success: null,
-      errorMessage: "",
-      successMessage: "",
-      selectedLanguage: "en",
+      errorMessage: '',
+      successMessage: '',
+      selectedLanguage: 'en',
     };
   }
 
@@ -47,11 +47,11 @@ export default class OtpVerifyScreen extends Component {
 
   _bootstrapAsync = async () => {
     AsyncStorage.multiGet([
-      "rememberToken",
-      "email",
-      "password",
-      "mobile_number",
-      "user___id",
+      'rememberToken',
+      'email',
+      'password',
+      'mobile_number',
+      'user___id',
     ]).then((response) => {
       this.setState({
         rememberToken: response[0][1],
@@ -59,7 +59,7 @@ export default class OtpVerifyScreen extends Component {
         password: response[2][1],
         mobile_number: response[3][1],
         user_id: response[4][1],
-        selectedLanguage: "fr",
+        selectedLanguage: 'fr',
       });
     });
   };
@@ -67,12 +67,12 @@ export default class OtpVerifyScreen extends Component {
   _doSubmit = () => {
     Keyboard.dismiss();
     this.setState({
-      errorMessage: "",
-      successMessage: "",
+      errorMessage: '',
+      successMessage: '',
     });
 
     let obj = {
-      url: "mobile-otp-verification",
+      url: 'mobile-otp-verification',
       data: {
         otp:
           this.state.otp1 + this.state.otp2 + this.state.otp3 + this.state.otp4,
@@ -84,7 +84,7 @@ export default class OtpVerifyScreen extends Component {
     let thatNavigation = this.props.navigation;
 
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           this.setState({
             loader: true,
@@ -102,12 +102,12 @@ export default class OtpVerifyScreen extends Component {
                   () => {
                     that.setState({
                       errorMessage: response.message
-                        ? Language[this.state.selectedLanguage]["status"][
+                        ? Language[this.state.selectedLanguage]['status'][
                             response.message
                           ]
-                        : "",
+                        : '',
                     });
-                  }
+                  },
                 );
               } else {
                 that.setState({
@@ -116,36 +116,36 @@ export default class OtpVerifyScreen extends Component {
                 });
 
                 setTimeout(
-                  function() {
-                    this.props.navigation.navigate("RegisterTwoPage");
+                  function () {
+                    this.props.navigation.navigate('RegisterTwoPage');
                   }.bind(this),
-                  3000
+                  3000,
                 );
               }
             })
             .catch((err) => {
               that.setState({
                 errorMessage: err.message
-                  ? Language[this.state.selectedLanguage]["status"][err.message]
-                  : "",
+                  ? Language[this.state.selectedLanguage]['status'][err.message]
+                  : '',
                 loader: false,
               });
             });
         }
       }.bind(this),
-      500
+      500,
     );
   };
 
   _onChangeText = (fieldName) => (text) => {
-    this.setState({ [fieldName]: text }, () => {
-      if (fieldName == "otp1") {
+    this.setState({[fieldName]: text}, () => {
+      if (fieldName == 'otp1') {
         this.secondTextInput.focus();
-      } else if (fieldName == "otp2") {
+      } else if (fieldName == 'otp2') {
         this.thirdTextInput.focus();
-      } else if (fieldName == "otp3") {
+      } else if (fieldName == 'otp3') {
         this.fourthTextInput.focus();
-      } else if (fieldName == "otp4") {
+      } else if (fieldName == 'otp4') {
         //this.secondTextInput.focus();
       }
     });
@@ -153,17 +153,17 @@ export default class OtpVerifyScreen extends Component {
 
   _doResendOTP = async () => {
     this.setState({
-      errorMessage: "",
-      successMessage: "",
+      errorMessage: '',
+      successMessage: '',
     });
 
     let that = this;
     let obj = {
-      url: "resend-otp",
+      url: 'resend-otp',
       data: {
         user_id: this.state.user_id,
       },
-      authtoken: "xyz",
+      authtoken: 'xyz',
     };
 
     this.setState({
@@ -182,12 +182,12 @@ export default class OtpVerifyScreen extends Component {
             () => {
               that.setState({
                 errorMessage: response.message
-                  ? Language[this.state.selectedLanguage]["status"][
+                  ? Language[this.state.selectedLanguage]['status'][
                       response.message
                     ]
-                  : "",
+                  : '',
               });
-            }
+            },
           );
         } else {
           that.setState(
@@ -198,29 +198,26 @@ export default class OtpVerifyScreen extends Component {
             () => {
               that.setState({
                 successMessage: response.message
-                  ? Language[this.state.selectedLanguage]["status"][
+                  ? Language[this.state.selectedLanguage]['status'][
                       response.message
                     ]
-                  : "",
+                  : '',
               });
-            }
+            },
           );
         }
       })
       .catch((err) => {
         that.setState({
           errorMessage: err.message
-            ? Language[this.state.selectedLanguage]["status"][err.message]
-            : "",
+            ? Language[this.state.selectedLanguage]['status'][err.message]
+            : '',
           loaderResendOtp: false,
         });
       });
   };
 
   render() {
-    const toasTStyle = this.state.success
-      ? { backgroundColor: "#00CC2C" }
-      : { backgroundColor: "#A40B0B" };
     return (
       <View style={styles.container}>
         <StatusBar
@@ -228,205 +225,162 @@ export default class OtpVerifyScreen extends Component {
           barStyle={barStyle}
         />
 
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={{ flex: 1, position: "relative" }}>
-            <HeaderCurve
-              title={
-                Language[this.state.selectedLanguage]["otp_screen"][
-                  "verify_otp"
-                ]
-              }
-              navigation={this.props.navigation}
-              avatar_location={this.state.avatar_location}
-              backButton={false}
-              bellIcon={false}
-            />
+        <HeaderCurve
+          title={
+            Language[this.state.selectedLanguage]['otp_screen']['verify_otp']
+          }
+          avatar_location={this.state.avatar_location}
+          backButton={false}
+          bellIcon={false}
+          navigation={this.props.navigation}
+        />
+        <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1}}>
+          <View
+            style={{
+              padding: 20,
+              flex: 1,
+              marginBottom: '20%',
+            }}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={require('../../../assets/images/otp.png')}
+                resizeMode={'contain'}
+                style={{
+                  width: '80%',
+                  height: '80%',
+                }}
+              />
+            </View>
 
-            <View style={{ flex: 1 }}>
+            <View style={styles.containerHeaderBlock}>
+              <Text style={styles.containerHeaderSubText}>
+                {Language[this.state.selectedLanguage]['otp_screen']['hint1']}
+              </Text>
+              <Text style={[styles.containerHeaderSubText, {marginTop: 0}]}>
+                {Language[this.state.selectedLanguage]['otp_screen']['hint2']}
+              </Text>
+              <Text
+                style={[
+                  styles.containerHeaderSubText,
+                  {color: '#929292', marginTop: 10},
+                ]}>
+                {Language[this.state.selectedLanguage]['otp_screen']['hint3']}
+              </Text>
+            </View>
+
+            <View style={styles.otpBlock}>
+              <TextInput
+                style={styles.otpTextBox}
+                textAlign={'center'}
+                maxLength={1}
+                keyboardType={'number-pad'}
+                blurOnSubmit={false}
+                onChangeText={this._onChangeText('otp1')}
+              />
+              <TextInput
+                style={styles.otpTextBox}
+                textAlign={'center'}
+                maxLength={1}
+                keyboardType={'number-pad'}
+                blurOnSubmit={false}
+                onChangeText={this._onChangeText('otp2')}
+                ref={(input) => {
+                  this.secondTextInput = input;
+                }}
+              />
+              <TextInput
+                style={styles.otpTextBox}
+                textAlign={'center'}
+                maxLength={1}
+                keyboardType={'number-pad'}
+                blurOnSubmit={false}
+                onChangeText={this._onChangeText('otp3')}
+                ref={(input) => {
+                  this.thirdTextInput = input;
+                }}
+              />
+              <TextInput
+                style={styles.otpTextBox}
+                textAlign={'center'}
+                maxLength={1}
+                keyboardType={'number-pad'}
+                blurOnSubmit={false}
+                onChangeText={this._onChangeText('otp4')}
+                ref={(input) => {
+                  this.fourthTextInput = input;
+                }}
+              />
+            </View>
+
+            <View style={styles.errorMessageContainer}>
+              {this.state.successMessage ? (
+                <Text
+                  style={{
+                    color: 'green',
+                    fontSize: 16,
+                  }}>
+                  {this.state.successMessage}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 16,
+                  }}>
+                  {this.state.errorMessage}
+                </Text>
+              )}
+            </View>
+
+            <View style={styles.resendOtpBlock}>
+              <Text style={[styles.containerHeaderSubText, {color: '#929292'}]}>
+                {Language[this.state.selectedLanguage]['otp_screen']['did_not']}
+              </Text>
+
               <View
                 style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                }}
-              >
-                <View style={styles.imageWrapper}>
-                  <Image
-                    source={require("../../../assets/images/otp.png")}
-                    resizeMode={"contain"}
-                    style={{ width: hp("30%"), height: hp("30%") }}
-                  />
-                </View>
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 10,
+                }}>
+                <Text
+                  style={[styles.containerHeaderSubText, {color: '#5AC6C6'}]}
+                  onPress={() => this._doResendOTP()}>
+                  {
+                    Language[this.state.selectedLanguage]['otp_screen'][
+                      'resend_otp'
+                    ]
+                  }
+                </Text>
 
-                <View style={styles.containerHeaderBlock}>
-                  <Text style={styles.containerHeaderSubText}>
-                    {
-                      Language[this.state.selectedLanguage]["otp_screen"][
-                        "hint1"
-                      ]
-                    }
-                  </Text>
-                  <Text
-                    style={[styles.containerHeaderSubText, { marginTop: 0 }]}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["otp_screen"][
-                        "hint2"
-                      ]
-                    }
-                  </Text>
-                  <Text
-                    style={[
-                      styles.containerHeaderSubText,
-                      { color: "#929292", marginTop: 10 },
-                    ]}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["otp_screen"][
-                        "hint3"
-                      ]
-                    }
-                  </Text>
-                </View>
-
-                <View style={styles.otpBlock}>
-                  <TextInput
-                    style={styles.otpTextBox}
-                    textAlign={"center"}
-                    maxLength={1}
-                    keyboardType={"number-pad"}
-                    blurOnSubmit={false}
-                    onChangeText={this._onChangeText("otp1")}
-                  />
-                  <TextInput
-                    style={styles.otpTextBox}
-                    textAlign={"center"}
-                    maxLength={1}
-                    keyboardType={"number-pad"}
-                    blurOnSubmit={false}
-                    onChangeText={this._onChangeText("otp2")}
-                    ref={(input) => {
-                      this.secondTextInput = input;
-                    }}
-                  />
-                  <TextInput
-                    style={styles.otpTextBox}
-                    textAlign={"center"}
-                    maxLength={1}
-                    keyboardType={"number-pad"}
-                    blurOnSubmit={false}
-                    onChangeText={this._onChangeText("otp3")}
-                    ref={(input) => {
-                      this.thirdTextInput = input;
-                    }}
-                  />
-                  <TextInput
-                    style={styles.otpTextBox}
-                    textAlign={"center"}
-                    maxLength={1}
-                    keyboardType={"number-pad"}
-                    blurOnSubmit={false}
-                    onChangeText={this._onChangeText("otp4")}
-                    ref={(input) => {
-                      this.fourthTextInput = input;
-                    }}
-                  />
-                </View>
-
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {this.state.successMessage ? (
-                    <Text
-                      style={{
-                        color: "green",
-                        fontSize: 16,
-                      }}
-                    >
-                      {this.state.successMessage}
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        color: "red",
-                        fontSize: 16,
-                      }}
-                    >
-                      {this.state.errorMessage}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={styles.resendOtpBlock}>
-                  <Text
-                    style={[
-                      styles.containerHeaderSubText,
-                      { color: "#929292" },
-                    ]}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["otp_screen"][
-                        "did_not"
-                      ]
-                    }
-                  </Text>
-
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.containerHeaderSubText,
-                        { color: "#5AC6C6" },
-                      ]}
-                      onPress={() => this._doResendOTP()}
-                    >
-                      {
-                        Language[this.state.selectedLanguage]["otp_screen"][
-                          "resend_otp"
-                        ]
-                      }
-                    </Text>
-
-                    {this.state.loaderResendOtp ? (
-                      <View style={styles.loading}>
-                        <ActivityIndicator size="small" color={"green"} />
-                      </View>
-                    ) : null}
+                {this.state.loaderResendOtp ? (
+                  <View style={styles.loading}>
+                    <ActivityIndicator size="small" color={'green'} />
                   </View>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => this._doSubmit()}
-                  style={styles.sendButtonBlock}
-                  disabled={this.state.loader}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["otp_screen"][
-                        "verify_otp"
-                      ]
-                    }
-                  </Text>
-
-                  {this.state.loader ? (
-                    <View style={styles.loading}>
-                      <ActivityIndicator size="small" color={"#FFFFFF"} />
-                    </View>
-                  ) : null}
-                </TouchableOpacity>
+                ) : null}
               </View>
             </View>
+
+            <TouchableOpacity
+              onPress={() => this._doSubmit()}
+              style={styles.sendButtonBlock}
+              disabled={this.state.loader}>
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]['otp_screen'][
+                    'verify_otp'
+                  ]
+                }
+              </Text>
+
+              {this.state.loader ? (
+                <View style={styles.loading}>
+                  <ActivityIndicator size="small" color={'#FFFFFF'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
       </View>
     );
@@ -436,87 +390,71 @@ export default class OtpVerifyScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  containerBackBlock: {
-    justifyContent: "center",
-    width: 60,
+    backgroundColor: '#FFFFFF',
   },
 
   sendButtonBlock: {
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
 
   imageWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
-    height: hp("30%"),
+    height: hp('30%'),
   },
-  headerMenu: {
-    flexDirection: "row",
-    height: 40,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
-    top: hp("3%"),
-  },
-  headingBold: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  headingLight: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "200",
-  },
+
   containerHeaderBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
   },
   containerHeaderSubText: {
     fontSize: 16,
-    color: "#000000",
+    color: '#000000',
   },
   resendOtpBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
   },
   otpBlock: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 20,
     marginBottom: 20,
-    marginLeft: wp("10%"),
-    marginRight: wp("10%"),
+    marginLeft: wp('10%'),
+    marginRight: wp('10%'),
   },
   otpTextBox: {
     height: 50,
     width: 50,
     borderRadius: 25,
-    borderColor: "#8ff1f4",
+    borderColor: '#8ff1f4',
     borderWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
     paddingHorizontal: 0,
   },
   loading: {
     marginLeft: 10,
+  },
+
+  errorMessageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });

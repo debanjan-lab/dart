@@ -8,7 +8,7 @@ import headerStyle from "../../assets/css/header/headerStyle";
 import HeaderCurve from "../includes/headercurve";
 import CommonService from "../../services/common/commonService";
 import httpService from "../../services/http/httpService";
-import Loading from "react-native-loader-overlay";
+
 import { ErrorTemplate } from "../../components/error/errorComponent";
 let selectedId = 8;
 
@@ -70,7 +70,7 @@ export default class RefusalInvitationScreen extends Component {
   };
 
   getReason() {
-    this.loading = Loading.show(CommonService.loaderObj);
+
     let payload = {
       url: "get-reason",
       data: {
@@ -81,7 +81,7 @@ export default class RefusalInvitationScreen extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        Loading.hide(this.loading);
+
         if (res.status !== undefined) {
           if (res.status == 100) {
             this.setState({ reason: res.result });
@@ -97,7 +97,7 @@ export default class RefusalInvitationScreen extends Component {
         this.setState({ apiExecute: true });
       })
       .catch((err) => {
-        Loading.hide(this.loading);
+
         this.setState({ errorText: err.message, apiExecute: true });
         if (err.status == 4) {
           this.setState({ subMessage: httpService.appMessege.internet_sub });
@@ -112,7 +112,7 @@ export default class RefusalInvitationScreen extends Component {
 
   doReject() {
     let item = this.state.details;
-    this.loading = Loading.show(CommonService.loaderObj);
+
     let payload = {
       url: "circle-request-reject",
       data: {
@@ -128,7 +128,7 @@ export default class RefusalInvitationScreen extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        Loading.hide(this.loading);
+
         if (res.status !== undefined) {
           console.log("doReject()==" + JSON.stringify(res));
           if (res.status == 100) {
@@ -138,7 +138,7 @@ export default class RefusalInvitationScreen extends Component {
                 : "",
               (response) => {
                 if (response) {
-                  this.props.navigation.navigate("dashboardPage");
+                  this.props.navigation.push("dashboardPage");
                 }
               }
             );
@@ -154,7 +154,7 @@ export default class RefusalInvitationScreen extends Component {
         }
       })
       .catch((err) => {
-        Loading.hide(this.loading);
+
         this.setState({
           errRejectMsg: err.message
             ? Language[this.state.selectedLanguage]["status"][err.message]
@@ -172,9 +172,8 @@ export default class RefusalInvitationScreen extends Component {
   render() {
     const item = this.state.details;
     return (
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <HeaderCurve
-          //title={"Create Circle"}
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
           backButton={true}
@@ -183,178 +182,188 @@ export default class RefusalInvitationScreen extends Component {
           bellIcon={true}
         />
 
-        {this.state.errorText != "" ? (
-          <View style={{ alignItems: "center", marginTop: "50%" }}>
-            <ErrorTemplate
-              message={this.state.errorText}
-              subMessage={this.state.subMessage}
-            />
-          </View>
-        ) : (
-            <View style={refusalInvitationStyle.mainContent}>
-              {this.state.apiExecute ? (
-                <View>
-                  <View style={refusalInvitationStyle.headerText}>
-                    <Text style={refusalInvitationStyle.title}>
-                      {
-                        Language[this.state.selectedLanguage][
-                        "dashboard_screen"
-                        ]["circle"]
-                      }
-                      ({item.circle_code})
-                      {
-                        Language[this.state.selectedLanguage][
-                        "circle_refusal_screen"
-                        ]["refusal"]
-                      }
-                    </Text>
-                  </View>
-                  <View style={refusalInvitationStyle.rowView}>
-                    <View style={refusalInvitationStyle.rowViewLeftItem}>
-                      <Text style={{ fontSize: 20 }}>
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+
+
+
+          {this.state.errorText != "" ? (
+            <View style={{ alignItems: "center", marginTop: "50%" }}>
+              <ErrorTemplate
+                message={this.state.errorText}
+                subMessage={this.state.subMessage}
+              />
+            </View>
+          ) : (
+              <View style={refusalInvitationStyle.mainContent}>
+                {this.state.apiExecute ? (
+                  <View>
+                    <View style={refusalInvitationStyle.headerText}>
+                      <Text style={refusalInvitationStyle.title}>
                         {
                           Language[this.state.selectedLanguage][
-                          "circle_refusal_screen"
-                          ]["reason_for_refusal"]
+                          "dashboard_screen"
+                          ]["circle"]
                         }
-                        :
+                      ({item.circle_code})
+                      {
+                          Language[this.state.selectedLanguage][
+                          "circle_refusal_screen"
+                          ]["refusal"]
+                        }
                       </Text>
                     </View>
-                    <View style={refusalInvitationStyle.rowViewRightItem}>
-                      <View style={refusalInvitationStyle.selectText}>
-                        <View style={refusalInvitationStyle.childRowView}>
-                          <View
-                            style={refusalInvitationStyle.childRowViewLeftItem}
-                          >
-                            <Text numberOfLines={1}>
-                              {this.state.reasonTxt}
-                            </Text>
-                          </View>
-                          <View
-                            style={refusalInvitationStyle.childRowViewRightItem}
-                          >
-                            <Icon
-                              name="arrow-down"
-                              style={{ fontSize: 18, color: "#A9A9A9" }}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                      <View>
-                        <View
-                          style={[
-                            refusalInvitationStyle.unSelectText,
-                            { marginTop: 10 },
-                          ]}
-                        >
-                          {this.state.reason.map(
-                            (reason_item, reason_index) => (
-                              <TouchableOpacity
-                                key={reason_index}
-                                onPress={() => {
-                                  this.selectReason(
-                                    reason_item.id,
-                                    reason_item.reason
-                                  );
-                                }}
-                              >
-                                <View
-                                  style={[
-                                    refusalInvitationStyle.childRowView,
-                                    refusalInvitationStyle.borderBottom,
-                                    reason_item.id == selectedId
-                                      ? { backgroundColor: "#E7E7E7" }
-                                      : {},
-                                  ]}
-                                >
-                                  <View
-                                    style={
-                                      refusalInvitationStyle.childRowViewLeftItem
-                                    }
-                                  >
-                                    <Text numberOfLines={1}>
-                                      {
-                                        Language[this.state.selectedLanguage][
-                                        "circle_join_reason_list"
-                                        ][reason_item.reason_alias]
-                                      }
-                                    </Text>
-                                  </View>
-                                </View>
-                              </TouchableOpacity>
-                            )
-                          )}
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={refusalInvitationStyle.otherResonView}>
-                    {this.state.reasonId == 8 ? (
-                      <View>
+                    <View style={refusalInvitationStyle.rowView}>
+                      <View style={refusalInvitationStyle.rowViewLeftItem}>
                         <Text style={{ fontSize: 20 }}>
                           {
                             Language[this.state.selectedLanguage][
-                            "accept_invitation_screen"
-                            ]["other_reason"]
+                            "circle_refusal_screen"
+                            ]["reason_for_refusal"]
                           }
-                          :
-                        </Text>
-                        <View style={{ marginTop: 10 }}>
-                          <TextInput
-                            style={refusalInvitationStyle.textInput}
-                            multiline={true}
-                            onChangeText={(otherReason) =>
-                              this.setState({ otherReason })
-                            }
-                          />
+                        :
+                      </Text>
+                      </View>
+                      <View style={refusalInvitationStyle.rowViewRightItem}>
+                        <View style={refusalInvitationStyle.selectText}>
+                          <View style={refusalInvitationStyle.childRowView}>
+                            <View
+                              style={refusalInvitationStyle.childRowViewLeftItem}
+                            >
+                              <Text numberOfLines={1}>
+                                {this.state.reasonTxt}
+                              </Text>
+                            </View>
+                            <View
+                              style={refusalInvitationStyle.childRowViewRightItem}
+                            >
+                              {/* <Icon
+                              name="arrow-down"
+                              style={{ fontSize: 18, color: "#A9A9A9" }}
+                            /> */}
+                            </View>
+                          </View>
+                        </View>
+                        <View>
+                          <View
+                            style={[
+                              refusalInvitationStyle.unSelectText,
+                              { marginTop: 10 },
+                            ]}
+                          >
+                            {this.state.reason.map(
+                              (reason_item, reason_index) => (
+                                <TouchableOpacity
+                                  key={reason_index}
+                                  onPress={() => {
+                                    this.selectReason(
+                                      reason_item.id,
+                                      reason_item.reason
+                                    );
+                                  }}
+                                >
+                                  <View
+                                    style={[
+                                      refusalInvitationStyle.childRowView,
+                                      refusalInvitationStyle.borderBottom,
+                                      reason_item.id == selectedId
+                                        ? { backgroundColor: "#E7E7E7" }
+                                        : {},
+                                    ]}
+                                  >
+                                    <View
+                                      style={
+                                        refusalInvitationStyle.childRowViewLeftItem
+                                      }
+                                    >
+                                      <Text numberOfLines={1}>
+                                        {
+                                          Language[this.state.selectedLanguage][
+                                          "circle_join_reason_list"
+                                          ][reason_item.reason_alias]
+                                        }
+                                      </Text>
+                                    </View>
+                                  </View>
+                                </TouchableOpacity>
+                              )
+                            )}
+                          </View>
                         </View>
                       </View>
-                    ) : null}
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
+                    </View>
+                    <View style={refusalInvitationStyle.otherResonView}>
+                      {this.state.reasonId == 8 ? (
+                        <View>
+                          <Text style={{ fontSize: 20 }}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "accept_invitation_screen"
+                              ]["other_reason"]
+                            }
+                          :
+                        </Text>
+                          <View style={{ marginTop: 10 }}>
+                            <TextInput
+                              style={refusalInvitationStyle.textInput}
+                              multiline={true}
+                              onChangeText={(otherReason) =>
+                                this.setState({ otherReason })
+                              }
+                            />
+                          </View>
+                        </View>
+                      ) : null}
+                      <View
                         style={{
-                          color: "red",
-                          fontSize: 16,
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        {this.state.errRejectMsg}
-                      </Text>
-                    </View>
-                    <View style={refusalInvitationStyle.paymentButtonView}>
-                      <TouchableOpacity
-                        onPress={() => this.doReject()}
-                        disabled={
-                          selectedId == 8 && this.state.otherReason == ""
-                            ? true
-                            : false
-                        }
-                        style={[
-                          selectedId == 8 && this.state.otherReason == ""
-                            ? { opacity: 0.8 }
-                            : {},
-                          refusalInvitationStyle.paymentButton,
-                        ]}
-                      >
-                        <Text style={refusalInvitationStyle.paymentText}>
-                          {
-                            Language[this.state.selectedLanguage]["common"][
-                            "send"
-                            ]
-                          }
+                        <Text
+                          style={{
+                            color: "red",
+                            fontSize: 16,
+                          }}
+                        >
+                          {this.state.errRejectMsg}
                         </Text>
-                      </TouchableOpacity>
+                      </View>
+                      <View style={refusalInvitationStyle.paymentButtonView}>
+                        <TouchableOpacity
+                          onPress={() => this.doReject()}
+                          disabled={
+                            selectedId == 8 && this.state.otherReason == ""
+                              ? true
+                              : false
+                          }
+                          style={[
+                            selectedId == 8 && this.state.otherReason == ""
+                              ? { opacity: 0.8 }
+                              : {},
+                            refusalInvitationStyle.paymentButton,
+                          ]}
+                        >
+                          <Text style={refusalInvitationStyle.paymentText}>
+                            {
+                              Language[this.state.selectedLanguage]["common"][
+                              "send"
+                              ]
+                            }
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
-              ) : null}
-            </View>
-          )}
-      </ScrollView>
+                ) : null}
+              </View>
+            )}
+
+        </ScrollView>
+
+
+
+
+      </View>
     );
   }
 }

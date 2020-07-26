@@ -25,6 +25,7 @@ import CompletedCircleDetails from "../../screens/circle/completedCircleDetails"
 const navigationConfig = Object.create(null);
 
 
+
 /**
  * Register all screen for navigation
  */
@@ -74,6 +75,9 @@ navigationConfig.Screen = {
       }
     }
   },
+
+
+
 
   homeStackScreens: {
     completedCircle: {
@@ -183,6 +187,8 @@ navigationConfig.Screen = {
       }
     }
   }
+
+
 };
 
 export default navigationConfig;

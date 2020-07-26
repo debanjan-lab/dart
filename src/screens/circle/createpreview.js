@@ -15,8 +15,7 @@ import {
   Alert,
   ScrollView
 } from "react-native";
-import EventEmitter from "react-native-eventemitter";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import AsyncStorage from "@react-native-community/async-storage";
 import {
   widthPercentageToDP as wp,
@@ -125,17 +124,7 @@ export default class CreateCirclePreviewScreen extends Component {
           ],
       });
     } else {
-      // let obj = {
-      //   circle_code: this.state.cicle_code,
-      //   target_achive: this.props.navigation.getParam("target_achive", "0"),
-      //   round_set: this.props.navigation.getParam("round_set", "0"),
-      //   p_round: this.props.navigation.getParam("p_round", "0"),
-      //   start_date: this.props.navigation.getParam("start_date", "0"),
-      //   reason_for_circle: this.props.navigation.getParam(
-      //     "reason_for_circle",
-      //     "0"
-      //   )
-      // };
+
 
       let obj = {
         circle_user_id: 1,
@@ -163,40 +152,7 @@ export default class CreateCirclePreviewScreen extends Component {
         navigate_from: "accept_screen",
       });
 
-      // let that = this;
-      // axios
-      //   .post(ApiConfig.base_url + "create-circle", JSON.stringify(obj), {
-      //     headers: {
-      //       Authorization: "Bearer " + that.state.rememberToken
-      //     }
-      //   })
-      //   .then(function(response) {
-      //     EventEmitter.emit("validatedCircleCreation", true);
-      //     commonService.getSmsPermission(res => {
-      //       if (res) {
-      //         unsafe_participants.forEach(element => {
-      //           if (
-      //             element.mobile_number.toString() !=
-      //             that.state.mobile_number.toString()
-      //           ) {
-      //             commonService.sendDirectSms(
-      //               element.mobile_number.toString(),
-      //               "Hello,\nI have added you to a new circle(" +
-      //                 that.state.cicle_code +
-      //                 ")"
-      //             );
-      //           }
-      //         });
-      //       }
-      //     });
-      //     that.props.navigation.navigate("dashboardPage");
-      //   })
-      //   .catch(function(error) {})
-      //   .finally(function() {
-      //     that.setState({
-      //       loader: false
-      //     });
-      //   });
+
     }
   };
 
@@ -226,228 +182,226 @@ export default class CreateCirclePreviewScreen extends Component {
       "0"
     );
     return (
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
         />
+        <HeaderCurve
+          //title={"Welcome Dashboard"}
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          backButton={true}
+          first_name={this.state.first_name}
+          bellIcon={false}
+        />
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
 
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View
             style={{
               flex: 1,
-              position: "relative",
+              padding: 20
             }}
           >
-            <HeaderCurve
-              //title={"Welcome Dashboard"}
-              navigation={this.props.navigation}
-              avatar_location={this.state.avatar_location}
-              backButton={true}
-              first_name={this.state.first_name}
-              bellIcon={false}
-            />
-
-
             <View
               style={{
-                flex: 1,
-                marginBottom: 20,
-                marginTop: 8,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                }}
-              >
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.headingText}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["create_circle_preview"]
-                    }
-                  </Text>
-                </View>
+              <Text style={styles.headingText}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["create_circle_preview"]
+                }
+              </Text>
+            </View>
 
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["target_achieve"]
-                    }
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["target_achieve"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>€{target_achive}</Text>
-                </View>
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["round_settlement"]
-                    }
+              <Text style={styles.frmLabelRight}>€{target_achive}</Text>
+            </View>
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["round_settlement"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>€{round_set}</Text>
-                </View>
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["periodicity_round"]
-                    }
+              <Text style={styles.frmLabelRight}>€{round_set}</Text>
+            </View>
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["periodicity_round"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>
-                    {Language[this.state.selectedLanguage]["create_circle_screen"][p_round]}
-                  </Text>
-                </View>
-                <View style={styles.frmInputWrapperColumn}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["personal_reason"]
-                    }
+              <Text style={styles.frmLabelRight}>
+                {Language[this.state.selectedLanguage]["create_circle_screen"][p_round]}
+              </Text>
+            </View>
+            <View style={styles.frmInputWrapperColumn}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["personal_reason"]
+                }
                     :
                   </Text>
-                  <Text style={[styles.frmLabelRight, { marginTop: 5 }]}>
-                    {reason_for_circle}
-                  </Text>
-                </View>
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["wishing_start"]
-                    }
+              <Text style={[styles.frmLabelRight, { marginTop: 5 }]}>
+                {reason_for_circle}
+              </Text>
+            </View>
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["wishing_start"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>{start_date}</Text>
-                </View>
+              <Text style={styles.frmLabelRight}>{start_date}</Text>
+            </View>
 
-                <View style={styles.frmInputWrapperMargin}>
-                  <View style={{ justifyContent: "center" }}>
-                    <Text style={styles.frmLabel}>
-                      {
-                        Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
-                        ]["circle_participants"]
-                      }
+            <View style={styles.frmInputWrapperMargin}>
+
+              <View style={{
+                flexDirection: 'row', marginBottom: 5,
+
+                justifyContent: 'space-between'
+              }}>
+
+                <Text style={styles.frmLabel}>
+                  {
+                    Language[this.state.selectedLanguage][
+                    "circle_preview_screen"
+                    ]["circle_participants"]
+                  }
                       :
                     </Text>
-                    {joinParticipantList}
-                  </View>
 
-                  <TouchableOpacity
-                    onPress={() => this._doRedirectChangeOrder()}
-                    style={styles.changeOrderButtonBlock}
-                  >
-                    <Text style={styles.changeOrderButtonText}>
-                      {
-                        Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
-                        ]["change_order"]
-                      }
-                    </Text>
-                  </TouchableOpacity>
-                </View>
 
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
+                <TouchableOpacity
+                  onPress={() => this._doRedirectChangeOrder()}
+                  style={styles.changeOrderButtonBlock}
+                >
+                  <Text style={styles.changeOrderButtonText}>
                     {
                       Language[this.state.selectedLanguage][
                       "circle_preview_screen"
-                      ]["num_round"]
+                      ]["change_order"]
                     }
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={{ padding: 10 }}>
+                {joinParticipantList}
+              </View>
+
+            </View>
+
+
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["num_round"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>{estimate_round}</Text>
-                </View>
+              <Text style={styles.frmLabelRight}>{estimate_round}</Text>
+            </View>
 
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["end_date"]
-                    }
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["end_date"]
+                }
                     :
                   </Text>
-                  <Text style={styles.frmLabelRight}>{end_date}</Text>
-                </View>
+              <Text style={styles.frmLabelRight}>{end_date}</Text>
+            </View>
 
-                {this.state.errorMessage ? (
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: 20,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "red",
-                        fontSize: 16,
-                      }}
-                    >
-                      {this.state.errorMessage}
-                    </Text>
+            {this.state.errorMessage ? (
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 20,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "red",
+                    fontSize: 16,
+                  }}
+                >
+                  {this.state.errorMessage}
+                </Text>
+              </View>
+            ) : null}
+
+            <View style={styles.frmInputWrapper}>
+              <TouchableOpacity
+                style={styles.returnButtonBlock}
+                onPress={() => this._doRedirectLanding()}
+              >
+                <Text style={styles.returnButtonText}>
+                  {
+                    Language[this.state.selectedLanguage]["common"][
+                    "return"
+                    ]
+                  }
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.validateButtonBlock}
+                onPress={() => this._doSubmitFinal()}
+                disabled={this.state.loader}
+              >
+                <Text style={styles.validateButtonText}>
+                  {
+                    Language[this.state.selectedLanguage][
+                    "circle_preview_screen"
+                    ]["pay_deposit"]
+                  }
+                </Text>
+
+                {this.state.loader ? (
+                  <View style={styles.loading}>
+                    <ActivityIndicator size="small" color={"#FFFFFF"} />
                   </View>
                 ) : null}
-
-                <View style={styles.frmInputWrapper}>
-                  <TouchableOpacity
-                    style={styles.returnButtonBlock}
-                    onPress={() => this._doRedirectLanding()}
-                  >
-                    <Text style={styles.returnButtonText}>
-                      {
-                        Language[this.state.selectedLanguage]["common"][
-                        "return"
-                        ]
-                      }
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.validateButtonBlock}
-                    onPress={() => this._doSubmitFinal()}
-                    disabled={this.state.loader}
-                  >
-                    <Text style={styles.validateButtonText}>
-                      {
-                        Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
-                        ]["pay_deposit"]
-                      }
-                    </Text>
-
-                    {this.state.loader ? (
-                      <View style={styles.loading}>
-                        <ActivityIndicator size="small" color={"#FFFFFF"} />
-                      </View>
-                    ) : null}
-                  </TouchableOpacity>
-                </View>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={{ marginTop: 20 }} />
-        </KeyboardAwareScrollView>
-      </ScrollView>
+
+
+        </ScrollView>
+
+
+
+      </View>
     );
   }
 }
@@ -558,9 +512,9 @@ const styles = StyleSheet.create({
   },
   frmInputWrapperMargin: {
     marginTop: 20,
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    //alignItems: "center",
     paddingTop: 10,
     paddingBottom: 10,
     borderTopWidth: 1,
@@ -682,14 +636,14 @@ const styles = StyleSheet.create({
   },
   changeOrderButtonBlock: {
     padding: 10,
-    height: 30,
+    //height: 30,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#5ac6c6",
     elevation: 2,
-    position: "absolute",
-    top: 5,
+    //position: "absolute",
+    // top: 5,
     right: 0,
   },
   changeOrderButtonText: {

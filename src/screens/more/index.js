@@ -7,8 +7,8 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -70,7 +70,7 @@ export default class MoreScreen extends Component {
           text: Language[this.state.selectedLanguage]["common"]["ok"],
           onPress: () => {
             AsyncStorage.clear();
-            this.props.navigation.navigate("authStack");
+            this.props.navigation.navigate("Auth");
           },
         },
       ],
@@ -79,7 +79,7 @@ export default class MoreScreen extends Component {
   };
 
   gotoEditProfile() {
-    this.props.navigation.navigate("editProfile");
+    this.props.navigation.navigate("EditProfileScreen");
   }
 
   render() {
@@ -89,87 +89,90 @@ export default class MoreScreen extends Component {
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
         />
+        <HeaderCurve
+          // title={"More Options"}
+          navigation={this.props.navigation}
+          backButton={false}
+          bellIcon={false}
+          first_name={this.state.first_name}
+          avatar_location={this.state.avatar_location}
+          props={this.props}
+        />
 
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={{ flex: 1, position: "relative" }}>
-            <HeaderCurve
-              // title={"More Options"}
-              navigation={this.props.navigation}
-              backButton={false}
-              bellIcon={false}
-              first_name={this.state.first_name}
-              avatar_location={this.state.avatar_location}
-              props={this.props}
-            />
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 
-            <View style={{ flex: 1 }}>
-              <View
+
+          <View
+            style={{
+              flex: 1,
+              padding: 20
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => this._doLogout()}
+              style={styles.sendButtonBlock}
+            >
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]["more_screen"][
+                  "logout"
+                  ]
+                }
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => this.gotoEditProfile()}
+              style={styles.sendButtonBlock}
+            >
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]["more_screen"][
+                  "edit_profile"
+                  ]
+                }
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("completedCircle")
+              }
+              style={styles.sendButtonBlock}
+            >
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]["more_screen"][
+                  "past_circles"
+                  ]
+                }
+              </Text>
+            </TouchableOpacity>
+
+            <View style={styles.versionBlock}>
+              <Text
                 style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
+                  fontWeight: "bold",
+                  color: "#5AC6C6",
+                  fontSize: 25,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => this._doLogout()}
-                  style={styles.sendButtonBlock}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["more_screen"][
-                        "logout"
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => this.gotoEditProfile()}
-                  style={styles.sendButtonBlock}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["more_screen"][
-                        "edit_profile"
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("completedCircle")
-                  }
-                  style={styles.sendButtonBlock}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["more_screen"][
-                        "past_circles"
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-
-                <View style={styles.versionBlock}>
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      color: "#5AC6C6",
-                      fontSize: 25,
-                    }}
-                  >
-                    {
-                      Language[this.state.selectedLanguage]["more_screen"][
-                        "version"
-                      ]
-                    }{" "}
+                {
+                  Language[this.state.selectedLanguage]["more_screen"][
+                  "version"
+                  ]
+                }{" "}
                     - 1.0
                   </Text>
-                </View>
-              </View>
             </View>
+
+
+
           </View>
-        </KeyboardAwareScrollView>
+
+
+
+
+        </ScrollView>
 
         <FooterTabComponent props={this.props} />
       </View>

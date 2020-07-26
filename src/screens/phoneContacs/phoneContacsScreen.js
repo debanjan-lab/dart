@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from "react";
+import React, {Component, PureComponent} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,59 +8,60 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
-} from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
-import StatusBarComponent from "../../components/statusBar/statusBarComponent";
-import HeaderCurve from "../includes/headercurve";
-import SearchBar from "react-native-searchbar";
-import Contacts from "react-native-contacts";
-import CommonService from "../../services/common/commonService";
-import Loading from "react-native-loader-overlay";
-import global from "../../services/global/globalService";
-import { NavigationEvents } from "react-navigation";
-import AsyncStorage from "@react-native-community/async-storage";
+} from 'react-native';
+import {ToastMessage} from '../../components/ToastMessage';
+import StatusBarComponent from '../../components/statusBar/statusBarComponent';
+import HeaderCurve from '../includes/headercurve';
+import SearchBar from 'react-native-searchbar';
+import Contacts from 'react-native-contacts';
+import CommonService from '../../services/common/commonService';
 
-import Language from "../../translations/index";
+import global from '../../services/global/globalService';
+import {NavigationEvents} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import Language from '../../translations/index';
+import {TextInput} from 'react-native-gesture-handler';
 
 export default class PhoneContacsScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
+      searchText: '',
       searchResult: [],
       contactList: false,
       defaultIcon: true,
       selectedLists: [],
       isChecked: [],
-      mobile_number: "",
-      mobile_country_code: "",
+      mobile_number: '',
+      mobile_country_code: '',
       allContacts: [],
       sortedContacts: [],
       isLoading: true,
       searchedList: [],
       selectLoader: false,
-      selectedLanguage: "en",
-      selectedLanguage: "fr",
+      selectedLanguage: 'en',
+      selectedLanguage: 'fr',
     };
   }
 
   componentDidMount() {
-    const { isChecked } = this.state;
+    const {isChecked} = this.state;
     global.contacts_data.map((d) => {
       isChecked[d.rawContactId] = true;
-      this.setState({ isChecked: isChecked });
+      this.setState({isChecked: isChecked});
     });
     this.setState({
       selectedLists: global.contacts_data,
     });
-    AsyncStorage.multiGet(["mobile_number", "mobile_country_code"]).then(
+    AsyncStorage.multiGet(['mobile_number', 'mobile_country_code']).then(
       (response) => {
-        console.log("mobile", response);
+        console.log('mobile', response);
         this.setState({
           mobile_number: response[0][1],
           mobile_country_code: response[1][1],
         });
-      }
+      },
     );
     this.getContactList();
   }
@@ -72,7 +73,7 @@ export default class PhoneContacsScreen extends PureComponent {
       } else {
         try {
           console.log(contacts);
-          this.setState({ allContacts: contacts }, () => {
+          this.setState({allContacts: contacts}, () => {
             this._getSortByLimit();
           });
         } catch (err) {}
@@ -85,28 +86,28 @@ export default class PhoneContacsScreen extends PureComponent {
     for (var a = 0; a < this.state.allContacts.length; a++) {
       let obj = {};
       let displayName =
-        Platform.OS === "ios"
+        Platform.OS === 'ios'
           ? this.state.allContacts[a].familyName
           : this.state.allContacts[a].displayName;
       let givenName = this.state.allContacts[a].givenName;
       let rawContactId =
-        Platform.OS === "ios"
+        Platform.OS === 'ios'
           ? this.state.allContacts[a].recordID
           : this.state.allContacts[a].rawContactId;
       let phoneNumbers = this.state.allContacts[a].phoneNumbers[0]
         ? this.state.allContacts[a].phoneNumbers[0].number
-        : "";
+        : '';
       if (phoneNumbers) {
-        phoneNumbers = phoneNumbers.split(".").join("");
-        phoneNumbers = phoneNumbers.split(" ").join("");
-        phoneNumbers = phoneNumbers.split("-").join("");
-        phoneNumbers = phoneNumbers.split("(").join("");
-        phoneNumbers = phoneNumbers.split(")").join("");
-        obj["displayName"] = displayName;
-        obj["givenName"] = givenName;
-        obj["phoneNumber"] = phoneNumbers;
-        obj["key"] = a + 1;
-        obj["rawContactId"] = rawContactId;
+        phoneNumbers = phoneNumbers.split('.').join('');
+        phoneNumbers = phoneNumbers.split(' ').join('');
+        phoneNumbers = phoneNumbers.split('-').join('');
+        phoneNumbers = phoneNumbers.split('(').join('');
+        phoneNumbers = phoneNumbers.split(')').join('');
+        obj['displayName'] = displayName;
+        obj['givenName'] = givenName;
+        obj['phoneNumber'] = phoneNumbers;
+        obj['key'] = a + 1;
+        obj['rawContactId'] = rawContactId;
         arrContacts.push(obj);
       }
     }
@@ -126,13 +127,13 @@ export default class PhoneContacsScreen extends PureComponent {
         isLoading: false,
       },
       () => {
-        console.log("arrContacts===" + JSON.stringify(arrContacts));
-      }
+        console.log('arrContacts===' + JSON.stringify(arrContacts));
+      },
     );
   };
 
   showSearchBar = () => {
-    this.setState({ defaultIcon: false });
+    this.setState({defaultIcon: false});
     this.searchBar.show();
   };
 
@@ -141,6 +142,7 @@ export default class PhoneContacsScreen extends PureComponent {
   }
 
   search = (searchText) => {
+    // alert(searchText);
     if (searchText.length > 0) {
       const newData = this.state.sortedContacts.filter((item) => {
         const itemData = `${item.displayName.toUpperCase()}`;
@@ -159,10 +161,10 @@ export default class PhoneContacsScreen extends PureComponent {
 
   chooseContact = (item, mobile, index) => {
     var mobile = mobile.trim();
-    let mobileNumber = "";
-    if (mobile[0] === "0") {
-      if (mobile[1] === "6" || mobile[1] === "7") {
-        mobileNumber = mobile.replace("0", this.state.mobile_country_code);
+    let mobileNumber = '';
+    if (mobile[0] === '0') {
+      if (mobile[1] === '6' || mobile[1] === '7') {
+        mobileNumber = mobile.replace('0', this.state.mobile_country_code);
       } else {
         //Alert.alert("",`Not a valid number 1 , selected phone number ${mobile} , position of "mobile[1]" is ${mobile[1]}`);
       }
@@ -173,27 +175,27 @@ export default class PhoneContacsScreen extends PureComponent {
       //Alert.alert("",`Not a valid number 3 , selected phone number ${mobile} , position of "+33" is ${mobile.indexOf('+33')}`);
     }
 
-    if (mobileNumber !== "") {
+    if (mobileNumber !== '') {
       let myContact = mobileNumber.match(this.state.mobile_number);
       if (myContact == null) {
-        this.setState({ selectLoader: true });
+        this.setState({selectLoader: true});
         let all = this.state.searchedList;
         if (!this.state.selectedLists.includes(item.rawContactId)) {
           this.setState(
-            { selectedLists: [...this.state.selectedLists, item.rawContactId] },
+            {selectedLists: [...this.state.selectedLists, item.rawContactId]},
             () => {
               this.setState({
                 searchedList: all,
                 selectLoader: false,
               });
-            }
+            },
           );
         } else {
           var array = [...this.state.selectedLists];
           var index = array.indexOf(item.rawContactId);
           if (index !== -1) {
             array.splice(index, 1);
-            this.setState({ selectedLists: array }, () => {
+            this.setState({selectedLists: array}, () => {
               this.setState({
                 searchedList: all,
                 selectLoader: false,
@@ -205,9 +207,9 @@ export default class PhoneContacsScreen extends PureComponent {
         //Alert.alert("You can't choose your own number");
 
         Alert.alert(
-          Language[this.state.selectedLanguage]["phone_contact_screen"][
-            "you_cannot_choose_your_own_number"
-          ]
+          Language[this.state.selectedLanguage]['phone_contact_screen'][
+            'you_cannot_choose_your_own_number'
+          ],
         );
       }
     } else {
@@ -215,9 +217,9 @@ export default class PhoneContacsScreen extends PureComponent {
       // Alert.alert(`Not a valid number`);
 
       Alert.alert(
-        Language[this.state.selectedLanguage]["phone_contact_screen"][
-          "not_a_valid_number"
-        ]
+        Language[this.state.selectedLanguage]['phone_contact_screen'][
+          'not_a_valid_number'
+        ],
       );
     }
   };
@@ -230,12 +232,12 @@ export default class PhoneContacsScreen extends PureComponent {
         var rawContactIdB = this.state.selectedLists[b];
         if (rawContactIdB == rawContactIdA) {
           let obj = {};
-          obj["username"] = this.state.sortedContacts[a]["displayName"];
-          obj["givenName"] = this.state.sortedContacts[a]["givenName"];
-          obj["mobile"] = this.state.sortedContacts[a]["phoneNumber"];
-          obj["rawContactId"] = rawContactIdB;
+          obj['username'] = this.state.sortedContacts[a]['displayName'];
+          obj['givenName'] = this.state.sortedContacts[a]['givenName'];
+          obj['mobile'] = this.state.sortedContacts[a]['phoneNumber'];
+          obj['rawContactId'] = rawContactIdB;
 
-          let find = list.find((x) => x.mobile === obj["mobile"]);
+          let find = list.find((x) => x.mobile === obj['mobile']);
           if (!find) {
             list.push(obj);
           }
@@ -251,10 +253,10 @@ export default class PhoneContacsScreen extends PureComponent {
       }
     }
 
-    console.log("list==========" + JSON.stringify(list));
+    console.log('list==========' + JSON.stringify(list));
     console.log(
-      "global.perticipant_info==========" +
-        JSON.stringify(global.perticipant_info)
+      'global.perticipant_info==========' +
+        JSON.stringify(global.perticipant_info),
     );
 
     global.contacts_data = this.state.selectedLists;
@@ -264,102 +266,75 @@ export default class PhoneContacsScreen extends PureComponent {
   };
 
   render() {
-    console.log("selected list", this.state.selectedLists);
-    console.log("mobile_country_code", this.state.mobile_country_code);
+    console.log('selected list', this.state.selectedLists);
+    console.log('mobile_country_code', this.state.mobile_country_code);
     return (
-      <>
-        <ScrollView
-          contentContainerStyle={{ backgroundColor: "#fff", flexGrow: 1 }}
-        >
-          <View>
-            <StatusBarComponent />
-            <View style={{ flex: 1, position: "relative", height: 120 }}>
-              {this.state.defaultIcon ? (
-                <HeaderCurve
-                  title={
-                    Language[this.state.selectedLanguage][
-                      "phone_contact_screen"
-                    ]["phone_contacts"]
-                  }
-                  navigation={this.props.navigation}
-                  searchIcon={true}
-                  showSearchBar={this.showSearchBar}
-                  backButton={true}
-                  bellIcon={true}
-                />
-              ) : (
-                <HeaderCurve
-                  navigation={this.props.navigation}
-                  searchIcon={true}
-                  showSearchBar={this.showSearchBar}
-                  bellIcon={false}
-                />
-              )}
+      <View style={{flex: 1, backgroundColor: '#FFF'}}>
+        <StatusBarComponent />
+        <HeaderCurve
+          title={
+            Language[this.state.selectedLanguage]['phone_contact_screen'][
+              'phone_contacts'
+            ]
+          }
+          navigation={this.props.navigation}
+          searchIcon={false}
+          showSearchBar={this.showSearchBar}
+          backButton={true}
+          bellIcon={true}
+        />
 
-              <SearchBar
-                ref={(ref) => (this.searchBar = ref)}
-                handleChangeText={this.search}
-                backgroundColor={"transparent"}
-                iconColor={"white"}
-                textColor={"white"}
-                placeholderTextColor={"white"}
-                heightAdjust={16}
-                onBack={() => this.hideSearchBar()}
-                backButton={
-                  <Image
-                    source={require("../../../assets/images/arrow.png")}
-                    style={{
-                      width: 20,
-                      height: 20,
-                    }}
-                  />
-                }
-                closeButton={
-                  <Image
-                    source={require("../../../assets/images/close.png")}
-                    style={{
-                      width: 20,
-                      height: 20,
-                    }}
-                  />
-                }
-              />
-            </View>
+        <View
+          style={{
+            flex: 1,
+            marginLeft: 20,
+            marginRight: 20,
+          }}>
+          <TextInput
+            style={{
+              borderRadius: 10,
+              paddingLeft: 10,
+              paddingRight: 20,
+              fontSize: 16,
+              fontWeight: '500',
+              borderBottomColor: '#ddd',
+              borderBottomWidth: 1,
+            }}
+            onChangeText={(text) => this.search(text)}
+            placeholder={'Search Here'}
+          />
 
-            {this.state.selectLoader && <ActivityIndicator />}
+          {this.state.selectLoader && <ActivityIndicator />}
 
-            {!this.state.isLoading ? (
-              <View>
-                <FlatList
-                  data={this.state.searchedList}
-                  renderItem={({ item }) =>
-                    this.listItem(item, this.state.selectedLists)
-                  }
-                  keyExtractor={(item) => item.key.toString()}
-                  removeClippedSubviews={true}
-                  extraData={this.state}
-                />
-              </View>
-            ) : (
-              <ActivityIndicator />
-            )}
-          </View>
-        </ScrollView>
+          {!this.state.isLoading ? (
+            <FlatList
+              data={this.state.searchedList}
+              renderItem={({item}) =>
+                this.listItem(item, this.state.selectedLists)
+              }
+              keyExtractor={(item) => item.key.toString()}
+              removeClippedSubviews={true}
+              extraData={this.state}
+              ListFooterComponent={<View style={{height: 40}} />}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
+        </View>
 
         {this.state.selectedLists.length ? (
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => this.submitContactsData()}
             style={{
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
               bottom: 50,
               right: 30,
-            }}
-          >
+            }}>
             <Image
-              source={require("../../../assets/images/tick_fill.png")}
+              source={require('../../../assets/images/tick_fill.png')}
               style={{
                 width: 50,
                 height: 50,
@@ -367,7 +342,7 @@ export default class PhoneContacsScreen extends PureComponent {
             />
           </TouchableOpacity>
         ) : null}
-      </>
+      </View>
     );
   }
 
@@ -375,16 +350,14 @@ export default class PhoneContacsScreen extends PureComponent {
     return (
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           height: 50,
           marginTop: 20,
-          paddingLeft: 20,
-          paddingRight: 20,
-          alignItems: "center",
-        }}
-      >
+
+          alignItems: 'center',
+        }}>
         <Image
-          source={require("../../../assets/images/profile_place_holder.png")}
+          source={require('../../../assets/images/profile_place_holder.png')}
           style={{
             width: 50,
             height: 50,
@@ -396,26 +369,24 @@ export default class PhoneContacsScreen extends PureComponent {
             flex: 1,
             paddingLeft: 10,
             padding: 2,
-            justifyContent: "space-between",
-          }}
-        >
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{fontSize: 16, fontWeight: '500'}}>
             {item.displayName}
           </Text>
-          <Text style={{ fontSize: 14, fontWeight: "500" }}>
+          <Text style={{fontSize: 14, fontWeight: '500'}}>
             {item.phoneNumber}
           </Text>
         </View>
 
-        <View style={{ width: 25 }}>
+        <View style={{width: 25}}>
           {selectedLists.includes(item.rawContactId) ? (
             <TouchableOpacity
               onPress={() =>
                 this.chooseContact(item, item.phoneNumber, item.key)
-              }
-            >
+              }>
               <Image
-                source={require("../../../assets/images/success.png")}
+                source={require('../../../assets/images/success.png')}
                 style={{
                   width: 25,
                   height: 25,
@@ -426,10 +397,9 @@ export default class PhoneContacsScreen extends PureComponent {
             <TouchableOpacity
               onPress={() =>
                 this.chooseContact(item, item.phoneNumber, item.key)
-              }
-            >
+              }>
               <Image
-                source={require("../../../assets/images/circle.png")}
+                source={require('../../../assets/images/circle.png')}
                 style={{
                   width: 25,
                   height: 25,

@@ -11,13 +11,11 @@ import {
   FlatList,
   ScrollView
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-community/async-storage";
-import Loading from "react-native-loader-overlay";
 import HeaderCurve from "../includes/headercurve";
 import httpService from "../../services/http/httpService";
 import CommonService from "../../services/common/commonService";
@@ -73,7 +71,9 @@ class CompletedCircle extends Component {
 
   getList = async () => {
     const value = await AsyncStorage.getItem("rememberToken");
-    CommonService.resetDataForLaunchNewCircle();
+
+
+    console.log("token===", value)
     let payload = {
       url: "circle-list",
       data: {
@@ -85,10 +85,10 @@ class CompletedCircle extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        Loading.hide(this.loading);
+
         if (res.status !== undefined) {
           if (res.status == 100) {
-            //console.log("Circle Details=="+JSON.stringify(res.result))
+            console.log("Circle Details==" + JSON.stringify(res.result))
 
             this.setState({
               getList: res.result,
@@ -115,6 +115,7 @@ class CompletedCircle extends Component {
         }
       })
       .catch((err) => {
+
         this.setState({
           errorText: err.message
             ? Language[this.state.selectedLanguage]["status"][res.message]
@@ -147,233 +148,223 @@ class CompletedCircle extends Component {
 
   render() {
     return (
+      <View style={styles.container}>
+        <StatusBar
+          backgroundColor={statusBarBackgroundColor}
+          barStyle={barStyle}
+        />
 
+        <HeaderCurve
+          //title={"Completed Circle"}
+          first_name={this.state.first_name}
+          avatar_location={this.state.avatar_location}
+          navigation={this.props.navigation}
+          backButton={true}
+          bellIcon={false}
+          props={this.props}
+        />
 
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
-        <View style={[styles.container]}>
-          <StatusBar
-            backgroundColor={statusBarBackgroundColor}
-            barStyle={barStyle}
-          />
-
-          <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={{ flex: 1, position: "relative" }}>
-              <HeaderCurve
-                //title={"Completed Circle"}
-                first_name={this.state.first_name}
-                avatar_location={this.state.avatar_location}
-                navigation={this.props.navigation}
-                backButton={true}
-                bellIcon={false}
-                props={this.props}
-              />
-
-              <View style={{ flex: 1 }}>
-                <View
-                  style={{
-                    flex: 1,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    marginTop: 15,
-                  }}
-                >
-                  {/* ----------------feature buttons----------------*/}
-                  {this.state.loader ? (
-                    <ActivityIndicator color={"#45BA96"} size="large" />
-                  ) : null}
-                  {this.state.errorText != "" ? (
-                    <View style={{ alignItems: "center", marginTop: "47%" }}>
-                      <ErrorTemplate
-                        message={this.state.errorText}
-                        subMessage={this.state.subMessage}
-                      />
-                    </View>
-                  ) : (
-                      <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        keyExtractor={(item) => item.id.toString()}
-                        ListHeaderComponent={<View style={{ height: 10 }} />}
-                        ListFooterComponent={<View style={{ height: 10 }} />}
-                        data={this.state.getList}
-                        numColumns={1}
-                        renderItem={({ item, index }) => (
-                          <TouchableOpacity
-                            key={index}
-                            activeOpacity={1}
-                            onPress={() => this.goToDetails(item)}
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              marginLeft: 20,
+              marginRight: 20,
+              marginTop: 15,
+            }}
+          >
+            {/* ----------------feature buttons----------------*/}
+            {this.state.loader ? (
+              <ActivityIndicator color={"#45BA96"} size="large" />
+            ) : null}
+            {this.state.errorText != "" ? (
+              <View style={{ alignItems: "center", marginTop: "47%" }}>
+                <ErrorTemplate
+                  message={this.state.errorText}
+                  subMessage={this.state.subMessage}
+                />
+              </View>
+            ) : (
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={(item) => item.id.toString()}
+                  ListHeaderComponent={<View style={{ height: 10 }} />}
+                  ListFooterComponent={<View style={{ height: 10 }} />}
+                  data={this.state.getList}
+                  numColumns={1}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      key={index}
+                      activeOpacity={1}
+                      onPress={() => this.goToDetails(item)}
+                    >
+                      <View style={[styles.listItemWrapper]}>
+                        <View style={styles.listLeftWrapper}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
                           >
-                            <View style={[styles.listItemWrapper]}>
-                              <View style={styles.listLeftWrapper}>
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["circle"]
-                                    }{" "}
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["circle"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text style={styles.listRightText}>
-                                    {item.circle_code}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              {item.circle_code}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["circle_admin"]
-                                    }{" "}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["circle_admin"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text style={styles.listRightText}>
-                                    {item.admin}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              {item.admin}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["participants"]
-                                    }{" "}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["participants"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text
-                                    numberOfLines={1}
-                                    style={[
-                                      styles.listRightText,
-                                      { paddingRight: 20 },
-                                    ]}
-                                  >
-                                    {this.getNames(item.get_users)}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text
+                              numberOfLines={1}
+                              style={[
+                                styles.listRightText,
+                                { paddingRight: 20 },
+                              ]}
+                            >
+                              {this.getNames(item.get_users)}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["amount"]
-                                    }{" "}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["amount"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text style={styles.listRightText}>
-                                    €{item.target_achive}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              €{item.target_achive}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["launch_date"]
-                                    }{" "}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["launch_date"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text style={styles.listRightText}>
-                                    {CommonService.formatDate(item.start_date)}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              {CommonService.formatDate(item.start_date)}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "dashboard_screen"
-                                      ]["last_round_date"]
-                                    }{" "}
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "dashboard_screen"
+                                ]["last_round_date"]
+                              }{" "}
                                   :{" "}
-                                  </Text>
-                                  <Text style={styles.listRightText}>
-                                    {CommonService.formatDate(item.end_date)}
-                                  </Text>
-                                </View>
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              {CommonService.formatDate(item.end_date)}
+                            </Text>
+                          </View>
 
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Text style={styles.listLeftText}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text style={styles.listLeftText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "common"
+                                ]["status"]
+                              }{" "}
+                                  :{" "}
+                            </Text>
+                            <Text style={styles.listRightText}>
+                              {item.status == 5 ? (
+                                <Text style={styles.completedText}>
+                                  {
+                                    Language[this.state.selectedLanguage][
+                                    "common"
+                                    ]["completed"]
+                                  }
+                                </Text>
+                              ) : (
+                                  <Text style={styles.rejectText}>
                                     {
                                       Language[this.state.selectedLanguage][
                                       "common"
-                                      ]["status"]
-                                    }{" "}
-                                  :{" "}
+                                      ]["rejected"]
+                                    }
                                   </Text>
-                                  <Text style={styles.listRightText}>
-                                    {item.status == 5 ? (
-                                      <Text style={styles.completedText}>
-                                        {
-                                          Language[this.state.selectedLanguage][
-                                          "common"
-                                          ]["completed"]
-                                        }
-                                      </Text>
-                                    ) : (
-                                        <Text style={styles.rejectText}>
-                                          {
-                                            Language[this.state.selectedLanguage][
-                                            "common"
-                                            ]["rejected"]
-                                          }
-                                        </Text>
-                                      )}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        )}
-                      />
-                    )}
-                </View>
-              </View>
-            </View>
-            <View style={{ marginTop: 20 }} />
-          </KeyboardAwareScrollView>
-
-          <FooterTabComponent props={this.props} />
+                                )}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />
+              )}
+          </View>
         </View>
-      </ScrollView>
+        <FooterTabComponent props={this.props} />
+      </View>
     );
   }
 }

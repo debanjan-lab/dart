@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
   Animated,
   Easing,
+  ScrollView
 } from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
 import AsyncStorage from "@react-native-community/async-storage";
 import {
   widthPercentageToDP as wp,
@@ -53,7 +53,7 @@ export default class ChangeOrderParticipantsScreen extends Component {
     });
 
     setTimeout(
-      function() {
+      function () {
         this.setState({
           loadingContent: false,
         });
@@ -109,7 +109,7 @@ export default class ChangeOrderParticipantsScreen extends Component {
     reorderList = reorderList.replace(/,\s*$/, "");
     participantList = participantList.replace(/,\s*$/, "");
     setTimeout(
-      function() {
+      function () {
         let obj = {
           circle_code: this.state.cicle_code,
           reorder: reorderList,
@@ -123,7 +123,7 @@ export default class ChangeOrderParticipantsScreen extends Component {
 
         axios
           .post(
-            `${ApiConfig.base_url}reorder-circle-user `,
+            `${ApiConfig.base_url}reorder-circle-user`,
             JSON.stringify(obj),
             {
               headers: {
@@ -131,13 +131,18 @@ export default class ChangeOrderParticipantsScreen extends Component {
               },
             }
           )
-          .then(function(response) {
+          .then(function (response) {
+            // alert('ok')
             that.props.navigation.navigate("circlePreviewPage", {
               participants: response.data.result,
             });
           })
-          .catch(function(error) {})
-          .finally(function() {
+          .catch(function (error) {
+            // console.log("error", error.response)
+            // alert('error')
+          })
+          .finally(function () {
+            // alert('final')
             that.setState({
               loader: false,
             });
@@ -148,109 +153,95 @@ export default class ChangeOrderParticipantsScreen extends Component {
   };
 
   render() {
-    console.log("fnaem");
-    console.log("avatar_location", this.state.avatar_location);
+    //console.log("fnaem");
+    //console.log("avatar_location", this.state.avatar_location);
     return (
       <View style={styles.container}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
         />
+        <HeaderCurve
+          backButton={true}
+          navigation={this.props.navigation}
+          avatar_location={this.state.avatar_location}
+          first_name={this.state.first_name}
+          bellIcon={false}
+        />
 
-        <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+
+
           <View
             style={{
               flex: 1,
-              position: "relative",
+              padding: 20
             }}
           >
-            <HeaderCurve
-              backButton={true}
-              //title={"Create Circle"}
-              navigation={this.props.navigation}
-              avatar_location={this.state.avatar_location}
-              first_name={this.state.first_name}
-              //admin={item.is_admin}
-              bellIcon={false}
-            />
-
             <View
               style={{
-                flex: 1,
-                marginBottom: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 20,
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                  marginTop: 20,
-                }}
-              >
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 20,
-                  }}
+              <Text style={styles.headingText}>
+                {
+                  Language[this.state.selectedLanguage][
+                  "circle_preview_screen"
+                  ]["change_order"]
+                }
+              </Text>
+            </View>
+
+            {!this.state.loadingContent ? (
+              <View style={{ flex: 1, marginTop: 20 }}>
+                <SortableList
+                  style={styles.list}
+                  contentContainerStyle={styles.contentContainer}
+                  data={this.state.participantList}
+                  renderRow={this._renderRow}
+                  //onChangeOrder={this.onRelease}
+                  onReleaseRow={this.onRelease}
+                />
+
+                <TouchableOpacity
+                  onPress={() => this._doContinue()}
+                  style={styles.confirmButtonBlock}
+                  disabled={this.state.loader}
                 >
-                  <Text style={styles.headingText}>
+                  <Text style={styles.confirmButtonText}>
                     {
-                      Language[this.state.selectedLanguage][
-                        "circle_preview_screen"
-                      ]["change_order"]
+                      Language[this.state.selectedLanguage]["common"][
+                      "confirm"
+                      ]
                     }
                   </Text>
-                </View>
 
-                {!this.state.loadingContent ? (
-                  <View style={{ flex: 1, marginTop: 20 }}>
-                    <SortableList
-                      style={styles.list}
-                      contentContainerStyle={styles.contentContainer}
-                      data={this.state.participantList}
-                      renderRow={this._renderRow}
-                      //onChangeOrder={this.onRelease}
-                      onReleaseRow={this.onRelease}
-                    />
-
-                    <TouchableOpacity
-                      onPress={() => this._doContinue()}
-                      style={styles.confirmButtonBlock}
-                      disabled={this.state.loader}
-                    >
-                      <Text style={styles.confirmButtonText}>
-                        {
-                          Language[this.state.selectedLanguage]["common"][
-                            "confirm"
-                          ]
-                        }
-                      </Text>
-
-                      {this.state.loader ? (
-                        <View style={styles.loading}>
-                          <ActivityIndicator size="small" color={"#FFFFFF"} />
-                        </View>
-                      ) : null}
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <ActivityIndicator />
-                  </View>
-                )}
+                  {this.state.loader ? (
+                    <View style={styles.loading}>
+                      <ActivityIndicator size="small" color={"#FFFFFF"} />
+                    </View>
+                  ) : null}
+                </TouchableOpacity>
               </View>
-            </View>
+            ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <ActivityIndicator />
+                </View>
+              )}
           </View>
-          <View style={{ marginTop: 20 }} />
-        </View>
+
+
+        </ScrollView>
+
+
       </View>
     );
   }
@@ -360,7 +351,7 @@ class Row extends Component {
             >
               {
                 Language[this.state.selectedLanguage]["register_screen1"][
-                  "phone"
+                "phone"
                 ]
               }{" "}
               :

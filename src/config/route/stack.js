@@ -12,17 +12,3 @@ export const authStackNavigator = createStackNavigator(
   }
 );
 
-export const homeStackNavigator = createStackNavigator(
-  navigationConfig.Screen.homeStackScreens,
-  {
-    headerMode: "none",
-    initialRouteName: "dashboardPage"
-  }
-);
-
-export const moreStackNavigator = createStackNavigator(
-  navigationConfig.Screen.moreStackScreens,
-  {
-    headerMode: "none"
-  }
-);

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,76 +11,57 @@ import {
   ActivityIndicator,
   Alert,
   BackHandler,
-} from "react-native";
+} from 'react-native';
 
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import PhoneInput from "react-native-phone-input";
+import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
+import PhoneInput from 'react-native-phone-input';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-community/async-storage";
-const width = Math.round(Dimensions.get("window").width);
-const statusBarBackgroundColor = "#1CCBE6";
-const barStyle = "light-content";
-import HeaderCurve from "../includes/headercurve";
-import httpService from "../../services/http/httpService";
+} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+const width = Math.round(Dimensions.get('window').width);
+const statusBarBackgroundColor = '#1CCBE6';
+const barStyle = 'light-content';
+import HeaderCurve from '../includes/headercurve';
+import httpService from '../../services/http/httpService';
 
-import Language from "../../translations/index";
+import Language from '../../translations/index';
 export default class RegisterOneScreen extends Component {
   _didFocusSubscription;
   _willBlurSubscription;
   constructor(props) {
     super(props);
-    this._didFocusSubscription = props.navigation.addListener(
-      "didFocus",
-      (payload) =>
-        BackHandler.addEventListener("hardwareBackPress", this.onGoBack)
-    );
     this.state = {
-      screen: "login2",
+      screen: 'login2',
       isSecured: true,
-      eyeIcon: require("../../../assets/images/eye_cross.png"),
+      eyeIcon: require('../../../assets/images/eye_cross.png'),
       loader: false,
       success: null,
 
-      email: "",
+      email: '',
       errorEmail: false,
-      mobile_number: "",
+      mobile_number: '',
       errorMobileNumber: false,
-      password: "",
+      password: '',
       errorPassword: false,
-      errorMessage: "",
-      successMessage: "",
-      device_token: "",
-      cca2: "",
+      errorMessage: '',
+      successMessage: '',
+      device_token: '',
+      cca2: '',
       valid: true,
-      type: "",
-      value: "",
-      countyCode: "",
-      selectedLanguage: "en",
+      type: '',
+      value: '',
+      countyCode: '',
+      selectedLanguage: 'en',
     };
-
-
   }
 
   async componentDidMount() {
     this.updateInfo();
-    const device_token = await AsyncStorage.getItem("device_token");
+    const device_token = await AsyncStorage.getItem('device_token');
 
-    this.setState({ device_token: device_token });
-    this._willBlurSubscription = this.props.navigation.addListener(
-      "willBlur",
-      (payload) =>
-        BackHandler.removeEventListener("hardwareBackPress", this.onGoBack)
-    );
-
-    this.setState({
-      selectedLanguage: "fr",
-    });
-  }
-  componentWillUnmount() {
-
+    this.setState({device_token: device_token, selectedLanguage: 'fr'});
   }
 
   _doRegister = () => {
@@ -91,43 +72,43 @@ export default class RegisterOneScreen extends Component {
       errorEmail: false,
       errorMobileNumber: false,
       errorPassword: false,
-      errorMessage: "",
-      successMessage: "",
+      errorMessage: '',
+      successMessage: '',
     });
     if (
-      this.state.email == "" ||
-      this.state.mobile_number == "" ||
-      this.state.password == "" ||
-      this.state.device_token == ""
+      this.state.email == '' ||
+      this.state.mobile_number == '' ||
+      this.state.password == '' ||
+      this.state.device_token == ''
     ) {
-      if (this.state.email == "") {
+      if (this.state.email == '') {
         this.setState({
           errorEmail: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
 
-      if (this.state.mobile_number == "") {
+      if (this.state.mobile_number == '') {
         this.setState({
           errorMobileNumber: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
 
-      if (this.state.password == "") {
+      if (this.state.password == '') {
         this.setState({
           errorPassword: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
-      if (this.state.device_token == "") {
+      if (this.state.device_token == '') {
         this.setState({
           errorMessage:
-            Language[this.state.selectedLanguage]["common"][
-            "device_token_not_found"
+            Language[this.state.selectedLanguage]['common'][
+              'device_token_not_found'
             ],
         });
       }
@@ -136,20 +117,14 @@ export default class RegisterOneScreen extends Component {
         this.setState({
           errorEmail: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["invalid_email"],
+            Language[this.state.selectedLanguage]['common']['invalid_email'],
         });
       }
-      // if (!this.state.device_token) {
-      //   this.setState({
-      //     errorMobileNumber: true,
-      //     errorMessage: "Please refresh again. Device token not found"
-      //   });
-      // }
       if (!this.state.valid) {
         this.setState({
           errorMobileNumber: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["invalid_phone"],
+            Language[this.state.selectedLanguage]['common']['invalid_phone'],
         });
       }
     }
@@ -160,10 +135,10 @@ export default class RegisterOneScreen extends Component {
           let thatNavigation = this.props.navigation;
           let mobileNo = this.state.mobile_number.replace(
             this.state.countyCode,
-            ""
+            '',
           );
           let obj = {
-            url: "signup",
+            url: 'signup',
             data: {
               email: this.state.email,
               mobile_number: mobileNo,
@@ -171,7 +146,7 @@ export default class RegisterOneScreen extends Component {
               password: this.state.password,
               device_token: this.state.device_token,
             },
-            authtoken: "XYZ",
+            authtoken: 'XYZ',
           };
           this.setState({
             loader: true,
@@ -190,13 +165,13 @@ export default class RegisterOneScreen extends Component {
                   () => {
                     that.setState({
                       errorMessage: response.message
-                        ? Language[this.state.selectedLanguage]["status"][
-                        response.message
-                        ]
-                        : "",
+                        ? Language[this.state.selectedLanguage]['status'][
+                            response.message
+                          ]
+                        : '',
                       loader: false,
                     });
-                  }
+                  },
                 );
               } else {
                 that.setState(
@@ -207,44 +182,44 @@ export default class RegisterOneScreen extends Component {
                   () => {
                     that.setState({
                       successMessage: response.message
-                        ? Language[this.state.selectedLanguage]["status"][
-                        response.message
-                        ]
-                        : "",
+                        ? Language[this.state.selectedLanguage]['status'][
+                            response.message
+                          ]
+                        : '',
                       loader: false,
                     });
-                  }
+                  },
                 );
 
                 AsyncStorage.multiSet([
-                  ["email", that.state.email],
-                  ["password", that.state.password],
-                  ["mobile_country_code", that.state.countyCode],
-                  ["mobile_number", mobileNo],
-                  ["screen", "registerOnePage"],
-                  ["rememberToken", response.result.remember_token],
-                  ["user___id", response.result.id.toString()],
+                  ['email', that.state.email],
+                  ['password', that.state.password],
+                  ['mobile_country_code', that.state.countyCode],
+                  ['mobile_number', mobileNo],
+                  ['screen', 'registerOnePage'],
+                  ['rememberToken', response.result.remember_token],
+                  ['user___id', response.result.id.toString()],
                 ]).then(() => {
-                  thatNavigation.navigate("otpVerifyPage");
+                  thatNavigation.navigate('otpVerifyPage');
                 });
               }
             })
             .catch((err) => {
               that.setState({
                 errorMessage: err.message
-                  ? Language[this.state.selectedLanguage]["status"][err.message]
-                  : "",
+                  ? Language[this.state.selectedLanguage]['status'][err.message]
+                  : '',
                 loader: false,
               });
             });
         }
       }.bind(this),
-      500
+      500,
     );
   };
 
   _doRedirectForgotPassword = () => {
-    this.props.navigation.navigate("forgotPasswordPage");
+    this.props.navigation.navigate('forgotPasswordPage');
   };
 
   _doChangeView = () => {
@@ -254,7 +229,7 @@ export default class RegisterOneScreen extends Component {
   };
 
   _doRedirectPrev = () => {
-    this.props.navigation.navigate("LoginScreen1");
+    this.props.navigation.navigate('LoginScreen1');
   };
 
   updateInfo() {
@@ -262,7 +237,7 @@ export default class RegisterOneScreen extends Component {
       value: this.phone.getDialCode(),
       mobile_number: this.phone.getDialCode(),
       valid: this.phone.isValidNumber(),
-      countyCode: "+" + this.phone.getCountryCode(),
+      countyCode: '+' + this.phone.getCountryCode(),
     });
   }
 
@@ -271,32 +246,19 @@ export default class RegisterOneScreen extends Component {
     this.setState({
       mobile_number: this.phone.getValue(),
       valid: this.phone.isValidNumber(),
-      countyCode: "+" + this.phone.getCountryCode(),
+      countyCode: '+' + this.phone.getCountryCode(),
       value: this.phone.getValue(),
     });
   }
 
   onGoBack = () => {
-    // if (this.state.email != "" || this.state.password != "") {
-    //   Alert.alert("Confirmation", "You will lose unsave data", [
-    //     { text: "No", onPress: () => (No = "no") },
-    //     { text: "OK", onPress: () => this.props.navigation.goBack() }
-    //   ]);
-    //   return true;
-    // } else {
-    //   this.props.navigation.goBack();
-    //   return true;
-    // }
-
     this.props.navigation.goBack();
-
-    return true;
   };
 
   render() {
     const eyeIcon = this.state.isSecured
-      ? require("../../../assets/images/eye_cross.png")
-      : require("../../../assets/images/eye.png");
+      ? require('../../../assets/images/eye_cross.png')
+      : require('../../../assets/images/eye.png');
 
     const errorEmail = this.state.errorEmail
       ? styles.inputTextStyleRequired
@@ -316,247 +278,178 @@ export default class RegisterOneScreen extends Component {
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
         />
+        <HeaderCurve
+          title={
+            Language[this.state.selectedLanguage]['register_screen1'][
+              'create_account'
+            ]
+          }
+          backButton={true}
+          backAlert={
+            this.state.email != '' || this.state.password != '' ? true : false
+          }
+          navigation={this.props.navigation}
+        />
 
         <KeyboardAwareScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps={"handled"}
-        >
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps={'handled'}>
           <View
             style={{
+              padding: 20,
               flex: 1,
-              position: "relative",
-            }}
-          >
-            <HeaderCurve
-              title={
-                Language[this.state.selectedLanguage]["register_screen1"][
-                "create_account"
-                ]
-              }
-              navigation={this.props.navigation}
-              backButton={true}
-              backAlert={
-                this.state.email != "" || this.state.password != ""
-                  ? true
-                  : false
-              }
-            />
-
-            <View
-              style={{
-                flex: 1,
-              }}
-            >
+            }}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={require('../../../assets/images/registration.png')}
+                resizeMode={'contain'}
+                style={{
+                  width: 200,
+                  height: 200,
+                }}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                autoFocus={true}
+                style={errorEmail}
+                onChangeText={(email) => this.setState({email})}
+                placeholder={
+                  Language[this.state.selectedLanguage]['login_screen']['email']
+                }
+                autoCapitalize="none"
+                returnKeyType="go"
+                keyboardType="email-address"
+                onSubmitEditing={() => this.phone.focus()}
+              />
               <View
                 style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                }}
-              >
-                <View style={styles.imageWrapper}>
-                  <Image
-                    source={require("../../../assets/images/registration.png")}
-                    resizeMode={"contain"}
-                    style={{
-                      width: hp("35%"),
-                      height: hp("35%"),
-                    }}
-                  />
-                </View>
-                <View
+                  position: 'absolute',
+                }}>
+                <Image
+                  source={require('../../../assets/images/email.png')}
                   style={{
-                    flexDirection: "row",
-                    position: "relative",
-                    marginTop: 10,
-                    alignItems: "center",
+                    width: 20,
+                    height: 20,
                   }}
-                >
-                  <TextInput
-                    autoFocus={true}
-                    style={errorEmail}
-                    onChangeText={(email) => this.setState({ email })}
-                    placeholder={
-                      Language[this.state.selectedLanguage]["login_screen"][
-                      "email"
-                      ]
-                    }
-                    autoCapitalize="none"
-                    returnKeyType="go"
-                    keyboardType="email-address"
-                    onSubmitEditing={() => this.phone.focus()}
-                  />
-                  <View
-                    style={{
-                      position: "absolute",
-                    }}
-                  >
-                    <Image
-                      source={require("../../../assets/images/email.png")}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    position: "relative",
-                    marginTop: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <PhoneInput
-                    ref={(ref) => {
-                      this.phone = ref;
-                    }}
-                    textProps={{
-                      placeholder:
-                        Language[this.state.selectedLanguage][
-                        "register_screen1"
-                        ]["phone"],
-                      fontSize: 18,
-                    }}
-                    value={this.state.value}
-                    initialCountry={"fr"}
-                    onChangePhoneNumber={() => this.onChangePhoneNumber()}
-                    allowZeroAfterCountryCode={false}
-                    style={errorMobileNumber}
-                    buttonColor={"#5AC6C6"}
-                    confirmTextStyle={{ color: "#5AC6C6" }}
-                    cancelTextStyle={{ color: "#5AC6C6" }}
-                    onSelectCountry={() => this.updateInfo()}
-                    returnKeyType="next"
-                    onSubmitEditing={() => this.password.focus()}
-                  />
-
-                  {/* <View
-						style={{
-						  position: 'absolute'
-						}}
-					  >
-						<Image
-						  source={require('../../../assets/images/phone.png')}
-						  style={{
-							width: 20,
-							height: 20
-						  }}
-						/>
-					  </View> */}
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    position: "relative",
-                    marginTop: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <TextInput
-                    style={[
-                      errorPassword,
-                      {
-                        paddingRight: 40,
-                      },
-                    ]}
-                    onChangeText={(password) => this.setState({ password })}
-                    placeholder={
-                      Language[this.state.selectedLanguage]["login_screen"][
-                      "password"
-                      ]
-                    }
-                    secureTextEntry={this.state.isSecured}
-                    autoCapitalize="none"
-                    returnKeyType="done"
-                    onSubmitEditing={() => this._doRegister()}
-                  />
-                  <View
-                    style={{
-                      position: "absolute",
-                    }}
-                  >
-                    <Image
-                      source={require("../../../assets/images/lock.png")}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      left: width - 70,
-                    }}
-                    onPress={() => this._doChangeView()}
-                  >
-                    <Image
-                      source={eyeIcon}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 10,
-                  }}
-                >
-                  {this.state.successMessage ? (
-                    <Text
-                      style={{
-                        color: "green",
-                        fontSize: 16,
-                      }}
-                    >
-                      {this.state.successMessage}
-                    </Text>
-                  ) : (
-                      <Text
-                        style={{
-                          color: "red",
-
-                          fontSize: 16,
-                        }}
-                      >
-                        {this.state.errorMessage}
-                      </Text>
-                    )}
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => this._doRegister()}
-                  style={styles.sendButtonBlockActive}
-                  disabled={this.state.loader}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]["register_screen1"][
-                      "create_account"
-                      ]
-                    }
-                  </Text>
-
-                  {this.state.loader ? (
-                    <View style={styles.loading}>
-                      <ActivityIndicator size="small" color={"#FFFFFF"} />
-                    </View>
-                  ) : null}
-                </TouchableOpacity>
+                />
               </View>
             </View>
+
+            <View style={styles.inputContainer}>
+              <PhoneInput
+                ref={(ref) => {
+                  this.phone = ref;
+                }}
+                textProps={{
+                  placeholder:
+                    Language[this.state.selectedLanguage]['register_screen1'][
+                      'phone'
+                    ],
+                  fontSize: 18,
+                }}
+                value={this.state.value}
+                initialCountry={'fr'}
+                onChangePhoneNumber={() => this.onChangePhoneNumber()}
+                allowZeroAfterCountryCode={false}
+                style={errorMobileNumber}
+                buttonColor={'#5AC6C6'}
+                confirmTextStyle={{color: '#5AC6C6'}}
+                cancelTextStyle={{color: '#5AC6C6'}}
+                onSelectCountry={() => this.updateInfo()}
+                returnKeyType="next"
+                onSubmitEditing={() => this.password.focus()}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[
+                  errorPassword,
+                  {
+                    paddingRight: 40,
+                  },
+                ]}
+                onChangeText={(password) => this.setState({password})}
+                placeholder={
+                  Language[this.state.selectedLanguage]['login_screen'][
+                    'password'
+                  ]
+                }
+                secureTextEntry={this.state.isSecured}
+                autoCapitalize="none"
+                returnKeyType="done"
+                onSubmitEditing={() => this._doRegister()}
+              />
+              <View
+                style={{
+                  position: 'absolute',
+                }}>
+                <Image
+                  source={require('../../../assets/images/lock.png')}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  left: width - 70,
+                }}
+                onPress={() => this._doChangeView()}>
+                <Image
+                  source={eyeIcon}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.errorMessageContainer}>
+              {this.state.successMessage ? (
+                <Text
+                  style={{
+                    color: 'green',
+                    fontSize: 16,
+                  }}>
+                  {this.state.successMessage}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    color: 'red',
+
+                    fontSize: 16,
+                  }}>
+                  {this.state.errorMessage}
+                </Text>
+              )}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => this._doRegister()}
+              style={styles.sendButtonBlockActive}
+              disabled={this.state.loader}>
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]['register_screen1'][
+                    'create_account'
+                  ]
+                }
+              </Text>
+
+              {this.state.loader ? (
+                <View style={styles.loading}>
+                  <ActivityIndicator size="small" color={'#FFFFFF'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 20 }} />
         </KeyboardAwareScrollView>
       </View>
     );
@@ -566,19 +459,16 @@ export default class RegisterOneScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
-  containerBackBlock: {
-    justifyContent: "center",
-    width: 60,
-  },
+
   inputTextStyleActive: {
     flex: 1,
     height: 40,
     //borderBottomColor: '#dfdfe1',
-    borderBottomColor: "#1DC2E0",
+    borderBottomColor: '#1DC2E0',
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 40,
     paddingVertical: 0,
@@ -587,54 +477,31 @@ const styles = StyleSheet.create({
     marginTop: 40,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
-  sendButtonBlockInActive: {
-    marginTop: 40,
-    height: 50,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
-    elevation: 2,
-  },
+
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
   imageWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    height: hp("30%"),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  headerMenu: {
-    flexDirection: "row",
-    height: 40,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
-    top: hp("3%"),
-  },
-  headingBold: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+
   loading: {
     marginLeft: 10,
   },
   inputTextStyleInactive: {
     flex: 1,
     height: 40,
-    borderBottomColor: "#1DC2E0", // normal
+    borderBottomColor: '#1DC2E0', // normal
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 40,
     paddingVertical: 0,
@@ -642,9 +509,9 @@ const styles = StyleSheet.create({
   inputTextStyleRequired: {
     flex: 1,
     height: 40,
-    borderBottomColor: "red", // required
+    borderBottomColor: 'red', // required
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 40,
     paddingVertical: 0,
@@ -653,19 +520,31 @@ const styles = StyleSheet.create({
   inputTextStyleInactiveMob: {
     flex: 1,
     height: 40,
-    borderBottomColor: "#1DC2E0", // normal
+    borderBottomColor: '#1DC2E0', // normal
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
   },
   inputTextStyleRequiredMob: {
     flex: 1,
     height: 40,
-    borderBottomColor: "red", // required
+    borderBottomColor: 'red', // required
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
+  },
+
+  inputContainer: {
+    flexDirection: 'row',
+    position: 'relative',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  errorMessageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });

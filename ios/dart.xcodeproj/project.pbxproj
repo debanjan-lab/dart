@@ -8,33 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		28A04ED514F7D40F0E58EC69 /* libPods-dart-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D65D79604C330A18E9A63FDA /* libPods-dart-OneSignalNotificationServiceExtension.a */; };
-		3126356FB0476B2284A784C9 /* libPods-dart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4857DDE305A35E404B923E1C /* libPods-dart.a */; };
-		BA6AE57A24BB476C00F37528 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6AE57924BB476C00F37528 /* NotificationService.swift */; };
-		BAF69D3124BEEB0A00A8D548 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BA6AE57724BB476C00F37528 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8B293D4EB6F06AF58D9C0E5F /* libPods-dart-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D9F144D143F997AF6402C56 /* libPods-dart-OneSignalNotificationServiceExtension.a */; };
+		B447F0A1CAB9D35949ABD2DC /* libPods-dart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33751FF02900AC0A0A7398AB /* libPods-dart.a */; };
+		BADB67FF24C4B6170013C083 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADB67FE24C4B6170013C083 /* NotificationService.swift */; };
+		BADB680324C4B6170013C083 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BADB67FC24C4B6170013C083 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BA6AE57C24BB476C00F37528 /* PBXContainerItemProxy */ = {
+		BADB680124C4B6170013C083 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BA6AE57624BB476C00F37528;
+			remoteGlobalIDString = BADB67FB24C4B6170013C083;
 			remoteInfo = OneSignalNotificationServiceExtension;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		BA6AE57F24BB476C00F37528 /* Embed App Extensions */ = {
+		BADB680724C4B6170013C083 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 8;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				BAF69D3124BEEB0A00A8D548 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+				BADB680324C4B6170013C083 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 1;
@@ -45,34 +45,34 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* dartTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = dartTests.m; sourceTree = "<group>"; };
+		0D9F144D143F997AF6402C56 /* libPods-dart-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Dart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = dart/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = dart/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = dart/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = dart/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = dart/main.m; sourceTree = "<group>"; };
-		14619BB8754D917AB737944B /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		2370665B7D7DAEC3A7EA2707 /* Pods-dartTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dartTests.debug.xcconfig"; path = "Target Support Files/Pods-dartTests/Pods-dartTests.debug.xcconfig"; sourceTree = "<group>"; };
-		2747CC29EF755C804CAC7310 /* Pods-dart-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-dart-tvOS/Pods-dart-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		30C155D2DC279585C62FC0A6 /* Pods-dart-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-dart-tvOSTests/Pods-dart-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4857DDE305A35E404B923E1C /* libPods-dart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6EB095EA24B3767C00E98108 /* Dart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Dart.entitlements; path = dart/Dart.entitlements; sourceTree = "<group>"; };
-		7883937011983ECF36592895 /* libPods-dart-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8812D419D711B30BB16D51CF /* libPods-dart-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8831B21DBEB03FD6D43B9F69 /* libPods-dartTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dartTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		88636C2E2D507EB50D638235 /* Pods-dart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart.release.xcconfig"; path = "Target Support Files/Pods-dart/Pods-dart.release.xcconfig"; sourceTree = "<group>"; };
-		9D312AAE07A5FF935CC2CA4C /* Pods-dart-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOS.release.xcconfig"; path = "Target Support Files/Pods-dart-tvOS/Pods-dart-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		A803442A468DD5C10D3CA047 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
-		BA6AE57724BB476C00F37528 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA6AE57924BB476C00F37528 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
-		BA6AE57B24BB476C00F37528 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BDC1610D840EE74ADAADB4E1 /* Pods-dart-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-dart-tvOSTests/Pods-dart-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		CA3E094097326604491CF6FE /* Pods-dart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart.debug.xcconfig"; path = "Target Support Files/Pods-dart/Pods-dart.debug.xcconfig"; sourceTree = "<group>"; };
-		D65D79604C330A18E9A63FDA /* libPods-dart-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FD653E1DEC9A5E772FD8375 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		207191C92C9B9089ECB4E062 /* Pods-dart-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-dart-tvOSTests/Pods-dart-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		23E6F020F1033305A1E96E35 /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		27D14C72DA508B39A7290681 /* Pods-dart-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-dart-tvOS/Pods-dart-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		33751FF02900AC0A0A7398AB /* libPods-dart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DEBABE763B8C7BD664B5430 /* Pods-dart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart.release.xcconfig"; path = "Target Support Files/Pods-dart/Pods-dart.release.xcconfig"; sourceTree = "<group>"; };
+		43C8B100A8615FC98E7DA140 /* Pods-dart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart.debug.xcconfig"; path = "Target Support Files/Pods-dart/Pods-dart.debug.xcconfig"; sourceTree = "<group>"; };
+		4C0B84D021CDCC81D7C52D0A /* libPods-dart-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F9CF69AC042695F36372A8A /* libPods-dart-dartTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-dartTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61E4376F36F5A697D3283D70 /* libPods-dart-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dart-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = dart/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		88C9C44E1838E77042EECB18 /* Pods-dart-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOS.release.xcconfig"; path = "Target Support Files/Pods-dart-tvOS/Pods-dart-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		B9D105EFE29783CA5F93E7DD /* Pods-dart-dartTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-dartTests.release.xcconfig"; path = "Target Support Files/Pods-dart-dartTests/Pods-dart-dartTests.release.xcconfig"; sourceTree = "<group>"; };
+		BADB67F724C4B5E00013C083 /* dart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = dart.entitlements; path = dart/dart.entitlements; sourceTree = "<group>"; };
+		BADB67FC24C4B6170013C083 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BADB67FE24C4B6170013C083 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		BADB680024C4B6170013C083 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C415CF992FFAD9136C0D3539 /* Pods-dart-dartTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-dartTests.debug.xcconfig"; path = "Target Support Files/Pods-dart-dartTests/Pods-dart-dartTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F3A863861D1855BE8577C4BC /* Pods-dartTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dartTests.release.xcconfig"; path = "Target Support Files/Pods-dartTests/Pods-dartTests.release.xcconfig"; sourceTree = "<group>"; };
+		F464C39573E83F4D5CB9995E /* Pods-dart-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dart-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-dart-tvOSTests/Pods-dart-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,15 +80,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3126356FB0476B2284A784C9 /* libPods-dart.a in Frameworks */,
+				B447F0A1CAB9D35949ABD2DC /* libPods-dart.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BA6AE57424BB476C00F37528 /* Frameworks */ = {
+		BADB67F924C4B6170013C083 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28A04ED514F7D40F0E58EC69 /* libPods-dart-OneSignalNotificationServiceExtension.a in Frameworks */,
+				8B293D4EB6F06AF58D9C0E5F /* libPods-dart-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,13 +115,13 @@
 		13B07FAE1A68108700A75B9A /* dart */ = {
 			isa = PBXGroup;
 			children = (
-				6EB095EA24B3767C00E98108 /* Dart.entitlements */,
+				BADB67F724C4B5E00013C083 /* dart.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
+				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = dart;
@@ -132,30 +132,13 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				4857DDE305A35E404B923E1C /* libPods-dart.a */,
-				7883937011983ECF36592895 /* libPods-dart-tvOS.a */,
-				8812D419D711B30BB16D51CF /* libPods-dart-tvOSTests.a */,
-				8831B21DBEB03FD6D43B9F69 /* libPods-dartTests.a */,
-				D65D79604C330A18E9A63FDA /* libPods-dart-OneSignalNotificationServiceExtension.a */,
+				33751FF02900AC0A0A7398AB /* libPods-dart.a */,
+				4F9CF69AC042695F36372A8A /* libPods-dart-dartTests.a */,
+				4C0B84D021CDCC81D7C52D0A /* libPods-dart-tvOS.a */,
+				61E4376F36F5A697D3283D70 /* libPods-dart-tvOSTests.a */,
+				0D9F144D143F997AF6402C56 /* libPods-dart-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		391C4FBFE924D914C3EE143A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				CA3E094097326604491CF6FE /* Pods-dart.debug.xcconfig */,
-				88636C2E2D507EB50D638235 /* Pods-dart.release.xcconfig */,
-				2747CC29EF755C804CAC7310 /* Pods-dart-tvOS.debug.xcconfig */,
-				9D312AAE07A5FF935CC2CA4C /* Pods-dart-tvOS.release.xcconfig */,
-				30C155D2DC279585C62FC0A6 /* Pods-dart-tvOSTests.debug.xcconfig */,
-				BDC1610D840EE74ADAADB4E1 /* Pods-dart-tvOSTests.release.xcconfig */,
-				2370665B7D7DAEC3A7EA2707 /* Pods-dartTests.debug.xcconfig */,
-				F3A863861D1855BE8577C4BC /* Pods-dartTests.release.xcconfig */,
-				14619BB8754D917AB737944B /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				A803442A468DD5C10D3CA047 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */,
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -171,10 +154,10 @@
 				13B07FAE1A68108700A75B9A /* dart */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* dartTests */,
-				BA6AE57824BB476C00F37528 /* OneSignalNotificationServiceExtension */,
+				BADB67FD24C4B6170013C083 /* OneSignalNotificationServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				391C4FBFE924D914C3EE143A /* Pods */,
+				DC1F00A3B275B670D70C63C4 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -185,18 +168,35 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Dart.app */,
-				BA6AE57724BB476C00F37528 /* OneSignalNotificationServiceExtension.appex */,
+				BADB67FC24C4B6170013C083 /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BA6AE57824BB476C00F37528 /* OneSignalNotificationServiceExtension */ = {
+		BADB67FD24C4B6170013C083 /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXGroup;
 			children = (
-				BA6AE57924BB476C00F37528 /* NotificationService.swift */,
-				BA6AE57B24BB476C00F37528 /* Info.plist */,
+				BADB67FE24C4B6170013C083 /* NotificationService.swift */,
+				BADB680024C4B6170013C083 /* Info.plist */,
 			);
 			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		DC1F00A3B275B670D70C63C4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				43C8B100A8615FC98E7DA140 /* Pods-dart.debug.xcconfig */,
+				3DEBABE763B8C7BD664B5430 /* Pods-dart.release.xcconfig */,
+				C415CF992FFAD9136C0D3539 /* Pods-dart-dartTests.debug.xcconfig */,
+				B9D105EFE29783CA5F93E7DD /* Pods-dart-dartTests.release.xcconfig */,
+				27D14C72DA508B39A7290681 /* Pods-dart-tvOS.debug.xcconfig */,
+				88C9C44E1838E77042EECB18 /* Pods-dart-tvOS.release.xcconfig */,
+				F464C39573E83F4D5CB9995E /* Pods-dart-tvOSTests.debug.xcconfig */,
+				207191C92C9B9089ECB4E062 /* Pods-dart-tvOSTests.release.xcconfig */,
+				23E6F020F1033305A1E96E35 /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				1FD653E1DEC9A5E772FD8375 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,34 +206,34 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "dart" */;
 			buildPhases = (
-				5F21A8A41181051148B00082 /* [CP] Check Pods Manifest.lock */,
+				DB8BA184BEC6D7253FEEEF80 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				033980A964270627A11D845D /* [CP] Copy Pods Resources */,
-				BA6AE57F24BB476C00F37528 /* Embed App Extensions */,
+				33A7670503B3ECDF06C1C1E3 /* [CP] Copy Pods Resources */,
+				BADB680724C4B6170013C083 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BA6AE57D24BB476C00F37528 /* PBXTargetDependency */,
+				BADB680224C4B6170013C083 /* PBXTargetDependency */,
 			);
 			name = dart;
 			productName = dart;
 			productReference = 13B07F961A680F5B00A75B9A /* Dart.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BA6AE57624BB476C00F37528 /* OneSignalNotificationServiceExtension */ = {
+		BADB67FB24C4B6170013C083 /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA6AE58224BB476C00F37528 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildConfigurationList = BADB680424C4B6170013C083 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				3A3057B6557514DAB1C7AF57 /* [CP] Check Pods Manifest.lock */,
-				BA6AE57324BB476C00F37528 /* Sources */,
-				BA6AE57424BB476C00F37528 /* Frameworks */,
-				BA6AE57524BB476C00F37528 /* Resources */,
-				B2FE78EE8902EE105EF2F51D /* [CP] Copy Pods Resources */,
+				B18A86EE831B144A53C67F14 /* [CP] Check Pods Manifest.lock */,
+				BADB67F824C4B6170013C083 /* Sources */,
+				BADB67F924C4B6170013C083 /* Frameworks */,
+				BADB67FA24C4B6170013C083 /* Resources */,
+				FEA8AC8C07CE978A874E0630 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -241,7 +241,7 @@
 			);
 			name = OneSignalNotificationServiceExtension;
 			productName = OneSignalNotificationServiceExtension;
-			productReference = BA6AE57724BB476C00F37528 /* OneSignalNotificationServiceExtension.appex */;
+			productReference = BADB67FC24C4B6170013C083 /* OneSignalNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -251,14 +251,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 0940;
-				ORGANIZATIONNAME = Facebook;
+				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 3VGRMT2PPY;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Manual;
 					};
-					BA6AE57624BB476C00F37528 = {
+					BADB67FB24C4B6170013C083 = {
 						CreatedOnToolsVersion = 11.5;
 						DevelopmentTeam = 3VGRMT2PPY;
 						ProvisioningStyle = Manual;
@@ -267,10 +267,9 @@
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "dart" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -280,7 +279,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* dart */,
-				BA6AE57624BB476C00F37528 /* OneSignalNotificationServiceExtension */,
+				BADB67FB24C4B6170013C083 /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -290,12 +289,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BA6AE57524BB476C00F37528 /* Resources */ = {
+		BADB67FA24C4B6170013C083 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -317,30 +316,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n\n\n";
-			showEnvVarsInLog = 0;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		033980A964270627A11D845D /* [CP] Copy Pods Resources */ = {
+		33A7670503B3ECDF06C1C1E3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-dart/Pods-dart-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
-				"${PODS_ROOT}/RSKImageCropper/RSKImageCropper/RSKImageCropperStrings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-dart/Pods-dart-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3A3057B6557514DAB1C7AF57 /* [CP] Check Pods Manifest.lock */ = {
+		B18A86EE831B144A53C67F14 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -362,7 +358,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5F21A8A41181051148B00082 /* [CP] Check Pods Manifest.lock */ = {
+		DB8BA184BEC6D7253FEEEF80 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -384,26 +380,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B2FE78EE8902EE105EF2F51D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
-				"${PODS_ROOT}/RSKImageCropper/RSKImageCropper/RSKImageCropperStrings.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -423,6 +399,24 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		FEA8AC8C07CE978A874E0630 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-dart-OneSignalNotificationServiceExtension/Pods-dart-OneSignalNotificationServiceExtension-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -435,49 +429,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BA6AE57324BB476C00F37528 /* Sources */ = {
+		BADB67F824C4B6170013C083 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA6AE57A24BB476C00F37528 /* NotificationService.swift in Sources */,
+				BADB67FF24C4B6170013C083 /* NotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BA6AE57D24BB476C00F37528 /* PBXTargetDependency */ = {
+		BADB680224C4B6170013C083 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BA6AE57624BB476C00F37528 /* OneSignalNotificationServiceExtension */;
-			targetProxy = BA6AE57C24BB476C00F37528 /* PBXContainerItemProxy */;
+			target = BADB67FB24C4B6170013C083 /* OneSignalNotificationServiceExtension */;
+			targetProxy = BADB680124C4B6170013C083 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				13B07FB21A68108700A75B9A /* Base */,
-			);
-			name = LaunchScreen.xib;
-			path = dart;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA3E094097326604491CF6FE /* Pods-dart.debug.xcconfig */;
+			baseConfigurationReference = 43C8B100A8615FC98E7DA140 /* Pods-dart.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = dart/Dart.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dart/dart.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 3VGRMT2PPY;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = dart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -488,17 +470,20 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.org.dart;
 				PRODUCT_NAME = Dart;
 				PROVISIONING_PROFILE_SPECIFIER = DART_DEV;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88636C2E2D507EB50D638235 /* Pods-dart.release.xcconfig */;
+			baseConfigurationReference = 3DEBABE763B8C7BD664B5430 /* Pods-dart.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = dart/Dart.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dart/dart.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -513,6 +498,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.org.dart;
 				PRODUCT_NAME = Dart;
 				PROVISIONING_PROFILE_SPECIFIER = DART_APPSTORE;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -521,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -545,7 +532,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -563,11 +550,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};
@@ -575,6 +567,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -602,7 +595,6 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -611,17 +603,22 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		BA6AE58024BB476C00F37528 /* Debug */ = {
+		BADB680524C4B6170013C083 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 14619BB8754D917AB737944B /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			baseConfigurationReference = 23E6F020F1033305A1E96E35 /* Pods-dart-OneSignalNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -629,7 +626,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 3VGRMT2PPY;
@@ -650,9 +646,9 @@
 			};
 			name = Debug;
 		};
-		BA6AE58124BB476C00F37528 /* Release */ = {
+		BADB680624C4B6170013C083 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A803442A468DD5C10D3CA047 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */;
+			baseConfigurationReference = 1FD653E1DEC9A5E772FD8375 /* Pods-dart-OneSignalNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -701,11 +697,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA6AE58224BB476C00F37528 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+		BADB680424C4B6170013C083 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BA6AE58024BB476C00F37528 /* Debug */,
-				BA6AE58124BB476C00F37528 /* Release */,
+				BADB680524C4B6170013C083 /* Debug */,
+				BADB680624C4B6170013C083 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

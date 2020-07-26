@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   Platform,
   View,
@@ -7,165 +7,110 @@ import {
   TouchableOpacity,
   Alert,
   Button,
-  ImageBackground
-} from "react-native";
-let tabIndex = 0;
-
-
+  ImageBackground,
+  StyleSheet,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-
-
 export default class HeaderCurve extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: false,
+      load_api: true,
     };
   }
-  onPressBackPage = () => {
-    // if (this.props.backAlert) {
-    //   Alert.alert("Confirmation", "You will lose unsave data", [
-    //     { text: "No", onPress: () => (No = "no") },
-    //     { text: "OK", onPress: () => this.props.navigation.goBack() },
-    //   ]);
-    //   return true;
-    // } else {
-    //   this.props.navigation.goBack();
-    // }
-    // return true;
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        load_api: false,
+      });
+    }, 1000);
+  }
+  onPressBackPage = () => {
     this.props.navigation.goBack();
   };
 
-  navigateTo(props, index, stack) {
-    this.setState({
-      isModalVisible: false,
-    });
-    props.navigation.navigate(stack);
-    tabIndex = index;
-  }
-
   render() {
-    const { admin, first_name, props } = this.props;
-    // let admin = {this.props.admin == 1 ? "(Admin)" : null}
+    //console.log('==================lo', this.props.avatar_location);
     return (
-      <View style={{ height: DeviceInfo.hasNotch() ? 160 : 120 }}>
-
-
+      <View style={{height: 100}}>
         <ImageBackground
-          source={require("../../../assets/images/header.png")}
-          style={{ width: '100%', height: '100%' }}
-        >
+          source={require('../../../assets/images/header.png')}
+          style={{width: '100%', height: '100%'}}>
+          <View style={styles.headerWrapper}>
+            <View style={{width: 30}}>
+              {this.props.backButton && (
+                <TouchableOpacity onPress={() => this.onPressBackPage()}>
+                  <Image
+                    source={require('../../../assets/images/arrow.png')}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
 
-
-          <View style={{
-            height: 60,
-
-            top: DeviceInfo.hasNotch() ? 60 : 40,
-            paddingLeft: 20,
-            paddingRight: 20,
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}>
-
-            {this.props.backButton ? (
-              <TouchableOpacity
-                onPress={() => this.onPressBackPage()}
-
-              >
-                <Image
-                  source={require("../../../assets/images/arrow.png")}
-                  style={{
-                    width: 20,
-                    height: 20,
-                  }}
-                />
-              </TouchableOpacity>
-            ) :
-              <View style={{ width: 30 }} />
-            }
-
-
-
-            {this.props.avatar_location ? (
-              <View style={{ alignItems: 'center' }}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              {!this.state.load_api && this.props.avatar_location && (
                 <Image
                   style={{
                     width: 40,
                     height: 40,
                     borderRadius: 20,
-
                   }}
                   source={this.props.avatar_location}
                 />
+              )}
 
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: "#FFFFFF",
-                    fontWeight: "700",
-                    marginTop: 5
-                  }}
-                >
-                  {this.props.first_name}
-                  {this.props.admin == 1 ? "(Admin)" : null}
+              {!this.state.load_api && this.props.first_name && (
+                <Text style={styles.centerText}>
+                  {this.props.first_name}{' '}
+                  {this.props.admin == 1 ? '(Admin)' : null}
                 </Text>
-              </View>
-            ) : null}
+              )}
 
-
-
-            {this.props.title ? (
-              <View>
-                <Text
-                  style={{
-                    color: "#FFFFFF",
-                    fontSize: 16,
-                    fontWeight: "600",
-                  }}
-                >
-                  {this.props.title}
-                </Text>
-              </View>
-            ) : null}
-
-
-
-            <View style={{ width: 30 }}>
-              {this.props.bellIcon ? (
-                this.props.searchIcon ? (
-
-
-                  <TouchableOpacity
-                    onPress={() => this.props.showSearchBar()}
-
-                  >
-                    <Image
-                      source={require("../../../assets/images/search_white.png")}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </TouchableOpacity>
-
-
-
-
-                ) : null
-              ) :
-                null}
-
+              {!this.state.load_api && this.props.title && (
+                <Text style={styles.centerText}>{this.props.title}</Text>
+              )}
             </View>
 
-
+            <View style={{width: 30}}>
+              {this.props.searchIcon && (
+                <TouchableOpacity onPress={() => this.props.showSearchBar()}>
+                  <Image
+                    source={require('../../../assets/images/search_white.png')}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-
         </ImageBackground>
-
       </View>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  headerWrapper: {
+    height: 80,
+    //top: '10%',
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    //backgroundColor: 'blue',
+  },
+  centerText: {
+    fontSize: 15,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    marginTop: 5,
+  },
+});

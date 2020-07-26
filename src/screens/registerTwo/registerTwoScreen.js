@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,34 +9,42 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
-} from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import ImagePicker from "react-native-image-crop-picker";
-import RNFetchBlob from "rn-fetch-blob";
+} from 'react-native';
+import {ToastMessage} from '../../components/ToastMessage';
+import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import ImagePicker from 'react-native-image-picker';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-community/async-storage";
-const height = Math.round(Dimensions.get("window").height);
-const statusBarBackgroundColor = "#1CCBE6";
-const barStyle = "light-content";
-import URL from "../../config/url";
-import HeaderCurve from "../includes/headercurve";
-import httpService from "../../services/http/httpService";
-import Language from "../../translations/index";
+} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+const height = Math.round(Dimensions.get('window').height);
+const statusBarBackgroundColor = '#1CCBE6';
+const barStyle = 'light-content';
+import URL from '../../config/url';
+import HeaderCurve from '../includes/headercurve';
+import httpService from '../../services/http/httpService';
+import Language from '../../translations/index';
+import axios from 'axios';
+const options = {
+  title: 'Select Avatar',
+  customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
 export default class RegisterTwoScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatar: URL.public_url + "storage/avatars/default_avatar.png",
+      avatar: URL.public_url + 'storage/avatars/default_avatar.png',
       idScan: null,
       loaderAvatar: false,
       loaderID: false,
-      rememberToken: "",
+      rememberToken: '',
       success: null,
       avatarFile: null,
       idScanFile: null,
@@ -44,37 +52,36 @@ export default class RegisterTwoScreen extends Component {
       email: null,
       phone: null,
 
-      first_name: "",
+      first_name: '',
       errorFirstName: false,
-      last_name: "",
+      last_name: '',
       errorLastName: false,
-      dob: "",
+      dob: '',
       selectedDate: new Date(),
       errorDob: false,
-      errorMessage: "",
-      mobile_country_code: "",
-      selectedLanguage: "en",
+      errorMessage: '',
+      mobile_country_code: '',
+      selectedLanguage: 'en',
     };
   }
 
   componentDidMount() {
-    ImagePicker.clean();
     this._bootstrapAsync();
   }
 
   _bootstrapAsync = async () => {
     AsyncStorage.multiGet([
-      "rememberToken",
-      "email",
-      "mobile_number",
-      "mobile_country_code",
+      'rememberToken',
+      'email',
+      'mobile_number',
+      'mobile_country_code',
     ]).then((response) => {
       this.setState({
         rememberToken: response[0][1],
         email: response[1][1],
         phone: response[2][1],
         mobile_country_code: response[3][1],
-        selectedLanguage: "fr",
+        selectedLanguage: 'fr',
       });
     });
   };
@@ -99,12 +106,12 @@ export default class RegisterTwoScreen extends Component {
       selectedDate: new Date(year, month - 1, day),
     });
     if (day < 10) {
-      day = "0" + day;
+      day = '0' + day;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = '0' + month;
     }
-    var date = day + "/" + month + "/" + year;
+    var date = day + '/' + month + '/' + year;
     this.setState({
       dob: date,
       isDateTimePickerVisible: false,
@@ -112,9 +119,9 @@ export default class RegisterTwoScreen extends Component {
   };
 
   makeid(length) {
-    var result = "";
+    var result = '';
     var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -123,115 +130,86 @@ export default class RegisterTwoScreen extends Component {
   }
 
   _openImagePicker = () => {
-    let thatRef = this.refs;
-    let that = this;
-    ImagePicker.openPicker({
-      width: 200,
-      height: 200,
-      mediaType: "photo",
-      includeBase64: true,
-      //cropping: true
-    }).then((image) => {
-      var type = image.mime.split("/")[1];
-      this.setState({
-        loaderAvatar: true,
-      });
-      RNFetchBlob.fetch(
-        "POST",
-        URL.base_url + "upload-file",
-        {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + that.state.rememberToken,
-        },
-        [
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: 'data:image/jpeg;base64,' + response.data};
+
+        this.setState(
           {
-            name: "file_name",
-            filename: this.makeid(15) + "." + type,
-            type: image.mime,
-            data: image.data,
+            uri: response.uri,
+            type: response.type,
+            fileName: response.fileName,
+            source: source,
           },
-          { name: "flag", data: "1" },
-        ]
-      )
-        .then((resp) => {
-          let json = resp.json();
-          if (json.status == 300) {
-            that.setState(
-              {
-                success: false,
-                loaderAvatar: false,
-                avatar: URL.public_url + "avatar/default_avatar.png",
-              },
-              () => {
-                thatRef.toast.show(json.message, DURATION.LENGTH_LONG);
-              }
-            );
-          } else {
-            this.setState({
-              avatar: URL.public_url + "storage/" + json.message,
-              loaderAvatar: false,
-              avatarFile: json.message,
-            });
-          }
-        })
-        .catch((err) => {
-          ToastMessage(err.message);
-        });
+          () => this._doUpload(),
+        );
+      }
     });
   };
 
-  _openIDScanPicker = () => {
-    let thatRef = this.refs;
-    let that = this;
-
-    ImagePicker.openPicker({
-      mediaType: "photo",
-      includeBase64: true,
-    }).then((image) => {
-      var type = image.mime.split("/")[1];
-      this.setState({
-        loaderID: true,
-      });
-      RNFetchBlob.fetch(
-        "POST",
-        URL.base_url + "upload-file",
-        {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + that.state.rememberToken,
-        },
-        [
-          {
-            name: "file_name",
-            filename: this.makeid(15) + "." + type,
-            type: image.mime,
-            data: image.data,
-          },
-          { name: "flag", data: "2" },
-        ]
-      )
-        .then((resp) => {
-          let json = resp.json();
-          if (json.status == 300) {
-            that.setState(
-              {
-                loaderID: false,
-                success: false,
-              },
-              () => {
-                thatRef.toast.show(json.message, DURATION.LENGTH_LONG);
-              }
-            );
-          } else {
-            this.setState({
-              loaderID: false,
-              idScanFile: json.message,
-            });
-          }
-        })
-        .catch((err) => {
-          ToastMessage(err.message);
-        });
+  _doUpload = () => {
+    this.setState({
+      loaderAvatar: true,
     });
+
+    let image = this.state.uri;
+
+    let reqUrl = URL.base_url + 'upload-file';
+
+    console.log(reqUrl);
+    console.log(this.state.rememberToken);
+
+    var bodyFormData = new FormData();
+
+    bodyFormData.append('flag', '1');
+    bodyFormData.append('file_name', {
+      uri: image,
+      name: this.state.fileName,
+      type: this.state.type,
+    });
+
+    axios
+      .post(reqUrl, bodyFormData, {
+        headers: {
+          'Content-type': 'multipart/form-data',
+          Authorization: 'Bearer ' + this.state.rememberToken,
+        },
+      })
+      .then((res) => {
+        console.log('res', res.data);
+        if (res.data.status == 100) {
+          ToastMessage(
+            Language[this.state.selectedLanguage]['common']['uploaded'],
+          );
+
+          this.setState({
+            avatarFile: res.data.message,
+          });
+        }
+
+        //this._doRegister();
+      })
+      .catch((err) => {
+        // console.log('err', err);
+        // ToastMessage(
+        //   Language[this.state.selectedLanguage]["online_payment_screen"][
+        //     "payment_key_error"
+        //   ]
+        // );
+      })
+      .finally(() => {
+        this.setState({
+          loaderAvatar: false,
+        });
+      });
   };
 
   _doRegister = () => {
@@ -239,47 +217,47 @@ export default class RegisterTwoScreen extends Component {
       errorFirstName: false,
       errorLastName: false,
       errorDob: false,
-      errorMessage: "",
+      errorMessage: '',
     });
 
     if (
-      this.state.first_name == "" ||
-      this.state.last_name == "" ||
-      this.state.dob == ""
+      this.state.first_name == '' ||
+      this.state.last_name == '' ||
+      this.state.dob == ''
     ) {
-      if (this.state.first_name == "") {
+      if (this.state.first_name == '') {
         this.setState({
           errorFirstName: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
 
-      if (this.state.last_name == "") {
+      if (this.state.last_name == '') {
         this.setState({
           errorLastName: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
 
-      if (this.state.dob == "") {
+      if (this.state.dob == '') {
         this.setState({
           errorDob: true,
           errorMessage:
-            Language[this.state.selectedLanguage]["common"]["empty_field"],
+            Language[this.state.selectedLanguage]['common']['empty_field'],
         });
       }
     }
 
     setTimeout(
-      function() {
+      function () {
         if (!this.state.errorMessage) {
           let thatRef = this.refs;
           let that = this;
           let thatNavigation = this.props.navigation;
           let obj = {
-            url: "update-profile",
+            url: 'update-profile',
             data: {
               first_name: this.state.first_name,
               last_name: this.state.last_name,
@@ -308,59 +286,59 @@ export default class RegisterTwoScreen extends Component {
                   () => {
                     that.setState({
                       errorMessage: response.message
-                        ? Language[this.state.selectedLanguage]["status"][
+                        ? Language[this.state.selectedLanguage]['status'][
                             response.message
                           ]
-                        : "",
+                        : '',
                     });
-                  }
+                  },
                 );
               } else {
                 AsyncStorage.clear();
                 AsyncStorage.multiSet(
                   [
-                    ["user_id", response.result.id.toString()],
-                    ["rememberToken", that.state.rememberToken],
-                    ["loggedIn", "success"],
-                    ["first_name", response.result.first_name],
-                    ["last_name", response.result.last_name],
-                    ["dob", response.result.dob],
-                    ["email", response.result.email],
-                    ["iban", response.result.iban],
+                    ['user_id', response.result.id.toString()],
+                    ['rememberToken', that.state.rememberToken],
+                    ['loggedIn', 'success'],
+                    ['first_name', response.result.first_name],
+                    ['last_name', response.result.last_name],
+                    ['dob', response.result.dob],
+                    ['email', response.result.email],
+                    ['iban', response.result.iban],
                     [
-                      "mobile_country_code",
+                      'mobile_country_code',
                       response.result.mobile_country_code,
                     ],
-                    ["mobile_number", response.result.mobile_number.toString()],
-                    ["avatar_location", response.result.avatar_location],
+                    ['mobile_number', response.result.mobile_number.toString()],
+                    ['avatar_location', response.result.avatar_location],
                   ],
 
-                  function(error) {
-                    that.setState({ loader: false });
+                  function (error) {
+                    that.setState({loader: false});
                     setTimeout(() => {
-                      thatNavigation.navigate("homeStack");
+                      thatNavigation.navigate('App');
                     }, 1000);
 
                     ToastMessage(
-                      Language[that.state.selectedLanguage]["status"][
+                      Language[that.state.selectedLanguage]['status'][
                         response.message
-                      ]
+                      ],
                     );
-                  }
+                  },
                 );
               }
             })
             .catch((err) => {
               that.setState({
                 errorMessage: err.message
-                  ? Language[this.state.selectedLanguage]["status"][err.message]
-                  : "",
+                  ? Language[this.state.selectedLanguage]['status'][err.message]
+                  : '',
                 loader: false,
               });
             });
         }
       }.bind(this),
-      500
+      500,
     );
   };
 
@@ -383,220 +361,179 @@ export default class RegisterTwoScreen extends Component {
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
         />
-
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <HeaderCurve
+          title={
+            Language[this.state.selectedLanguage]['register_screen2']['profile']
+          }
+          navigation={this.props.navigation}
+        />
+        <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1}}>
           <View
             style={{
+              padding: 20,
               flex: 1,
-              position: "relative",
-            }}
-          >
-            <HeaderCurve
-              title={
-                Language[this.state.selectedLanguage]["register_screen2"][
-                  "profile"
-                ]
-              }
-              navigation={this.props.navigation}
-            />
+            }}>
+            <View style={styles.avatarWrapper}>
+              <TouchableOpacity
+                style={styles.avatarImageWrapper}
+                onPress={() => this._openImagePicker()}>
+                <Image
+                  source={{
+                    uri: this.state.uri ? this.state.uri : this.state.avatar,
+                  }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                  }}
+                />
+
+                {this.state.loaderAvatar ? (
+                  <View style={styles.loadingCenter}>
+                    <ActivityIndicator size="large" color={'#2ba685'} />
+                  </View>
+                ) : null}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  top: hp('10%'),
+                  left: wp('50%'),
+                  position: 'absolute',
+                }}
+                onPress={() => this._openImagePicker()}>
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                  }}
+                  source={require('../../../assets/images/edit.png')}
+                />
+              </TouchableOpacity>
+            </View>
 
             <View
-              style={{
-                flex: 1,
-                marginBottom: 20,
-              }}
-            >
+              style={[
+                styles.frmInputWrapper,
+                {flexDirection: 'row', justifyContent: null},
+              ]}>
+              <Text style={[styles.frmLabel, {flex: 1}]}>
+                {Language[this.state.selectedLanguage]['login_screen']['email']}
+              </Text>
+              <Text style={[styles.frmLabel, {flex: 3, color: '#000000'}]}>
+                {this.state.email}
+              </Text>
+            </View>
+
+            <View
+              style={[
+                styles.frmInputWrapper,
+                {flexDirection: 'row', justifyContent: null},
+              ]}>
+              <Text style={[styles.frmLabel, {flex: 1}]}>
+                {
+                  Language[this.state.selectedLanguage]['register_screen1'][
+                    'phone'
+                  ]
+                }
+              </Text>
+              <Text style={[styles.frmLabel, {flex: 3, color: '#000000'}]}>
+                {this.state.mobile_country_code}
+                {this.state.phone}
+              </Text>
+            </View>
+
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage]['register_screen2'][
+                    'first_name'
+                  ]
+                }
+              </Text>
+              <TextInput
+                style={errorFirstName}
+                onChangeText={(first_name) => this.setState({first_name})}
+              />
+            </View>
+
+            <View style={styles.frmInputWrapper}>
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage]['register_screen2'][
+                    'last_name'
+                  ]
+                }
+              </Text>
+              <TextInput
+                style={errorLastName}
+                onChangeText={(last_name) => this.setState({last_name})}
+              />
+            </View>
+
+            <View style={styles.frmInputWrapper}>
               <View
                 style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                }}
-              >
-                <View style={styles.avatarWrapper}>
-                  <TouchableOpacity
-                    style={styles.avatarImageWrapper}
-                    onPress={() => this._openImagePicker()}
-                  >
-                    <Image
-                      source={{
-                        uri: this.state.avatar,
-                      }}
-                      style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: 50,
-                      }}
-                    />
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={styles.frmLabel}>
+                  {
+                    Language[this.state.selectedLanguage]['register_screen2'][
+                      'date_of_birth'
+                    ]
+                  }
+                </Text>
 
-                    {this.state.loaderAvatar ? (
-                      <View style={styles.loadingCenter}>
-                        <ActivityIndicator size="large" color={"#2ba685"} />
-                      </View>
-                    ) : null}
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
+                <TouchableOpacity onPress={() => this.showDateTimePicker()}>
+                  <Image
+                    source={require('../../../assets/images/calendar.png')}
                     style={{
-                      top: hp("10%"),
-                      left: wp("50%"),
-                      position: "absolute",
+                      width: 25,
+                      height: 25,
                     }}
-                    onPress={() => this._openImagePicker()}
-                  >
-                    <Image
-                      style={{
-                        width: 35,
-                        height: 35,
-                      }}
-                      source={require("../../../assets/images/edit.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View
-                  style={[
-                    styles.frmInputWrapper,
-                    { flexDirection: "row", justifyContent: null },
-                  ]}
-                >
-                  <Text style={[styles.frmLabel, { flex: 1 }]}>
-                    {
-                      Language[this.state.selectedLanguage]["login_screen"][
-                        "email"
-                      ]
-                    }
-                  </Text>
-                  <Text
-                    style={[styles.frmLabel, { flex: 3, color: "#000000" }]}
-                  >
-                    {this.state.email}
-                  </Text>
-                </View>
-
-                <View
-                  style={[
-                    styles.frmInputWrapper,
-                    { flexDirection: "row", justifyContent: null },
-                  ]}
-                >
-                  <Text style={[styles.frmLabel, { flex: 1 }]}>
-                    {
-                      Language[this.state.selectedLanguage]["register_screen1"][
-                        "phone"
-                      ]
-                    }
-                  </Text>
-                  <Text
-                    style={[styles.frmLabel, { flex: 3, color: "#000000" }]}
-                  >
-                    {this.state.mobile_country_code}
-                    {this.state.phone}
-                  </Text>
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]["register_screen2"][
-                        "first_name"
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errorFirstName}
-                    onChangeText={(first_name) => this.setState({ first_name })}
                   />
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]["register_screen2"][
-                        "last_name"
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errorLastName}
-                    onChangeText={(last_name) => this.setState({ last_name })}
-                  />
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text style={styles.frmLabel}>
-                      {
-                        Language[this.state.selectedLanguage][
-                          "register_screen2"
-                        ]["date_of_birth"]
-                      }
-                    </Text>
-
-                    <TouchableOpacity onPress={() => this.showDateTimePicker()}>
-                      <Image
-                        source={require("../../../assets/images/calendar.png")}
-                        style={{
-                          width: 25,
-                          height: 25,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <TextInput
-                    style={errorDob}
-                    editable={false}
-                    value={this.state.dob}
-                  />
-
-                  <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onConfirm={this.handleDatePicked}
-                    onCancel={this.hideDateTimePicker}
-                    datePickerModeAndroid={"spinner"}
-                    date={this.state.selectedDate}
-                  />
-                </View>
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 20,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "red",
-                      fontSize: 16,
-                    }}
-                  >
-                    {this.state.errorMessage}
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => this._doRegister()}
-                  style={styles.sendButtonBlock}
-                  disabled={this.state.loader}
-                >
-                  <Text style={styles.sendButtonText}>
-                    {Language[this.state.selectedLanguage]["common"]["submit"]}
-                  </Text>
-
-                  {this.state.loader ? (
-                    <View style={styles.loading}>
-                      <ActivityIndicator size="small" color={"#FFFFFF"} />
-                    </View>
-                  ) : null}
                 </TouchableOpacity>
               </View>
+
+              <TextInput
+                style={errorDob}
+                editable={false}
+                value={this.state.dob}
+              />
+
+              <DateTimePicker
+                isVisible={this.state.isDateTimePickerVisible}
+                onConfirm={this.handleDatePicked}
+                onCancel={this.hideDateTimePicker}
+                datePickerModeAndroid={'spinner'}
+                date={this.state.selectedDate}
+              />
             </View>
+            <View style={styles.errorMessageContainer}>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: 16,
+                }}>
+                {this.state.errorMessage}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => this._doRegister()}
+              style={styles.sendButtonBlock}
+              disabled={this.state.loader}>
+              <Text style={styles.sendButtonText}>
+                {Language[this.state.selectedLanguage]['common']['submit']}
+              </Text>
+
+              {this.state.loader ? (
+                <View style={styles.loading}>
+                  <ActivityIndicator size="small" color={'#FFFFFF'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>
       </View>
@@ -607,44 +544,15 @@ export default class RegisterTwoScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  containerBackBlock: {
-    justifyContent: "center",
-    width: 60,
-  },
-
-  containerHeaderText: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    right: 10,
-  },
-
-  containerImageBlock: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    height: height / 4,
-    backgroundColor: "#C6F3F0",
-  },
-
-  forgotPasswordBlock: {
-    marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  forgotPasswordText: {
-    color: "#22e2ef",
-    fontSize: 16,
+    backgroundColor: '#FFFFFF',
   },
 
   inputTextStyleActive: {
     flex: 1,
     height: 25,
-    borderBottomColor: "#1DC2E0",
+    borderBottomColor: '#1DC2E0',
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
   },
@@ -653,109 +561,75 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
-  imageWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    height: hp("40%"),
-  },
-  headerMenu: {
-    flexDirection: "row",
-    height: 40,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
-    top: hp("3%"),
-  },
-  headingBold: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  headingLight: {
-    color: "#FFFFFF",
-    fontSize: hp("2.5%"),
-    fontWeight: "200",
-  },
   avatarWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
   },
   avatarImageWrapper: {
     width: 110,
     height: 110,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "#eeeeee",
+    borderColor: '#eeeeee',
     borderRadius: 55,
   },
   frmInputWrapper: {
     marginTop: 20,
-    //flexDirection: 'row',
-    //alignItems: 'center',
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   frmLabel: {
     fontSize: 16,
-    //paddingRight: 10,
-    //paddingLeft: 10,
-    color: "#909090",
-  },
-  inputTextStyleInactive: {
-    flex: 1,
-    //height: 30,
-    borderBottomColor: "#cecece",
-    borderBottomWidth: 1,
-    color: "#000000",
-    fontSize: hp("2.5%"),
-    paddingVertical: 0,
-    // paddingLeft: 10,
-    //paddingRight: 10,
+    color: '#909090',
   },
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
   idScan: {
     marginTop: 10,
     height: 40,
-    width: wp("40%"),
+    width: wp('40%'),
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5ac6c6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5ac6c6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   loading: {
     marginLeft: 10,
   },
   loadingCenter: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputTextStyleRequired: {
     flex: 1,
     height: 25,
-    borderBottomColor: "red", // required
+    borderBottomColor: 'red', // required
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
+  },
+
+  errorMessageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });

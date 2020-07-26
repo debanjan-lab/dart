@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import HeaderCurve from "../includes/headercurve";
 import CommonService from "../../services/common/commonService";
 import httpService from "../../services/http/httpService";
-import Loading from "react-native-loader-overlay";
 import { ErrorTemplate } from "../../components/error/errorComponent";
 
 let selectedId = 9;
@@ -75,7 +74,6 @@ export default class AcceptInvitaionScreen extends Component {
   }
 
   getReason() {
-    this.loading = Loading.show(CommonService.loaderObj);
     let payload = {
       url: "get-reason",
       data: {
@@ -88,13 +86,6 @@ export default class AcceptInvitaionScreen extends Component {
     httpService
       .postHttpCall(payload)
       .then(res => {
-        Loading.hide(this.loading);
-
-        console.log("res11=============" + JSON.stringify(res))
-
-
-
-
         if (res.status !== undefined) {
           if (res.status == 100) {
             this.setState({ reason: res.result });
@@ -110,7 +101,6 @@ export default class AcceptInvitaionScreen extends Component {
         this.setState({ apiExecute: true });
       })
       .catch(err => {
-        Loading.hide(this.loading);
         this.setState({ errorText: err.message ? Language[this.state.selectedLanguage]['status'][err.message] : '', apiExecute: true });
         if (err.status == 4) {
           this.setState({ subMessage: httpService.appMessege.internet_sub });
@@ -127,9 +117,8 @@ export default class AcceptInvitaionScreen extends Component {
   render() {
     const item = this.state.details;
     return (
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <HeaderCurve
-          //title={"Create Circle"}
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
           backButton={true}
@@ -137,148 +126,150 @@ export default class AcceptInvitaionScreen extends Component {
           admin={item.is_admin}
           bellIcon={true}
         />
-
-        {this.state.errorText != "" ? (
-          <View style={{ alignItems: "center", marginTop: "50%" }}>
-            <ErrorTemplate
-              message={this.state.errorText}
-              subMessage={this.state.subMessage}
-            />
-          </View>
-        ) : (
-            <View style={acceptInvitaionStyle.mainContent}>
-              {this.state.apiExecute ? (
-                <View>
-                  <View style={acceptInvitaionStyle.headerText}>
-                    <Text style={acceptInvitaionStyle.title}>
-                      {Language[this.state.selectedLanguage]['dashboard_screen']['circle']}({item.circle_code})
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+          {this.state.errorText != "" ? (
+            <View style={{ alignItems: "center", marginTop: "50%" }}>
+              <ErrorTemplate
+                message={this.state.errorText}
+                subMessage={this.state.subMessage}
+              />
+            </View>
+          ) : (
+              <View style={acceptInvitaionStyle.mainContent}>
+                {this.state.apiExecute ? (
+                  <View>
+                    <View style={acceptInvitaionStyle.headerText}>
+                      <Text style={acceptInvitaionStyle.title}>
+                        {Language[this.state.selectedLanguage]['dashboard_screen']['circle']}({item.circle_code})
                     {Language[this.state.selectedLanguage]['accept_invitation_screen']['accept_invitation']}
-                    </Text>
-                  </View>
-                  <View style={acceptInvitaionStyle.rowView}>
-                    <View style={acceptInvitaionStyle.rowViewLeftItem}>
-                      <Text style={{ fontSize: 20 }}>
-                        {Language[this.state.selectedLanguage]['create_circle_screen']['reason']}:
                       </Text>
                     </View>
-                    <View style={acceptInvitaionStyle.rowViewRightItem}>
-                      <View style={acceptInvitaionStyle.selectText}>
-                        <View style={acceptInvitaionStyle.childRowView}>
-                          <View
-                            style={acceptInvitaionStyle.childRowViewLeftItem}
-                          >
-                            <Text numberOfLines={1}>
-                              {this.state.reasonTxt}
-                            </Text>
-                          </View>
-                          <View
-                            style={acceptInvitaionStyle.childRowViewRightItem}
-                          >
-                            <Icon
+                    <View style={acceptInvitaionStyle.rowView}>
+                      <View style={acceptInvitaionStyle.rowViewLeftItem}>
+                        <Text style={{ fontSize: 20 }}>
+                          {Language[this.state.selectedLanguage]['create_circle_screen']['reason']}:
+                      </Text>
+                      </View>
+                      <View style={acceptInvitaionStyle.rowViewRightItem}>
+                        <View style={acceptInvitaionStyle.selectText}>
+                          <View style={acceptInvitaionStyle.childRowView}>
+                            <View
+                              style={acceptInvitaionStyle.childRowViewLeftItem}
+                            >
+                              <Text numberOfLines={1}>
+                                {this.state.reasonTxt}
+                              </Text>
+                            </View>
+                            <View
+                              style={acceptInvitaionStyle.childRowViewRightItem}
+                            >
+                              {/* <Icon
                               name="arrow-down"
                               style={{ fontSize: 18, color: "#A9A9A9" }}
+                            /> */}
+                            </View>
+                          </View>
+                        </View>
+                        <View>
+                          <View
+                            style={[
+                              acceptInvitaionStyle.unSelectText,
+                              { marginTop: 10 }
+                            ]}
+                          >
+                            {this.state.reason.map(
+                              (reason_item, reason_index) => (
+                                <TouchableOpacity
+                                  key={reason_index}
+                                  onPress={() => {
+                                    this.selectReason(
+                                      reason_item.id,
+                                      Language[this.state.selectedLanguage]['circle_join_reason_list'][reason_item.reason_alias]
+                                    );
+                                  }}
+                                >
+                                  <View
+                                    style={[
+                                      acceptInvitaionStyle.childRowView,
+                                      acceptInvitaionStyle.borderBottom,
+                                      reason_item.id == selectedId
+                                        ? { backgroundColor: "#E7E7E7" }
+                                        : {}
+                                    ]}
+                                  >
+                                    <View
+                                      style={
+                                        acceptInvitaionStyle.childRowViewLeftItem
+                                      }
+                                    >
+                                      <Text>
+                                        {Language[this.state.selectedLanguage]['circle_join_reason_list'][reason_item.reason_alias]}
+                                      </Text>
+                                    </View>
+                                  </View>
+                                </TouchableOpacity>
+                              )
+                            )}
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={acceptInvitaionStyle.otherResonView}>
+                      {this.state.reasonId == 9 ? (
+                        <View>
+                          <Text style={{ fontSize: 20 }}>{Language[this.state.selectedLanguage]['accept_invitation_screen']['other_reason']}:</Text>
+                          <View style={{ marginTop: 10 }}>
+                            <TextInput
+                              style={acceptInvitaionStyle.textInput}
+                              multiline={true}
+                              onChangeText={otherReason =>
+                                this.setState({ otherReason })
+                              }
                             />
                           </View>
                         </View>
-                      </View>
-                      <View>
-                        <View
+                      ) : null}
+
+                      <View style={acceptInvitaionStyle.paymentButtonView}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate("bankDetailsPage", {
+                              result: this.state.details,
+                              reason_id: selectedId,
+                              other_reason: this.state.otherReason,
+                              navigate_from: "accept_screen"
+                            })
+                          }
+                          disabled={
+                            selectedId == 9 && this.state.otherReason == ""
+                              ? true
+                              : false
+                          }
                           style={[
-                            acceptInvitaionStyle.unSelectText,
-                            { marginTop: 10 }
+                            selectedId == 9 && this.state.otherReason == ""
+                              ? { opacity: 0.8 }
+                              : {},
+                            acceptInvitaionStyle.paymentButton
                           ]}
                         >
-                          {this.state.reason.map(
-                            (reason_item, reason_index) => (
-                              <TouchableOpacity
-                                key={reason_index}
-                                onPress={() => {
-                                  this.selectReason(
-                                    reason_item.id,
-                                    reason_item.reason
-                                  );
-                                }}
-                              >
-                                <View
-                                  style={[
-                                    acceptInvitaionStyle.childRowView,
-                                    acceptInvitaionStyle.borderBottom,
-                                    reason_item.id == selectedId
-                                      ? { backgroundColor: "#E7E7E7" }
-                                      : {}
-                                  ]}
-                                >
-                                  <View
-                                    style={
-                                      acceptInvitaionStyle.childRowViewLeftItem
-                                    }
-                                  >
-                                    <Text>
-
-
-
-                                      {Language[this.state.selectedLanguage]['circle_join_reason_list'][reason_item.reason_alias]}
-
-
-                                    </Text>
-                                  </View>
-                                </View>
-                              </TouchableOpacity>
-                            )
-                          )}
-                        </View>
+                          <Text style={acceptInvitaionStyle.paymentText}>
+                            {Language[this.state.selectedLanguage]['bank_details_screen']['pay_deposit']}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>
-                  <View style={acceptInvitaionStyle.otherResonView}>
-                    {this.state.reasonId == 9 ? (
-                      <View>
-                        <Text style={{ fontSize: 20 }}>{Language[this.state.selectedLanguage]['accept_invitation_screen']['other_reason']}:</Text>
-                        <View style={{ marginTop: 10 }}>
-                          <TextInput
-                            style={acceptInvitaionStyle.textInput}
-                            multiline={true}
-                            onChangeText={otherReason =>
-                              this.setState({ otherReason })
-                            }
-                          />
-                        </View>
-                      </View>
-                    ) : null}
+                ) : null}
+              </View>
+            )}
 
-                    <View style={acceptInvitaionStyle.paymentButtonView}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.props.navigation.navigate("bankDetailsPage", {
-                            result: this.state.details,
-                            reason_id: selectedId,
-                            other_reason: this.state.otherReason,
-                            navigate_from: "accept_screen"
-                          })
-                        }
-                        disabled={
-                          selectedId == 9 && this.state.otherReason == ""
-                            ? true
-                            : false
-                        }
-                        style={[
-                          selectedId == 9 && this.state.otherReason == ""
-                            ? { opacity: 0.8 }
-                            : {},
-                          acceptInvitaionStyle.paymentButton
-                        ]}
-                      >
-                        <Text style={acceptInvitaionStyle.paymentText}>
-                          {Language[this.state.selectedLanguage]['bank_details_screen']['pay_deposit']}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              ) : null}
-            </View>
-          )}
-      </ScrollView>
+
+        </ScrollView>
+
+
+
+
+      </View>
 
     );
   }

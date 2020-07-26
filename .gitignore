@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+__MACOSX/
+
 # Xcode
 #
 build/
@@ -20,7 +22,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -40,6 +41,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+!debug.keystore
 
 # fastlane
 #
@@ -57,3 +59,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+

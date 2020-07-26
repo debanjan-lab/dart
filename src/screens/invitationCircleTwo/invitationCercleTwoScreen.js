@@ -16,10 +16,9 @@ import AsyncStorage from "@react-native-community/async-storage";
 import CommonService from "../../services/common/commonService";
 import httpService from "../../services/http/httpService";
 var moment = require("moment");
-import Loading from "react-native-loader-overlay";
 import { ErrorTemplate } from "../../components/error/errorComponent";
 let flag = false;
-buttons = false;
+var buttons = false;
 import axios from "axios";
 import Language from "../../translations/index";
 
@@ -111,7 +110,6 @@ export default class InvitationCercleTwoScreen extends Component {
    * @param {String} token
    */
   getCircleDetailsByCirlceCode(circleCode, token) {
-    this.loading = Loading.show(CommonService.loaderObj);
     let payload = {
       url: "ongoing-circle-details",
       data: {
@@ -123,7 +121,6 @@ export default class InvitationCercleTwoScreen extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        Loading.hide(this.loading);
         if (res.status !== undefined) {
           if (res.status == 100) {
             let details = res.result;
@@ -151,7 +148,6 @@ export default class InvitationCercleTwoScreen extends Component {
         this.setState({ apiExecute: true });
       })
       .catch((err) => {
-        Loading.hide(this.loading);
         this.setState({
           errorText: err.message
             ? Language[this.state.selectedLanguage]["status"][err.message]
@@ -232,7 +228,7 @@ export default class InvitationCercleTwoScreen extends Component {
     console.log("item", item);
     return (
 
-      <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <HeaderCurve
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
@@ -243,430 +239,445 @@ export default class InvitationCercleTwoScreen extends Component {
           props={this.props}
         />
         <StatusBar backgroundColor="#1CCBE6" />
-        {this.state.errorText != "" ? (
-          <View style={{ alignItems: "center", marginTop: "50%" }}>
-            <ErrorTemplate
-              message={this.state.errorText}
-              subMessage={this.state.subMessage}
-            />
-          </View>
-        ) : (
-            <View style={invitationCercleTwoStyle.mainContent}>
-              {this.state.apiExecute ? (
-                <View>
-                  <View style={invitationCercleTwoStyle.headerText}>
-                    <Text style={invitationCercleTwoStyle.title}>
-                      {item.is_rejected
-                        ? Language[this.state.selectedLanguage]["common"][
-                        "circle_refused"
-                        ]
-                        : Language[this.state.selectedLanguage]["common"][
-                        "circle_waiting"
-                        ]}
-                    </Text>
-                    <Text>N° {item.circle_code}</Text>
-                  </View>
-                  <View style={{ marginTop: 25 }}>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "dashboard_screen"
-                            ]["circle_admin"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View
-                        style={[
-                          invitationCercleTwoStyle.rowViewRightItem,
-                          { flexDirection: "row" },
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            invitationCercleTwoStyle.rowTextValue,
-                            { marginRight: 10 },
+        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+
+          {this.state.errorText != "" ? (
+            <View style={{ alignItems: "center", marginTop: "50%" }}>
+              <ErrorTemplate
+                message={this.state.errorText}
+                subMessage={this.state.subMessage}
+              />
+            </View>
+          ) : (
+              <View style={invitationCercleTwoStyle.mainContent}>
+                {this.state.apiExecute ? (
+                  <View>
+                    <View style={invitationCercleTwoStyle.headerText}>
+                      <Text style={invitationCercleTwoStyle.title}>
+                        {item.is_rejected
+                          ? Language[this.state.selectedLanguage]["common"][
+                          "circle_refused"
+                          ]
+                          : Language[this.state.selectedLanguage]["common"][
+                          "circle_waiting"
                           ]}
-                        >
-                          {item.admin}
-                        </Text>
-                        {!this.whatsppIconEnable(
-                          item.admin_mobile_code + item.admin_mobile,
-                          item.login_user_mobile_code + item.login_user_mobile
-                        ) ? (
-                            <TouchableOpacity
-                              onPress={() =>
-                                CommonService.openWhatsApp(
-                                  item.admin_mobile_code + item.admin_mobile
-                                )
-                              }
-                            >
-                              <Image
-                                source={require("../../../assets/images/whatsapp.png")}
-                                style={{
-                                  width: 20,
-                                  height: 20,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          ) : null}
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["target_achieve"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          €{item.target_achive}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["round_settlement"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          €{item.round_set}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["periodicity_of_round"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-
-                          {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.thPadding}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["reason"]
-                          }
-                          :
-                        </Text>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {item.reason_for_circle}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "create_circle_screen"
-                            ]["start_date"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {CommonService.formatDate(item.start_date)}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{ paddingTop: 20 }}>
-                      <Text style={invitationCercleTwoStyle.rowText}>
-                        {
-                          Language[this.state.selectedLanguage][
-                          "circle_preview_screen"
-                          ]["circle_participants"]
-                        }
-                        :
                       </Text>
-                      <View
-                        style={[
-                          invitationCercleTwoStyle.rowViewNew,
-                          { paddingBottom: 20 },
-                        ]}
-                      >
-                        {item.circleUsers !== undefined
-                          ? item.circleUsers.map((user_item, user_index) => {
-                            return (
-                              <View
-                                key={user_index}
-                                style={{ flexDirection: "row" }}
-                              >
-                                <View
-                                  style={
-                                    invitationCercleTwoStyle.nextRowViewLeftItem
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      invitationCercleTwoStyle.rowTextValue
-                                    }
-                                  >
-                                    {user_index + 1}.{user_item.username} (
-                                      {user_item.mobile_country_code}
-                                    {user_item.mobile_number})
-                                    </Text>
-                                </View>
-                                <View
-                                  style={
-                                    invitationCercleTwoStyle.rowViewMiddleItem
-                                  }
-                                >
-                                  {user_item.accept_status == 1 ? (
-                                    <Image
-                                      source={require("../../../assets/images/success.png")}
-                                      style={{
-                                        width: 15,
-                                        height: 15,
-                                      }}
-                                    />
-                                  ) : null}
-
-                                  {user_item.accept_status == 3 ? (
-                                    <Image
-                                      source={require("../../../assets/images/clock.png")}
-                                      style={{
-                                        width: 20,
-                                        height: 20,
-                                      }}
-                                    />
-                                  ) : null}
-                                </View>
-                                <View
-                                  style={
-                                    invitationCercleTwoStyle.nextRowViewRightItem
-                                  }
-                                >
-                                  {!this.whatsppIconEnable(
-                                    user_item.mobile_number,
-                                    item.login_user_mobile
-                                  ) ? (
-                                      <TouchableOpacity
-                                        onPress={() =>
-                                          CommonService.openWhatsApp(
-                                            user_item.mobile_country_code,
-                                            user_item.mobile_number
-                                          )
-                                        }
-                                      >
-                                        <Image
-                                          source={require("../../../assets/images/whatsapp.png")}
-                                          style={{
-                                            width: 20,
-                                            height: 20,
-                                          }}
-                                        />
-                                      </TouchableOpacity>
-                                    ) : null}
-                                </View>
-                              </View>
-                            );
-                          })
-                          : null}
-                      </View>
+                      <Text>N° {item.circle_code}</Text>
                     </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "dashboard_screen"
-                            ]["expected_payment_recieved"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {item.expected_payable_date}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
-                            ]["num_round"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {item.estimate_round}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={invitationCercleTwoStyle.rowView}>
-                      <View style={invitationCercleTwoStyle.rowViewLeftItem}>
-                        <Text style={invitationCercleTwoStyle.rowText}>
-                          {
-                            Language[this.state.selectedLanguage][
-                            "circle_preview_screen"
-                            ]["end_date"]
-                          }
-                          :
-                        </Text>
-                      </View>
-                      <View style={invitationCercleTwoStyle.rowViewRightItem}>
-                        <Text style={invitationCercleTwoStyle.rowTextValue}>
-                          {CommonService.formatDate(item.end_date)}
-                        </Text>
-                      </View>
-                    </View>
-
-                    {item.is_rejected ? null : this.state.visiblityButton ? (
-                      <View>
-                        {item.request_accept_status == 0 ? (
-                          <View>
-                            {item.is_admin == 1 ? (
-                              <View
-                                style={
-                                  invitationCercleTwoStyle.paymentButtonView
-                                }
-                              >
-                                <TouchableOpacity
-                                  onPress={() =>
-                                    this.props.navigation.navigate(
-                                      "bankDetailsPage",
-                                      {
-                                        result: this.state.details,
-                                        reason_id: "",
-                                        other_reason: "",
-                                        navigate_from: "accept_screen",
-                                      }
-                                    )
-                                  }
-                                  style={[
-                                    invitationCercleTwoStyle.paymentButton,
-                                  ]}
-                                >
-                                  <Text
-                                    style={invitationCercleTwoStyle.paymentText}
-                                  >
-                                    {
-                                      Language[this.state.selectedLanguage][
-                                      "bank_details_screen"
-                                      ]["pay_deposit"]
-                                    }
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            ) : (
-                                <View style={invitationCercleTwoStyle.buttonView}>
-                                  <TouchableOpacity
-                                    style={invitationCercleTwoStyle.rejectButton}
-                                    onPress={() =>
-                                      this.props.navigation.navigate(
-                                        "refusalPage",
-                                        { result: item }
-                                      )
-                                    }
-                                  >
-                                    <Text
-                                      style={invitationCercleTwoStyle.buttonText}
-                                    >
-                                      {
-                                        Language[this.state.selectedLanguage][
-                                        "common"
-                                        ]["reject"]
-                                      }
-                                    </Text>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    style={invitationCercleTwoStyle.joinButton}
-                                    onPress={() =>
-                                      this.props.navigation.navigate(
-                                        "acceptInvitaionPage",
-                                        { result: item }
-                                      )
-                                    }
-                                  >
-                                    <Text
-                                      style={invitationCercleTwoStyle.buttonText}
-                                    >
-                                      {
-                                        Language[this.state.selectedLanguage][
-                                        "common"
-                                        ]["join"]
-                                      }
-                                    </Text>
-                                  </TouchableOpacity>
-                                </View>
-                              )}
-                          </View>
-                        ) : item.is_admin == 1 && item.status == 0 ? (
-                          <View style={invitationCercleTwoStyle.sendButtonView}>
-                            <TouchableOpacity
-                              style={invitationCercleTwoStyle.sendButton}
-                              onPress={() => this.onSendReminder()}
-                            >
-                              <Text
-                                style={invitationCercleTwoStyle.sendButtonText}
-                              >
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  "invitation_circle_screen"
-                                  ]["send_reminder"]
-                                }
-                              </Text>
-                              {this.state.btnLoader ? (
-                                <View style={{ marginLeft: 10 }}>
-                                  <ActivityIndicator
-                                    size="small"
-                                    color={"#FFFFFF"}
-                                  />
-                                </View>
-                              ) : null}
-                            </TouchableOpacity>
-                          </View>
-                        ) : item.request_accept_status == 3 ? (
-                          <Text>
+                    <View style={{ marginTop: 25 }}>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
                             {
                               Language[this.state.selectedLanguage][
-                              "invitation_circle_screen"
-                              ]["note"]
+                              "dashboard_screen"
+                              ]["circle_admin"]
                             }
+                          :
+                        </Text>
+                        </View>
+                        <View
+                          style={[
+                            invitationCercleTwoStyle.rowViewRightItem,
+                            { flexDirection: "row" },
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              invitationCercleTwoStyle.rowTextValue,
+                              { marginRight: 10 },
+                            ]}
+                          >
+                            {item.admin}
                           </Text>
-                        ) : null}
+                          {!this.whatsppIconEnable(
+                            item.admin_mobile_code + item.admin_mobile,
+                            item.login_user_mobile_code + item.login_user_mobile
+                          ) ? (
+                              <TouchableOpacity
+                                onPress={() =>
+                                  CommonService.openWhatsApp(
+                                    item.admin_mobile_code + item.admin_mobile
+                                  )
+                                }
+                              >
+                                <Image
+                                  source={require("../../../assets/images/whatsapp.png")}
+                                  style={{
+                                    width: 20,
+                                    height: 20,
+                                  }}
+                                />
+                              </TouchableOpacity>
+                            ) : null}
+                        </View>
                       </View>
-                    ) : null}
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["target_achieve"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            €{item.target_achive}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["round_settlement"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            €{item.round_set}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["periodicity_of_round"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+
+                            {Language[this.state.selectedLanguage]["create_circle_screen"][item.p_round]}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.thPadding}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["reason"]
+                            }
+                          :
+                        </Text>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            {item.reason_for_circle}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "create_circle_screen"
+                              ]["start_date"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            {CommonService.formatDate(item.start_date)}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{ paddingTop: 20 }}>
+                        <Text style={invitationCercleTwoStyle.rowText}>
+                          {
+                            Language[this.state.selectedLanguage][
+                            "circle_preview_screen"
+                            ]["circle_participants"]
+                          }
+                        :
+                      </Text>
+                        <View
+                          style={[
+                            invitationCercleTwoStyle.rowViewNew,
+                            { paddingBottom: 20 },
+                          ]}
+                        >
+                          {item.circleUsers !== undefined
+                            ? item.circleUsers.map((user_item, user_index) => {
+                              return (
+                                <View
+                                  key={user_index}
+                                  style={{ flexDirection: "row" }}
+                                >
+                                  <View
+                                    style={
+                                      invitationCercleTwoStyle.nextRowViewLeftItem
+                                    }
+                                  >
+                                    <Text
+                                      style={
+                                        invitationCercleTwoStyle.rowTextValue
+                                      }
+                                    >
+                                      {user_index + 1}.{user_item.username} (
+                                      {user_item.mobile_country_code}
+                                      {user_item.mobile_number})
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={
+                                      invitationCercleTwoStyle.rowViewMiddleItem
+                                    }
+                                  >
+                                    {user_item.accept_status == 1 ? (
+                                      <Image
+                                        source={require("../../../assets/images/success.png")}
+                                        style={{
+                                          width: 15,
+                                          height: 15,
+                                        }}
+                                      />
+                                    ) : null}
+
+                                    {user_item.accept_status == 3 ? (
+                                      <Image
+                                        source={require("../../../assets/images/clock.png")}
+                                        style={{
+                                          width: 20,
+                                          height: 20,
+                                        }}
+                                      />
+                                    ) : null}
+                                  </View>
+                                  <View
+                                    style={
+                                      invitationCercleTwoStyle.nextRowViewRightItem
+                                    }
+                                  >
+                                    {!this.whatsppIconEnable(
+                                      user_item.mobile_number,
+                                      item.login_user_mobile
+                                    ) ? (
+                                        <TouchableOpacity
+                                          onPress={() =>
+                                            CommonService.openWhatsApp(
+                                              user_item.mobile_country_code,
+                                              user_item.mobile_number
+                                            )
+                                          }
+                                        >
+                                          <Image
+                                            source={require("../../../assets/images/whatsapp.png")}
+                                            style={{
+                                              width: 20,
+                                              height: 20,
+                                            }}
+                                          />
+                                        </TouchableOpacity>
+                                      ) : null}
+                                  </View>
+                                </View>
+                              );
+                            })
+                            : null}
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "dashboard_screen"
+                              ]["expected_payment_recieved"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            {item.expected_payable_date}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "circle_preview_screen"
+                              ]["num_round"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            {item.estimate_round}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={invitationCercleTwoStyle.rowView}>
+                        <View style={invitationCercleTwoStyle.rowViewLeftItem}>
+                          <Text style={invitationCercleTwoStyle.rowText}>
+                            {
+                              Language[this.state.selectedLanguage][
+                              "circle_preview_screen"
+                              ]["end_date"]
+                            }
+                          :
+                        </Text>
+                        </View>
+                        <View style={invitationCercleTwoStyle.rowViewRightItem}>
+                          <Text style={invitationCercleTwoStyle.rowTextValue}>
+                            {CommonService.formatDate(item.end_date)}
+                          </Text>
+                        </View>
+                      </View>
+
+                      {item.is_rejected ? null : this.state.visiblityButton ? (
+                        <View>
+                          {item.request_accept_status == 0 ? (
+                            <View>
+                              {item.is_admin == 1 ? (
+                                <View
+                                  style={
+                                    invitationCercleTwoStyle.paymentButtonView
+                                  }
+                                >
+                                  <TouchableOpacity
+                                    onPress={() =>
+                                      this.props.navigation.navigate(
+                                        "bankDetailsPage",
+                                        {
+                                          result: this.state.details,
+                                          reason_id: "",
+                                          other_reason: "",
+                                          navigate_from: "accept_screen",
+                                        }
+                                      )
+                                    }
+                                    style={[
+                                      invitationCercleTwoStyle.paymentButton,
+                                    ]}
+                                  >
+                                    <Text
+                                      style={invitationCercleTwoStyle.paymentText}
+                                    >
+                                      {
+                                        Language[this.state.selectedLanguage][
+                                        "bank_details_screen"
+                                        ]["pay_deposit"]
+                                      }
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              ) : (
+                                  <View style={invitationCercleTwoStyle.buttonView}>
+                                    <TouchableOpacity
+                                      style={invitationCercleTwoStyle.rejectButton}
+                                      onPress={() =>
+                                        this.props.navigation.navigate(
+                                          "refusalPage",
+                                          { result: item }
+                                        )
+                                      }
+                                    >
+
+                                      <Text
+                                        style={invitationCercleTwoStyle.buttonText}
+                                      >
+                                        {
+                                          Language[this.state.selectedLanguage][
+                                          "common"
+                                          ]["reject"]
+                                        }
+                                      </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                      style={invitationCercleTwoStyle.joinButton}
+                                      onPress={() =>
+                                        this.props.navigation.navigate(
+                                          "acceptInvitaionPage",
+                                          { result: item }
+                                        )
+                                      }
+                                    >
+                                      <Text
+                                        style={invitationCercleTwoStyle.buttonText}
+                                      >
+                                        {
+                                          Language[this.state.selectedLanguage][
+                                          "common"
+                                          ]["join"]
+                                        }
+                                      </Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                )}
+                            </View>
+                          ) : item.is_admin == 1 && item.status == 0 ? (
+                            <View style={invitationCercleTwoStyle.sendButtonView}>
+                              <TouchableOpacity
+                                style={invitationCercleTwoStyle.sendButton}
+                                onPress={() => this.onSendReminder()}
+                              >
+                                <Text
+                                  style={invitationCercleTwoStyle.sendButtonText}
+                                >
+                                  {
+                                    Language[this.state.selectedLanguage][
+                                    "invitation_circle_screen"
+                                    ]["send_reminder"]
+                                  }
+                                </Text>
+                                {this.state.btnLoader ? (
+                                  <View style={{ marginLeft: 10 }}>
+                                    <ActivityIndicator
+                                      size="small"
+                                      color={"#FFFFFF"}
+                                    />
+                                  </View>
+                                ) : null}
+                              </TouchableOpacity>
+                            </View>
+                          ) : item.request_accept_status == 3 ? (
+                            <Text>
+                              {
+                                Language[this.state.selectedLanguage][
+                                "invitation_circle_screen"
+                                ]["note"]
+                              }
+                            </Text>
+                          ) : null}
+                        </View>
+                      ) : null}
+                    </View>
                   </View>
-                </View>
-              ) : null}
-            </View>
-          )}
-      </ScrollView>
+                ) : null}
+              </View>
+            )}
+
+
+
+
+        </ScrollView>
+
+
+
+
+
+
+
+      </View>
 
     );
   }
