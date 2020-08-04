@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,49 +6,49 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-} from "react-native";
-import axios from "axios";
-import Stripe from "react-native-stripe-api";
-import moment from "moment";
-import CreateCircle from "../../components/createCircle";
+} from 'react-native';
+import axios from 'axios';
+import Stripe from 'react-native-stripe-api';
+import moment from 'moment';
+import CreateCircle from '../../components/createCircle';
 
-import { ToastMessage } from "../ToastMessage";
+import {ToastMessage} from '../ToastMessage';
 // const apiKey = "";
 // const client = new Stripe(apiKey);
 
-import Language from "../../translations/index";
+import Language from '../../translations/index';
 
-import API from "../../config/url";
+import API from '../../config/url';
 
 const API_URL = API.base_url;
 export default class OnlinePaymentModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      number: "4242424242424242",
-      exp_month: "09",
-      exp_year: "2020",
-      cvc: "123",
+      number: '4242424242424242',
+      exp_month: '09',
+      exp_year: '2020',
+      cvc: '123',
       loader: false,
-      apiKey: "",
-      selectedLanguage: "en",
+      apiKey: '',
+      selectedLanguage: 'en',
     };
   }
   componentDidMount() {
     this.setState(
       {
-        selectedLanguage: "fr",
+        selectedLanguage: 'fr',
       },
       () => {
         this._getStripeApiKey();
-      }
+      },
     );
   }
   _getStripeApiKey = () => {
     axios
-      .get(API_URL + "get-stripe-public-key", {
+      .get(API_URL + 'get-stripe-public-key', {
         headers: {
-          Authorization: "Bearer " + this.props.token,
+          Authorization: 'Bearer ' + this.props.token,
         },
       })
       .then((res) => {
@@ -58,46 +58,46 @@ export default class OnlinePaymentModal extends Component {
           });
         } else {
           ToastMessage(
-            Language[this.state.selectedLanguage]["online_payment_screen"][
-              "payment_key_error"
-            ]
+            Language[this.state.selectedLanguage]['online_payment_screen'][
+              'payment_key_error'
+            ],
           );
         }
       })
       .catch((err) => {
-        alert("error");
+        alert('error');
       });
   };
 
   onlinePyament = async () => {
     const client = new Stripe(this.state.apiKey);
 
-    this.setState({ loader: true });
-    let onlinePaymentUrl = "";
+    this.setState({loader: true});
+    let onlinePaymentUrl = '';
     let paymentdata = {};
 
-    const { number, exp_month, exp_year, cvc } = this.state;
-    if (number === "") {
+    const {number, exp_month, exp_year, cvc} = this.state;
+    if (number === '') {
       ToastMessage(
-        Language[this.state.selectedLanguage]["online_payment_screen"][
-          "card_name"
-        ]
+        Language[this.state.selectedLanguage]['online_payment_screen'][
+          'card_name'
+        ],
       );
-    } else if (exp_month === "") {
+    } else if (exp_month === '') {
       ToastMessage(
-        Language[this.state.selectedLanguage]["online_payment_screen"][
-          "expiry_month"
-        ]
+        Language[this.state.selectedLanguage]['online_payment_screen'][
+          'expiry_month'
+        ],
       );
-    } else if (exp_year === "") {
+    } else if (exp_year === '') {
       ToastMessage(
-        Language[this.state.selectedLanguage]["online_payment_screen"][
-          "expiry_year"
-        ]
+        Language[this.state.selectedLanguage]['online_payment_screen'][
+          'expiry_year'
+        ],
       );
-    } else if (cvc === "") {
+    } else if (cvc === '') {
       ToastMessage(
-        Language[this.state.selectedLanguage]["online_payment_screen"]["cvc"]
+        Language[this.state.selectedLanguage]['online_payment_screen']['cvc'],
       );
     } else {
       const token = await client.createToken({
@@ -109,45 +109,45 @@ export default class OnlinePaymentModal extends Component {
 
       if (token.error) {
         ToastMessage(token.error.message);
-        this.setState({ loader: false });
+        this.setState({loader: false});
       } else {
         if (
           this.props.buttonText ===
-          Language[this.state.selectedLanguage]["bank_details_screen"][
-            "pay_deposit"
+          Language[this.state.selectedLanguage]['bank_details_screen'][
+            'pay_deposit'
           ]
         ) {
-          onlinePaymentUrl = API_URL + "circle-request-accept";
+          onlinePaymentUrl = API_URL + 'circle-request-accept';
           paymentdata = {
             circle_user_id: this.props.item.circle_user_id,
             circle_code: this.props.circle_code,
-            trn_id: "",
-            trn_status: "0",
+            trn_id: '',
+            trn_status: '0',
             amount: this.props.amount,
-            payment_date: moment(new Date()).format("DD/MM/YYYY"),
+            payment_date: moment(new Date()).format('DD/MM/YYYY'),
             login_mobile_number: this.props.mobileNo,
             join_status: 1,
             reason_id: 9,
-            other_reason: "no eason",
+            other_reason: 'no eason',
             payment_mode: 2,
             stripeToken: token.id,
           };
         }
         if (
           this.props.buttonText ===
-          Language[this.state.selectedLanguage]["bank_details_screen"][
-            "pay_your_round"
+          Language[this.state.selectedLanguage]['bank_details_screen'][
+            'pay_your_round'
           ]
         ) {
-          onlinePaymentUrl = API_URL + "circle-payment";
+          onlinePaymentUrl = API_URL + 'circle-payment';
 
           paymentdata = {
             circle_code: this.props.circle_code,
             round_no: this.props.current_round,
-            trn_id: "",
-            trn_status: "0",
+            trn_id: '',
+            trn_status: '0',
             amount: this.props.amount,
-            payment_date: moment(new Date()).format("DD/MM/YYYY"),
+            payment_date: moment(new Date()).format('DD/MM/YYYY'),
             payment_mode: 2,
             stripeToken: token.id,
           };
@@ -155,19 +155,19 @@ export default class OnlinePaymentModal extends Component {
 
         if (
           this.props.buttonText ===
-          Language[this.state.selectedLanguage]["bank_details_screen"][
-            "pay_my_round"
+          Language[this.state.selectedLanguage]['bank_details_screen'][
+            'pay_my_round'
           ]
         ) {
-          onlinePaymentUrl = API_URL + "block-circle-payment";
+          onlinePaymentUrl = API_URL + 'block-circle-payment';
 
           paymentdata = {
             circle_code: this.props.circle_code,
             round_no: this.props.current_round,
-            trn_id: "",
-            trn_status: "0",
+            trn_id: '',
+            trn_status: '0',
             amount: this.props.amount,
-            payment_date: moment(new Date()).format("DD/MM/YYYY"),
+            payment_date: moment(new Date()).format('DD/MM/YYYY'),
             payment_mode: 2,
             stripeToken: token.id,
           };
@@ -175,36 +175,36 @@ export default class OnlinePaymentModal extends Component {
 
         if (
           this.props.buttonText ===
-          Language[this.state.selectedLanguage]["bank_details_screen"][
-            "suspend_pay"
+          Language[this.state.selectedLanguage]['bank_details_screen'][
+            'suspend_pay'
           ]
         ) {
-          onlinePaymentUrl = API_URL + "circle-refund-payment";
+          onlinePaymentUrl = API_URL + 'circle-refund-payment';
           paymentdata = {
             circle_code: this.props.circle_code,
-            trn_id: "",
-            trn_status: "0",
+            trn_id: '',
+            trn_status: '0',
             amount: this.props.amount,
-            payment_date: moment(new Date()).format("DD/MM/YYYY"),
+            payment_date: moment(new Date()).format('DD/MM/YYYY'),
             payment_mode: 2,
             stripeToken: token.id,
           };
         }
 
-        console.log("onlinePaymentUrl==" + onlinePaymentUrl);
-        console.log("payload==" + JSON.stringify(paymentdata));
-        console.log("token==" + this.props.token);
+        console.log('onlinePaymentUrl==' + onlinePaymentUrl);
+        console.log('payload==' + JSON.stringify(paymentdata));
+        console.log('token==' + this.props.token);
 
         axios
           .post(onlinePaymentUrl, JSON.stringify(paymentdata), {
             headers: {
-              Authorization: "Bearer " + this.props.token,
+              Authorization: 'Bearer ' + this.props.token,
             },
           })
           .then((res) => {
-            console.log("onlinePyament()==" + JSON.stringify(res));
+            console.log('onlinePyament()==' + JSON.stringify(res));
 
-            this.setState({ loader: false });
+            this.setState({loader: false});
             if (res.data.status === 100) {
               if (
                 paymentdata.circle_user_id !== undefined ||
@@ -213,32 +213,32 @@ export default class OnlinePaymentModal extends Component {
                 CreateCircle.create(
                   this.props.item,
                   this.props.token,
-                  this.props.navigation
+                  this.props.navigation,
                 );
               } else {
                 // alert(this.state.selectedLanguage);
 
                 if (res.data.message)
                   ToastMessage(
-                    Language[this.state.selectedLanguage]["status"][
+                    Language[this.state.selectedLanguage]['status'][
                       res.data.message
-                    ]
+                    ],
                   );
 
-                this.props.navigation.navigate("dashboardPage");
+                this.props.navigation.navigate('dashboardPage');
               }
             } else {
               if (res.data.message)
                 ToastMessage(
-                  Language[this.state.selectedLanguage]["status"][
+                  Language[this.state.selectedLanguage]['status'][
                     res.data.message
-                  ]
+                  ],
                 );
             }
           })
           .catch((err) => {
-            console.log("onlinePyament() err==" + err);
-            this.setState({ loader: false });
+            console.log('onlinePyament() err==' + err);
+            this.setState({loader: false});
           });
       }
     }
@@ -249,18 +249,18 @@ export default class OnlinePaymentModal extends Component {
       <View>
         <Text>
           {
-            Language[this.state.selectedLanguage]["bank_details_screen"][
-              "pay_payment"
+            Language[this.state.selectedLanguage]['bank_details_screen'][
+              'pay_payment'
             ]
           }
         </Text>
         <View style={styles.mainView}>
           <View style={styles.nestedView}>
-            <View style={{ width: 100 }}>
+            <View style={{width: 100}}>
               <Text style={styles.textStyle}>
                 {
-                  Language[this.state.selectedLanguage]["bank_details_screen"][
-                    "card_number"
+                  Language[this.state.selectedLanguage]['bank_details_screen'][
+                    'card_number'
                   ]
                 }
                 :
@@ -270,18 +270,18 @@ export default class OnlinePaymentModal extends Component {
             <TextInput
               style={styles.inputStyle}
               value={this.state.number}
-              placeholder={"Card number"}
+              placeholder={'Card number'}
               keyboardType="numeric"
               autoFocus={true}
-              onChangeText={(evt) => this.setState({ number: evt })}
+              onChangeText={(evt) => this.setState({number: evt})}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{ width: 100 }}>
+            <View style={{width: 100}}>
               <Text style={styles.textStyle}>
                 {
-                  Language[this.state.selectedLanguage]["bank_details_screen"][
-                    "exp_month"
+                  Language[this.state.selectedLanguage]['bank_details_screen'][
+                    'exp_month'
                   ]
                 }
                 :
@@ -291,17 +291,17 @@ export default class OnlinePaymentModal extends Component {
             <TextInput
               style={styles.inputStyle}
               value={this.state.exp_month}
-              placeholder={"Expiry month"}
+              placeholder={'Expiry month'}
               keyboardType="numeric"
-              onChangeText={(evt) => this.setState({ exp_month: evt })}
+              onChangeText={(evt) => this.setState({exp_month: evt})}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{ width: 100 }}>
+            <View style={{width: 100}}>
               <Text style={styles.textStyle}>
                 {
-                  Language[this.state.selectedLanguage]["bank_details_screen"][
-                    "exp_year"
+                  Language[this.state.selectedLanguage]['bank_details_screen'][
+                    'exp_year'
                   ]
                 }
                 :
@@ -311,18 +311,18 @@ export default class OnlinePaymentModal extends Component {
             <TextInput
               style={styles.inputStyle}
               value={this.state.exp_year}
-              placeholder={"Expiry year"}
+              placeholder={'Expiry year'}
               keyboardType="numeric"
-              onChangeText={(evt) => this.setState({ exp_year: evt })}
+              onChangeText={(evt) => this.setState({exp_year: evt})}
             />
           </View>
 
           <View style={styles.nestedView}>
-            <View style={{ width: 100 }}>
+            <View style={{width: 100}}>
               <Text style={styles.textStyle}>
                 {
-                  Language[this.state.selectedLanguage]["bank_details_screen"][
-                    "cvc"
+                  Language[this.state.selectedLanguage]['bank_details_screen'][
+                    'cvc'
                   ]
                 }
                 :
@@ -333,16 +333,16 @@ export default class OnlinePaymentModal extends Component {
               style={styles.inputStyle}
               value={this.state.cvc}
               keyboardType="numeric"
-              placeholder={"Cvc number"}
-              onChangeText={(evt) => this.setState({ cvc: evt })}
+              placeholder={'Cvc number'}
+              onChangeText={(evt) => this.setState({cvc: evt})}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{ width: 100 }}>
+            <View style={{width: 100}}>
               <Text style={styles.textStyle}>
                 {
-                  Language[this.state.selectedLanguage]["bank_details_screen"][
-                    "pay_amount"
+                  Language[this.state.selectedLanguage]['bank_details_screen'][
+                    'pay_amount'
                   ]
                 }
                 :
@@ -359,11 +359,11 @@ export default class OnlinePaymentModal extends Component {
         <TouchableOpacity
           style={styles.dipositButton}
           onPress={() => this.onlinePyament()}
-        >
+          disabled={this.state.loader}>
           <Text style={styles.dipositButtnText}>{this.props.buttonText}</Text>
           {this.state.loader ? (
-            <View style={{ marginLeft: 10 }}>
-              <ActivityIndicator size="small" color={"#FFFFFF"} />
+            <View style={{marginLeft: 10}}>
+              <ActivityIndicator size="small" color={'#FFFFFF'} />
             </View>
           ) : null}
         </TouchableOpacity>
@@ -375,20 +375,20 @@ export default class OnlinePaymentModal extends Component {
 const styles = StyleSheet.create({
   mainView: {
     marginTop: 10,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderBottomWidth: 0.5,
   },
   nestedView: {
     flex: 5,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     paddingBottom: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  textStyle: { fontSize: 15, fontWeight: "bold", color: "#494949" },
+  textStyle: {fontSize: 15, fontWeight: 'bold', color: '#494949'},
   inputStyle: {
-    backgroundColor: "#ede4e4",
-    width: "70%",
+    backgroundColor: '#ede4e4',
+    width: '70%',
     height: 50,
     borderRadius: 10,
     marginLeft: 10,
@@ -396,15 +396,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   dipositButton: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     borderRadius: 50,
-    backgroundColor: "#5AC6C6",
-    alignItems: "center",
+    backgroundColor: '#5AC6C6',
+    alignItems: 'center',
     padding: 16,
-    justifyContent: "center",
+    justifyContent: 'center',
     elevation: 2,
     marginTop: 50,
   },
-  dipositButtnText: { color: "#ffffff", fontSize: 16 },
+  dipositButtnText: {color: '#ffffff', fontSize: 16},
 });

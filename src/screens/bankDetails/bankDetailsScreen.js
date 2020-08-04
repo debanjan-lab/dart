@@ -163,6 +163,14 @@ export default class BankDetailsScreen extends Component {
   }
 
   doPaymentDeposit() {
+    // this.props.navigation.push('dashboardPage');
+    // return false;
+    this.setState({
+      loadingBtn: true,
+    });
+    // alert('doPaymentDeposit()');
+    // return false;
+
     let item = this.state.details;
     item['mobile_country_code'] = this.state.mobile_country_code;
     let payload = {
@@ -204,10 +212,11 @@ export default class BankDetailsScreen extends Component {
                   : '',
                 (response) => {
                   if (response) {
-                    this.props.navigation.push('dashboardPage');
+                    // this.props.navigation.push('dashboardPage');
                   }
                 },
               );
+              this.props.navigation.push('dashboardPage');
             }
           } else {
             this.setState({
@@ -233,6 +242,13 @@ export default class BankDetailsScreen extends Component {
   }
 
   doPaymentRound() {
+    // alert('doPaymentRound()');
+    // return false;
+
+    this.setState({
+      loadingBtn: true,
+    });
+
     let item = this.state.details;
     let payload = {
       url: 'circle-payment',
@@ -286,6 +302,13 @@ export default class BankDetailsScreen extends Component {
   }
 
   doPayMyRound() {
+    // alert('doPayMyRound()');
+    // return false;
+
+    this.setState({
+      loadingBtn: true,
+    });
+
     let item = this.state.details;
     let payload = {
       url: 'block-circle-payment',
@@ -339,6 +362,13 @@ export default class BankDetailsScreen extends Component {
   }
 
   doPayMySuspend = () => {
+    // alert('doPayMySuspend()');
+    // return false;
+
+    this.setState({
+      loadingBtn: true,
+    });
+
     let item = this.state.details;
     let payload = {
       url: 'circle-refund-payment',
@@ -611,11 +641,8 @@ export default class BankDetailsScreen extends Component {
                         {this.state.navigateFrom == 'accept_screen' ? (
                           <TouchableOpacity
                             onPress={() => this.doPaymentDeposit()}
-                            disabled={selectedId == 2 ? true : false}
-                            style={[
-                              selectedId == 2 ? {opacity: 0.8} : {},
-                              bankDetailsStyle.paymentButton,
-                            ]}>
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
                             <Text style={bankDetailsStyle.paymentText}>
                               {' '}
                               {
@@ -628,11 +655,8 @@ export default class BankDetailsScreen extends Component {
                         ) : this.state.navigateFrom == 'on_going_details' ? (
                           <TouchableOpacity
                             onPress={() => this.doPaymentRound()}
-                            disabled={selectedId == 2 ? true : false}
-                            style={[
-                              selectedId == 2 ? {opacity: 0.8} : {},
-                              bankDetailsStyle.paymentButton,
-                            ]}>
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][
@@ -644,11 +668,8 @@ export default class BankDetailsScreen extends Component {
                         ) : this.state.navigateFrom == 'block_details' ? (
                           <TouchableOpacity
                             onPress={() => this.doPayMyRound()}
-                            disabled={selectedId == 2 ? true : false}
-                            style={[
-                              selectedId == 2 ? {opacity: 0.8} : {},
-                              bankDetailsStyle.paymentButton,
-                            ]}>
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][
@@ -660,11 +681,8 @@ export default class BankDetailsScreen extends Component {
                         ) : this.state.navigateFrom === 'suspend_details' ? (
                           <TouchableOpacity
                             onPress={() => this.doPayMySuspend()}
-                            disabled={selectedId == 2 ? true : false}
-                            style={[
-                              selectedId == 2 ? {opacity: 0.8} : {},
-                              bankDetailsStyle.paymentButton,
-                            ]}>
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
                             <Text style={bankDetailsStyle.paymentText}>
                               {
                                 Language[this.state.selectedLanguage][

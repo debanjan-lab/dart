@@ -395,13 +395,17 @@ const styles = StyleSheet.create({
 
   sendButtonBlock: {
     marginTop: 20,
-    height: 50,
+    //height: 50,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#5AC6C6',
     elevation: 2,
     flexDirection: 'row',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   sendButtonText: {
     color: '#FFFFFF',

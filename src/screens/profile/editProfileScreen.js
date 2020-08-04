@@ -38,11 +38,6 @@ import Language from '../../translations/index';
 import axios from 'axios';
 const options = {
   title: 'Select Avatar',
-  customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
 };
 export default class EditProfileScreen extends Component {
   constructor(props) {
@@ -126,12 +121,11 @@ export default class EditProfileScreen extends Component {
   };
 
   handleDatePicked = (date) => {
+    console.log(date);
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
-    this.setState({
-      selectedDate: new Date(year, month - 1, day),
-    });
+
     if (day < 10) {
       day = '0' + day;
     }
@@ -140,6 +134,7 @@ export default class EditProfileScreen extends Component {
     }
     var date = day + '/' + month + '/' + year;
     this.setState({
+      selectedDate: new Date(year, month - 1, day),
       dob: date,
       isDateTimePickerVisible: false,
     });
@@ -590,6 +585,7 @@ export default class EditProfileScreen extends Component {
                     onCancel={this.hideDateTimePicker}
                     datePickerModeAndroid={'spinner'}
                     date={this.state.selectedDate}
+                    maximumDate={new Date()}
                   />
                 </View>
                 <View style={[styles.frmInputWrapper, {position: 'relative'}]}>

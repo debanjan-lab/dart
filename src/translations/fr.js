@@ -47,7 +47,7 @@ export default {
   more_screen: {
     logout: 'Me déconnecter',
     logout_confirm: 'Êtes-vous sûr de vouloir vous déconnecter?',
-    edit_profile: 'Éditer mon profil',
+    edit_profile: 'Éditer mon profil',
     past_circles: 'Cercles passés',
     version: 'Version',
   },

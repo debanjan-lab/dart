@@ -150,6 +150,8 @@ export default class CreateCircleScreen extends Component {
   };
 
   handleDatePicked = (date) => {
+    console.log(date);
+
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
@@ -801,7 +803,7 @@ export default class CreateCircleScreen extends Component {
               ) : null}
             </View>
 
-            {this.state.errorMessage && this.state.tempData.length <= 0 ? (
+            {/* {this.state.errorMessage && this.state.tempData.length <= 0 ? (
               <View
                 style={{
                   justifyContent: 'center',
@@ -818,7 +820,7 @@ export default class CreateCircleScreen extends Component {
                   {this.state.errorMessage}
                 </Text>
               </View>
-            ) : null}
+            ) : null} */}
 
             {this.state.successMessage ? (
               <View

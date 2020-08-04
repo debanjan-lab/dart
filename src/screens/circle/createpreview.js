@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -13,41 +13,41 @@ import {
   Button,
   Picker,
   Alert,
-  ScrollView
-} from "react-native";
+  ScrollView,
+} from 'react-native';
 
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-const width = Math.round(Dimensions.get("window").width);
-const height = Math.round(Dimensions.get("window").height);
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
 
-const statusBarBackgroundColor = "#1CCBE6";
-const barStyle = "light-content";
-import HeaderCurve from "../includes/headercurve";
-import axios from "axios";
-import URL from "../../config/url";
-import commonService from "../../services/common/commonService";
+const statusBarBackgroundColor = '#1CCBE6';
+const barStyle = 'light-content';
+import HeaderCurve from '../includes/headercurve';
+import axios from 'axios';
+import URL from '../../config/url';
+import commonService from '../../services/common/commonService';
 const ApiConfig = URL;
 let count = 0;
-var moment = require("moment");
-import Language from "../../translations/index";
+var moment = require('moment');
+import Language from '../../translations/index';
 
 export default class CreateCirclePreviewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: "",
-      avatar_location: "",
+      first_name: '',
+      avatar_location: '',
       participants: [],
       loader: false,
-      errorMessage: "",
-      cicle_code: "",
-      mobile_number: "",
-      selectedLanguage: "en",
+      errorMessage: '',
+      cicle_code: '',
+      mobile_number: '',
+      selectedLanguage: 'en',
     };
   }
 
@@ -60,33 +60,33 @@ export default class CreateCirclePreviewScreen extends Component {
 
   _bootstrapAsync = async () => {
     AsyncStorage.multiGet([
-      "rememberToken",
-      "circle_code",
-      "first_name",
-      "avatar_location",
-      "mobile_number",
+      'rememberToken',
+      'circle_code',
+      'first_name',
+      'avatar_location',
+      'mobile_number',
     ]).then((response) => {
       this.setState({
         rememberToken: response[0][1],
         cicle_code: response[1][1],
         first_name: response[2][1],
         avatar_location: {
-          uri: ApiConfig.public_url + "storage/" + response[3][1],
+          uri: ApiConfig.public_url + 'storage/' + response[3][1],
         },
         mobile_number: response[4][1],
-        selectedLanguage: "fr",
+        selectedLanguage: 'fr',
       });
     });
   };
   onError(error) {
     this.setState({
-      avatar_location: require("../../../assets/images/contact.png"),
+      avatar_location: require('../../../assets/images/contact.png'),
     });
   }
 
   _doRedirectChangeOrder = () => {
-    let participants = this.props.navigation.getParam("participants", {});
-    this.props.navigation.navigate("changeOrderPage", {
+    let participants = this.props.navigation.getParam('participants', {});
+    this.props.navigation.navigate('changeOrderPage', {
       participants: participants,
     });
   };
@@ -101,88 +101,84 @@ export default class CreateCirclePreviewScreen extends Component {
 
   _doSubmitFinal = () => {
     this.setState({
-      errorMessage: "",
+      errorMessage: '',
     });
 
-    let start_date = this.props.navigation.getParam("start_date", "");
-    let end_date = this.props.navigation.getParam("end_date", "");
+    let start_date = this.props.navigation.getParam('start_date', '');
+    let end_date = this.props.navigation.getParam('end_date', '');
     let unsafe_participants = this.props.navigation.getParam(
-      "participants",
-      {}
+      'participants',
+      {},
     );
     let month_range = Math.abs(
-      moment(start_date, "DD/MM/YYYY")
-        .startOf("day")
-        .diff(moment(end_date, "DD/MM/YYYY").startOf("day"), "months")
+      moment(start_date, 'DD/MM/YYYY')
+        .startOf('day')
+        .diff(moment(end_date, 'DD/MM/YYYY').startOf('day'), 'months'),
     );
 
     if (month_range > 6) {
       this.setState({
         errorMessage:
-          Language[this.state.selectedLanguage]["circle_preview_screen"][
-          "circle_validation_hint1"
+          Language[this.state.selectedLanguage]['circle_preview_screen'][
+            'circle_validation_hint1'
           ],
       });
     } else {
-
-
       let obj = {
         circle_user_id: 1,
         circle_code: this.state.cicle_code,
         admin: this.state.first_name,
         admin_mobile: this.state.mobile_number,
         login_user_mobile: this.state.mobile_number,
-        target_achive: this.props.navigation.getParam("target_achive", "0"),
-        round_set: this.props.navigation.getParam("round_set", "0"),
-        p_round: this.props.navigation.getParam("p_round", "0"),
-        start_date: this.props.navigation.getParam("start_date", "0"),
+        target_achive: this.props.navigation.getParam('target_achive', '0'),
+        round_set: this.props.navigation.getParam('round_set', '0'),
+        p_round: this.props.navigation.getParam('p_round', '0'),
+        start_date: this.props.navigation.getParam('start_date', '0'),
         reason_for_circle: this.props.navigation.getParam(
-          "reason_for_circle",
-          "0"
+          'reason_for_circle',
+          '0',
         ),
-        unsafe_participants: this.props.navigation.getParam("participants"),
+        unsafe_participants: this.props.navigation.getParam('participants'),
       };
 
-      console.log("objjjj", obj);
+      console.log('objjjj', obj);
 
-      this.props.navigation.navigate("bankDetailsPage", {
+      this.props.navigation.navigate('bankDetailsPage', {
         result: obj,
-        reason_id: "",
-        other_reason: "",
-        navigate_from: "accept_screen",
+        reason_id: '',
+        other_reason: '',
+        navigate_from: 'accept_screen',
       });
-
-
     }
   };
 
   render() {
-    const participants = this.props.navigation.getParam("participants", {});
+    const participants = this.props.navigation.getParam('participants', {});
     const joinParticipantList = participants.map(function (data, i) {
       return (
-        <Text key={i} style={[styles.frmLabelRight, { marginTop: 5 }]}>
+        <Text key={i} style={[styles.frmLabelRight, {marginTop: 5}]}>
           {i + 1}. {data.username} ({data.mobile_country_code}
           {data.mobile_number})
         </Text>
       );
     });
-    const target_achive = this.props.navigation.getParam("target_achive", "0");
+    const target_achive = this.props.navigation.getParam('target_achive', '0');
 
-    const round_set = this.props.navigation.getParam("round_set", "0");
-    const p_round = this.props.navigation.getParam("p_round", "");
-    const start_date = this.props.navigation.getParam("start_date", "");
+    const round_set = this.props.navigation.getParam('round_set', '0');
+    const p_round = this.props.navigation.getParam('p_round', '');
+    const start_date = this.props.navigation.getParam('start_date', '');
     const reason_for_circle = this.props.navigation.getParam(
-      "reason_for_circle",
-      ""
+      'reason_for_circle',
+      '',
     );
 
-    const end_date = this.props.navigation.getParam("end_date", "");
+    const end_date = this.props.navigation.getParam('end_date', '');
     const estimate_round = this.props.navigation.getParam(
-      "estimate_round",
-      "0"
+      'estimate_round',
+      '0',
     );
     return (
-      <View style={{ backgroundColor: '#fff', flex: 1 }}>
+      <View style={{backgroundColor: '#fff', flex: 1}}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
@@ -195,25 +191,23 @@ export default class CreateCirclePreviewScreen extends Component {
           first_name={this.state.first_name}
           bellIcon={false}
         />
-        <ScrollView contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
-
+        <ScrollView
+          contentContainerStyle={{backgroundColor: '#fff', flexGrow: 1}}>
           <View
             style={{
               flex: 1,
-              padding: 20
-            }}
-          >
+              padding: 20,
+            }}>
             <View
               style={{
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.headingText}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["create_circle_preview"]
+                    'circle_preview_screen'
+                  ]['create_circle_preview']
                 }
               </Text>
             </View>
@@ -222,47 +216,51 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["target_achieve"]
+                    'circle_preview_screen'
+                  ]['target_achieve']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>€{target_achive}</Text>
             </View>
             <View style={styles.frmInputWrapper}>
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["round_settlement"]
+                    'circle_preview_screen'
+                  ]['round_settlement']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>€{round_set}</Text>
             </View>
             <View style={styles.frmInputWrapper}>
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["periodicity_round"]
+                    'circle_preview_screen'
+                  ]['periodicity_round']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>
-                {Language[this.state.selectedLanguage]["create_circle_screen"][p_round]}
+                {
+                  Language[this.state.selectedLanguage]['create_circle_screen'][
+                    p_round
+                  ]
+                }
               </Text>
             </View>
             <View style={styles.frmInputWrapperColumn}>
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["personal_reason"]
+                    'circle_preview_screen'
+                  ]['personal_reason']
                 }
-                    :
-                  </Text>
-              <Text style={[styles.frmLabelRight, { marginTop: 5 }]}>
+                :
+              </Text>
+              <Text style={[styles.frmLabelRight, {marginTop: 5}]}>
                 {reason_for_circle}
               </Text>
             </View>
@@ -270,62 +268,56 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["wishing_start"]
+                    'circle_preview_screen'
+                  ]['wishing_start']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>{start_date}</Text>
             </View>
 
             <View style={styles.frmInputWrapperMargin}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 5,
 
-              <View style={{
-                flexDirection: 'row', marginBottom: 5,
-
-                justifyContent: 'space-between'
-              }}>
-
+                  justifyContent: 'space-between',
+                }}>
                 <Text style={styles.frmLabel}>
                   {
                     Language[this.state.selectedLanguage][
-                    "circle_preview_screen"
-                    ]["circle_participants"]
+                      'circle_preview_screen'
+                    ]['circle_participants']
                   }
-                      :
-                    </Text>
-
+                  :
+                </Text>
 
                 <TouchableOpacity
                   onPress={() => this._doRedirectChangeOrder()}
-                  style={styles.changeOrderButtonBlock}
-                >
+                  style={styles.changeOrderButtonBlock}>
                   <Text style={styles.changeOrderButtonText}>
                     {
                       Language[this.state.selectedLanguage][
-                      "circle_preview_screen"
-                      ]["change_order"]
+                        'circle_preview_screen'
+                      ]['change_order']
                     }
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <View style={{ padding: 10 }}>
-                {joinParticipantList}
-              </View>
-
+              <View style={{padding: 10}}>{joinParticipantList}</View>
             </View>
-
 
             <View style={styles.frmInputWrapper}>
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["num_round"]
+                    'circle_preview_screen'
+                  ]['num_round']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>{estimate_round}</Text>
             </View>
 
@@ -333,28 +325,26 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                  "circle_preview_screen"
-                  ]["end_date"]
+                    'circle_preview_screen'
+                  ]['end_date']
                 }
-                    :
-                  </Text>
+                :
+              </Text>
               <Text style={styles.frmLabelRight}>{end_date}</Text>
             </View>
 
             {this.state.errorMessage ? (
               <View
                 style={{
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   marginTop: 20,
-                }}
-              >
+                }}>
                 <Text
                   style={{
-                    color: "red",
+                    color: 'red',
                     fontSize: 16,
-                  }}
-                >
+                  }}>
                   {this.state.errorMessage}
                 </Text>
               </View>
@@ -363,44 +353,33 @@ export default class CreateCirclePreviewScreen extends Component {
             <View style={styles.frmInputWrapper}>
               <TouchableOpacity
                 style={styles.returnButtonBlock}
-                onPress={() => this._doRedirectLanding()}
-              >
+                onPress={() => this._doRedirectLanding()}>
                 <Text style={styles.returnButtonText}>
-                  {
-                    Language[this.state.selectedLanguage]["common"][
-                    "return"
-                    ]
-                  }
+                  {Language[this.state.selectedLanguage]['common']['return']}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.validateButtonBlock}
                 onPress={() => this._doSubmitFinal()}
-                disabled={this.state.loader}
-              >
+                disabled={this.state.loader}>
                 <Text style={styles.validateButtonText}>
                   {
                     Language[this.state.selectedLanguage][
-                    "circle_preview_screen"
-                    ]["pay_deposit"]
+                      'circle_preview_screen'
+                    ]['pay_deposit']
                   }
                 </Text>
 
                 {this.state.loader ? (
                   <View style={styles.loading}>
-                    <ActivityIndicator size="small" color={"#FFFFFF"} />
+                    <ActivityIndicator size="small" color={'#FFFFFF'} />
                   </View>
                 ) : null}
               </TouchableOpacity>
             </View>
           </View>
-
-
         </ScrollView>
-
-
-
       </View>
     );
   }
@@ -409,45 +388,45 @@ export default class CreateCirclePreviewScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   containerBackBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: 30,
   },
 
   containerHeaderText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
     right: 10,
   },
 
   containerImageBlock: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
     height: height / 4,
-    backgroundColor: "#C6F3F0",
+    backgroundColor: '#C6F3F0',
   },
 
   forgotPasswordBlock: {
     marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   forgotPasswordText: {
-    color: "#22e2ef",
+    color: '#22e2ef',
     fontSize: 16,
   },
 
   inputTextStyleActive: {
     flex: 1,
     height: 25,
-    borderBottomColor: "#1DC2E0",
+    borderBottomColor: '#1DC2E0',
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
   },
@@ -456,144 +435,144 @@ const styles = StyleSheet.create({
     marginTop: 80,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   imageWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
-    height: hp("40%"),
+    height: hp('40%'),
   },
   headerMenu: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 40,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 20,
-    top: hp("3%"),
+    top: hp('3%'),
   },
   headingBold: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   headingLight: {
-    color: "#FFFFFF",
-    fontSize: hp("2.5%"),
-    fontWeight: "200",
+    color: '#FFFFFF',
+    fontSize: hp('2.5%'),
+    fontWeight: '200',
   },
   avatarWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
   },
   avatarImageWrapper: {
     width: 50,
     height: 50,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "#eeeeee",
-    backgroundColor: "#FFFFFF",
+    borderColor: '#eeeeee',
+    backgroundColor: '#FFFFFF',
     borderRadius: 25,
     top: 20,
   },
   frmInputWrapper: {
     marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   frmInputWrapperMargin: {
     marginTop: 20,
     // flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     //alignItems: "center",
     paddingTop: 10,
     paddingBottom: 10,
     borderTopWidth: 1,
-    borderTopColor: "#dcdcdc",
+    borderTopColor: '#dcdcdc',
     borderBottomWidth: 1,
-    borderBottomColor: "#dcdcdc",
+    borderBottomColor: '#dcdcdc',
   },
 
   frmInputWrapperColumn: {
     marginTop: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   headingText: {
     fontSize: 16,
     //paddingRight: 10,
     //paddingLeft: 10,
-    color: "#000000",
+    color: '#000000',
   },
   frmLabel: {
     fontSize: 15,
-    color: "#000000",
-    fontWeight: "400",
+    color: '#000000',
+    fontWeight: '400',
   },
   frmLabelRight: {
     fontSize: 16,
-    color: "#000000",
-    fontWeight: "400",
+    color: '#000000',
+    fontWeight: '400',
   },
   inputTextStyleInactive: {
     flex: 1,
     //height: 30,
-    borderBottomColor: "#cecece",
+    borderBottomColor: '#cecece',
     borderBottomWidth: 1,
-    color: "#000000",
-    fontSize: hp("2.5%"),
+    color: '#000000',
+    fontSize: hp('2.5%'),
     paddingVertical: 0,
     // paddingLeft: 10,
     //paddingRight: 10,
   },
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
   idScan: {
     marginTop: 10,
     height: 40,
-    width: wp("40%"),
+    width: wp('40%'),
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5ac6c6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5ac6c6',
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   loading: {
     marginLeft: 10,
   },
   loadingCenter: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputTextStyleRequired: {
     flex: 1,
     height: 25,
-    borderBottomColor: "red", // required
+    borderBottomColor: 'red', // required
     borderBottomWidth: 1,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingVertical: 0,
   },
   avatarName: {
     fontSize: 16,
-    color: "#FFFFFF",
-    fontWeight: "700",
+    color: '#FFFFFF',
+    fontWeight: '700',
     top: 20,
   },
   notificationBadge: {
@@ -601,24 +580,24 @@ const styles = StyleSheet.create({
     left: 15,
     height: 20,
     width: 20,
-    backgroundColor: "red",
+    backgroundColor: 'red',
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   notificationText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
+    color: '#FFFFFF',
+    fontWeight: '700',
     fontSize: 14,
   },
   textInput: {
     flex: 1,
     height: 40,
     borderWidth: 1,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
     marginLeft: 5,
     borderRadius: 5,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 5,
     paddingVertical: 0,
@@ -627,9 +606,9 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderWidth: 1,
-    borderColor: "#dcdcdc",
+    borderColor: '#dcdcdc',
     borderRadius: 5,
-    color: "#000000",
+    color: '#000000',
     fontSize: 18,
     paddingLeft: 5,
     paddingVertical: 0,
@@ -638,16 +617,16 @@ const styles = StyleSheet.create({
     padding: 10,
     //height: 30,
     borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5ac6c6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5ac6c6',
     elevation: 2,
     //position: "absolute",
     // top: 5,
     right: 0,
   },
   changeOrderButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
   },
   returnButtonBlock: {
@@ -655,15 +634,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#5AC6C6',
     borderWidth: 1,
     elevation: 2,
   },
   returnButtonText: {
-    color: "#5AC6C6",
+    color: '#5AC6C6',
     fontSize: 14,
   },
 
@@ -672,16 +651,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
-    borderColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
+    borderColor: '#5AC6C6',
     borderWidth: 1,
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   validateButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
   },
 });

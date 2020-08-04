@@ -34,64 +34,30 @@ const ApiConfig = URL;
 import {withNavigationFocus} from 'react-navigation';
 import Language from '../../translations/index';
 
+import OngoingList from './onGoingList';
+import WaitingList from './waitingList';
+import BlockList from './blockedList';
+import SuspendedList from './suspendedList';
 class DashboardScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loader: false,
-      ongoingApiCalled: false,
-      waitingApiCalled: true,
-      blockedApiCalled: false,
-      suspendApiCalled: false,
-      rememberToken: null,
-      errorText: '',
-      subMessage: '',
-      list: [{key: '1', name: 'debanjan'}],
-      getList: [],
-      language: 'en',
-      first_name: '',
-      avatar_location: '',
-      dataLoadIndicator: false,
-      tabName: '',
       selectedLanguage: 'en',
-      isRefresh: true,
+      tabIndex: 0,
     };
   }
 
-  async componentDidMount() {
-    const {
-      ongoingApiCalled,
-      waitingApiCalled,
-      blockedApiCalled,
-      suspendApiCalled,
-    } = this.state;
-    const language = await AsyncStorage.getItem('language');
-    if (language) {
-      this.setState({language: language});
-    }
-    this.onGetUserInfo();
-    this.getList(
-      ongoingApiCalled,
-      waitingApiCalled,
-      blockedApiCalled,
-      suspendApiCalled,
-      '0',
+  componentDidMount() {
+    this.setState(
+      {
+        selectedLanguage: 'fr',
+        tabIndex: 0,
+      },
+      () => {
+        this.onGetUserInfo();
+        //alert(this.state.tabIndex);
+      },
     );
-    EventEmitter.on('validatedCircleCreation', (data) => {
-      if (data) {
-        this.getList(
-          ongoingApiCalled,
-          waitingApiCalled,
-          blockedApiCalled,
-          suspendApiCalled,
-          '0',
-        );
-      }
-    });
-
-    this.setState({
-      selectedLanguage: 'fr',
-    });
   }
 
   onGetUserInfo = () => {
@@ -112,55 +78,107 @@ class DashboardScreen extends Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const {tabName} = this.state;
-    console.log(prevState);
-    console.log(this.state);
-    if (
-      prevProps.isFocused !== this.props.isFocused ||
-      prevState.isRefresh != this.state.isRefresh
-    ) {
-      if (tabName === 'onGoing') {
-        this.setState({
-          ongoingApiCalled: true,
-          waitingApiCalled: false,
-          blockedApiCalled: false,
-          suspendApiCalled: false,
-        });
-        this.getList(true, false, false, false, '1');
-      }
-      if (tabName === 'onWaiting') {
-        this.setState({
-          ongoingApiCalled: false,
-          waitingApiCalled: true,
-          blockedApiCalled: false,
-          suspendApiCalled: false,
-        });
-        this.getList(false, true, false, false, '0');
-      }
-      if (tabName === 'onBlock') {
-        this.setState({
-          ongoingApiCalled: false,
-          waitingApiCalled: false,
-          blockedApiCalled: true,
-          suspendApiCalled: false,
-        });
-        this.getList(false, false, true, false, '2');
-      }
-      if (tabName === 'onSuspend') {
-        this.setState({
-          ongoingApiCalled: false,
-          waitingApiCalled: false,
-          blockedApiCalled: false,
-          suspendApiCalled: true,
-        });
-        this.getList(false, false, false, true, '3');
-      }
-    }
-  }
+  _doActive = (tabNo) => {
+    this.setState({
+      tabIndex: tabNo,
+    });
+  };
+
+  _btnTabWaiting = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => this._doActive(0)}
+        style={[
+          styles.tabBlockDefault,
+          this.state.tabIndex == 0
+            ? styles.block2Active
+            : styles.block2InActive,
+        ]}>
+        <Text
+          style={[
+            this.state.tabIndex == 0
+              ? styles.block2ActiveText
+              : styles.block2InActiveText,
+          ]}>
+          {Language[this.state.selectedLanguage]['dashboard_screen']['waiting']}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  _btnTabOngoing = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => this._doActive(1)}
+        style={[
+          styles.tabBlockDefault,
+          this.state.tabIndex == 1
+            ? styles.block1Active
+            : styles.block1InActive,
+        ]}>
+        <Text
+          style={[
+            this.state.tabIndex == 1
+              ? styles.block1ActiveText
+              : styles.block1InActiveText,
+          ]}>
+          {Language[this.state.selectedLanguage]['dashboard_screen']['ongoing']}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  _btnTabBlocked = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => this._doActive(2)}
+        style={[
+          styles.tabBlockDefault,
+          this.state.tabIndex == 2
+            ? styles.block3Active
+            : styles.block3InActive,
+        ]}>
+        <Text
+          style={[
+            this.state.tabIndex == 2
+              ? styles.block3ActiveText
+              : styles.block3InActiveText,
+          ]}>
+          {Language[this.state.selectedLanguage]['dashboard_screen']['blocked']}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  _btnTabSuspended = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => this._doActive(3)}
+        style={[
+          styles.tabBlockDefault,
+          this.state.tabIndex == 3
+            ? styles.block4Active
+            : styles.block4InActive,
+        ]}>
+        <Text
+          style={[
+            this.state.tabIndex == 3
+              ? styles.block4ActiveText
+              : styles.block4InActiveText,
+          ]}>
+          {
+            Language[this.state.selectedLanguage]['dashboard_screen'][
+              'suspended'
+            ]
+          }
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   _doLaunchCircle = () => {
     CommonService.resetDataForLaunchNewCircle();
+
     let circle_code = Date.now().toString();
     let that = this;
     this.setState({
@@ -176,121 +194,12 @@ class DashboardScreen extends Component {
               loader: false,
             },
             () => {
-              that.props.navigation.navigate('createCirclePage');
+              that.props.navigation.push('createCirclePage');
             },
           );
         }.bind(this),
-        1000,
+        500,
       );
-    });
-  };
-
-  getList = async (ongoing, waiting, block, suspend, status) => {
-    tabIndex = status;
-    CommonService.resetDataForLaunchNewCircle();
-    //this.loading = Loading.show(CommonService.loaderObj);
-
-    const value = await AsyncStorage.getItem('rememberToken');
-    this.setState({
-      rememberToken: value,
-      errorText: '',
-      subMessage: '',
-      getList: [],
-      ongoingApiCalled: ongoing,
-      waitingApiCalled: waiting,
-      blockedApiCalled: block,
-      suspendApiCalled: suspend,
-      dataLoadIndicator: true,
-      isRefresh: true,
-    });
-
-    let payload = {
-      url: 'circle-list',
-      data: {
-        circle_status: status,
-      },
-      authtoken: value,
-    };
-
-    httpService
-      .postHttpCall(payload)
-      .then((res) => {
-        this.setState({
-          isRefresh: false,
-        });
-        // Loading.hide(this.loading);
-        if (res.status !== undefined) {
-          if (res.status == 100) {
-            this.setState({
-              getList: res.result,
-              loader: false,
-              dataLoadIndicator: false,
-            });
-          } else {
-            //Loading.hide(this.loading);
-            this.setState({
-              errorText: res.message
-                ? Language[this.state.selectedLanguage]['status'][res.message]
-                : '',
-              loader: false,
-              dataLoadIndicator: false,
-            });
-          }
-        } else {
-          this.setState({
-            errorText: httpService.appMessege.unknown_error,
-            subMessage: httpService.appMessege.working_progress,
-            loader: false,
-            dataLoadIndicator: false,
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          errorText: err.message,
-          loader: false,
-          isRefresh: false,
-        });
-        if (err.status == 4) {
-          this.setState({
-            subMessage: httpService.appMessege.internet_sub,
-            loader: false,
-            dataLoadIndicator: false,
-          });
-        }
-      });
-  };
-
-  getNames(data) {
-    let names = '';
-    data.forEach((element) => {
-      names += element.username + ', ';
-    });
-    names = names.substring(0, names.length - 2);
-    return names + ' ';
-  }
-
-  onPresswaitingTab = (item) => {
-    this.setState({tabName: 'onWaiting'});
-    this.props.navigation.navigate('rejectJoinPage', {result: item});
-  };
-
-  onPressGoingTab = (item) => {
-    this.setState({tabName: 'onGoing'});
-    this.props.navigation.navigate('ongingPage', {result: item});
-  };
-
-  onPressBlockTab = (item) => {
-    this.setState({tabName: 'onBlock'});
-    this.props.navigation.navigate('blockCircleOnePage', {
-      result: item,
-    });
-  };
-
-  onPressSuspended = (item) => {
-    this.setState({tabName: 'onSuspend'});
-    this.props.navigation.navigate('suspendedScreen', {
-      result: item,
     });
   };
 
@@ -299,7 +208,6 @@ class DashboardScreen extends Component {
       <View style={{flex: 1}}>
         <View style={[styles.container]}>
           <HeaderCurve
-            // title={"Dashboard"}
             first_name={this.state.first_name}
             avatar_location={this.state.avatar_location}
             navigation={this.navigation}
@@ -312,1232 +220,58 @@ class DashboardScreen extends Component {
             barStyle={barStyle}
           />
 
-          {this.state.dataLoadIndicator ? (
-            <View style={styles.loaderWrapper}>
-              <ActivityIndicator size="large" color="#1CCBE6" />
-            </View>
-          ) : (
-            <ScrollView
-              contentContainerStyle={{
-                flexGrow: 1,
-                padding: 20,
+          <View style={{paddingLeft: 20, paddingRight: 20, paddingTop: 20}}>
+            <TouchableOpacity
+              onPress={this._doLaunchCircle}
+              style={styles.sendButtonBlock}
+              disabled={this.state.loader}>
+              <Text style={styles.sendButtonText}>
+                {
+                  Language[this.state.selectedLanguage]['dashboard_screen'][
+                    'launch_new_circle'
+                  ]
+                }
+              </Text>
+              {this.state.loader ? (
+                <View style={{marginLeft: 10}}>
+                  <ActivityIndicator size="small" color={'#FFFFFF'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 10,
+                marginBottom: 10,
               }}>
-              <TouchableOpacity
-                onPress={() => this._doLaunchCircle()}
-                style={styles.sendButtonBlock}>
-                <Text style={styles.sendButtonText}>
-                  {
-                    Language[this.state.selectedLanguage]['dashboard_screen'][
-                      'launch_new_circle'
-                    ]
-                  }
-                </Text>
+              {this._btnTabWaiting()}
+              {this._btnTabOngoing()}
+              {this._btnTabBlocked()}
+              {this._btnTabSuspended()}
+            </View>
+          </View>
 
-                {this.state.loader ? (
-                  <View style={{marginLeft: 10}}>
-                    <ActivityIndicator size="small" color={'#FFFFFF'} />
-                  </View>
-                ) : null}
-              </TouchableOpacity>
-
-              {/* ----------------feature buttons----------------*/}
-              <View style={styles.featureBlockWrapper}>
-                <TouchableOpacity
-                  style={[
-                    tabIndex == 0 ? styles.block2Active : styles.block2InActive,
-                  ]}
-                  onPress={() => this.getList(false, true, false, false, '0')}>
-                  <Text
-                    style={[
-                      tabIndex == 0
-                        ? styles.block2ActiveText
-                        : styles.block2InActiveText,
-                    ]}>
-                    {
-                      Language[this.state.selectedLanguage]['dashboard_screen'][
-                        'waiting'
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    tabIndex == 1 ? styles.block1Active : styles.block1InActive,
-                  ]}
-                  onPress={() => this.getList(true, false, false, false, '1')}>
-                  <Text
-                    style={[
-                      tabIndex == 1
-                        ? styles.block1ActiveText
-                        : styles.block1InActiveText,
-                    ]}>
-                    {
-                      Language[this.state.selectedLanguage]['dashboard_screen'][
-                        'ongoing'
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    tabIndex == 2 ? styles.block3Active : styles.block3InActive,
-                  ]}
-                  onPress={() => this.getList(false, false, true, false, '2')}>
-                  <Text
-                    style={[
-                      tabIndex == 2
-                        ? styles.block3ActiveText
-                        : styles.block3InActiveText,
-                    ]}>
-                    {
-                      Language[this.state.selectedLanguage]['dashboard_screen'][
-                        'blocked'
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    tabIndex == 3 ? styles.block4Active : styles.block4InActive,
-                  ]}
-                  onPress={() => this.getList(false, false, false, true, '3')}>
-                  <Text
-                    style={[
-                      tabIndex == 3
-                        ? styles.block4ActiveText
-                        : styles.block4InActiveText,
-                    ]}>
-                    {
-                      Language[this.state.selectedLanguage]['dashboard_screen'][
-                        'suspended'
-                      ]
-                    }
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {this.state.errorText != '' ? (
-                <View style={{alignItems: 'center', marginTop: '47%'}}>
-                  <ErrorTemplate
-                    message={this.state.errorText}
-                    subMessage={this.state.subMessage}
-                  />
-                </View>
-              ) : (
-                <View>
-                  {this.state.waitingApiCalled &&
-                    this.state.getList.map((value, index) => {
-                      return this.waitinglistRender(value, index);
-                    })}
-
-                  {this.state.ongoingApiCalled &&
-                    this.state.getList.map((value, index) => {
-                      return this.onGoingListRender(value, index);
-                    })}
-
-                  {this.state.blockedApiCalled &&
-                    this.state.getList.map((value, index) => {
-                      return this.blockedListRender(value, index);
-                    })}
-
-                  {this.state.suspendApiCalled &&
-                    this.state.getList.map((value, index) => {
-                      return this.suspendListRender(value, index);
-                    })}
-
-                  {/* {this.state.waitingApiCalled
-                    ? 
-                    : this.state.ongoingApiCalled
-                    ? this.onGoingListComponent(this.state.getList)
-                    : this.state.blockedApiCalled
-                    ? this.blockListComponent(this.state.getList)
-                    : this.state.suspendApiCalled
-                    ? this.suspendListComponent(this.state.getList)
-                    : null} */}
-                </View>
-              )}
-            </ScrollView>
-          )}
+          <View style={{flex: 1}}>
+            {this.state.tabIndex == 0 && (
+              <WaitingList navigation={this.props.navigation} />
+            )}
+            {this.state.tabIndex == 1 && (
+              <OngoingList navigation={this.props.navigation} />
+            )}
+            {this.state.tabIndex == 2 && (
+              <BlockList navigation={this.props.navigation} />
+            )}
+            {this.state.tabIndex == 3 && (
+              <SuspendedList navigation={this.props.navigation} />
+            )}
+          </View>
 
           <FooterTabComponent props={this.props} />
         </View>
       </View>
     );
   }
-
-  waitinglistRender = (value, index) => {
-    return (
-      <TouchableOpacity
-        key={index}
-        onPress={() => this.onPresswaitingTab(value)}>
-        <View style={[styles.listItemWrapper]}>
-          <View style={styles.listLeftWrapper}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.circle_code}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle_admin'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.admin}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'participants'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[styles.listRightText, {paddingRight: 20}]}>
-                {this.getNames(value.get_users)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'amount'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>€{value.target_achive}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'launch_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.start_date)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'last_round_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.end_date)}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  // waitinglistComponent = (response) => {
-  //   return (
-  //     <FlatList
-  //       showsHorizontalScrollIndicator={false}
-  //       showsVerticalScrollIndicator={false}
-  //       keyExtractor={(item) => item.id.toString()}
-  //       ListHeaderComponent={<View style={{height: 10}} />}
-  //       ListFooterComponent={<View style={{height: 10}} />}
-  //       data={response}
-  //       numColumns={1}
-  //       renderItem={({item, index}) => (
-  //         <TouchableOpacity
-  //           activeOpacity={1}
-  //           onPress={() => this.onPresswaitingTab(item)}>
-  //           <View style={[styles.listItemWrapper]}>
-  //             <View style={styles.listLeftWrapper}>
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.circle_code}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle_admin'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.admin}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'participants'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text
-  //                   numberOfLines={1}
-  //                   style={[styles.listRightText, {paddingRight: 20}]}>
-  //                   {this.getNames(item.get_users)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'amount'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   €{item.target_achive}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'launch_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.start_date)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'last_round_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.end_date)}
-  //                 </Text>
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </TouchableOpacity>
-  //       )}
-  //     />
-  //   );
-  // };
-
-  onGoingListRender = (value, index) => {
-    return (
-      <TouchableOpacity key={index} onPress={() => this.onPressGoingTab(value)}>
-        <View style={styles.listItemWrapper}>
-          <View style={styles.listLeftWrapper}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.circle_code}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle_admin'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.admin}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'participants'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[styles.listRightText, {width: wp('33%')}]}>
-                {this.getNames(value.get_users)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'amount'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>€{value.target_achive}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'launch_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.end_date)}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'expected_payment_recieved'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {value.expected_payable_date}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'next_expected_payment'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {value.expected_next_payment_date}
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              alignItems: 'center',
-              flex: 1,
-              paddingTop: 10,
-            }}>
-            <ProgressCircle
-              percent={CommonService.getPercentage(
-                value.completed_round,
-                value.estimate_round,
-              )}
-              radius={hp('5%')}
-              borderWidth={8}
-              color="#3bdfde"
-              shadowColor="#ececec"
-              bgColor="#fff">
-              <Text style={{fontSize: 18}}>
-                {CommonService.getPercentage(
-                  value.completed_round,
-                  value.estimate_round,
-                ) + '%'}
-              </Text>
-            </ProgressCircle>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  // onGoingListComponent = (response) => {
-  //   return (
-  //     <FlatList
-  //       showsHorizontalScrollIndicator={false}
-  //       showsVerticalScrollIndicator={false}
-  //       keyExtractor={(item) => item.id.toString()}
-  //       ListHeaderComponent={<View style={{height: 10}} />}
-  //       ListFooterComponent={<View style={{height: 10}} />}
-  //       data={response}
-  //       renderItem={({item, index}) => (
-  //         <TouchableOpacity
-  //           activeOpacity={1}
-  //           onPress={() => this.onPressGoingTab(item)}>
-  //           <View style={styles.listItemWrapper}>
-  //             <View style={styles.listLeftWrapper}>
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.circle_code}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle_admin'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.admin}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'participants'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text
-  //                   numberOfLines={1}
-  //                   style={[styles.listRightText, {width: wp('33%')}]}>
-  //                   {this.getNames(item.get_users)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'amount'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   €{item.target_achive}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'launch_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.end_date)}
-  //                 </Text>
-  //               </View>
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'expected_payment_recieved'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {item.expected_payable_date}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'next_expected_payment'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {item.expected_next_payment_date}
-  //                 </Text>
-  //               </View>
-  //             </View>
-
-  //             <View
-  //               style={{
-  //                 alignItems: 'center',
-  //                 flex: 1,
-  //                 paddingTop: 10,
-  //               }}>
-  //               <ProgressCircle
-  //                 percent={CommonService.getPercentage(
-  //                   item.completed_round,
-  //                   item.estimate_round,
-  //                 )}
-  //                 radius={hp('5%')}
-  //                 borderWidth={8}
-  //                 color="#3bdfde"
-  //                 shadowColor="#ececec"
-  //                 bgColor="#fff">
-  //                 <Text style={{fontSize: 18}}>
-  //                   {CommonService.getPercentage(
-  //                     item.completed_round,
-  //                     item.estimate_round,
-  //                   ) + '%'}
-  //                 </Text>
-  //               </ProgressCircle>
-  //             </View>
-  //           </View>
-  //         </TouchableOpacity>
-  //       )}
-  //       numColumns={1}
-  //     />
-  //   );
-  // };
-
-  blockedListRender = (value, index) => {
-    return (
-      <TouchableOpacity key={index} onPress={() => this.onPressBlockTab(value)}>
-        <View style={styles.listItemWrapper}>
-          <View style={styles.listLeftWrapper}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.circle_code}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle_admin'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.admin}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'participants'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[styles.listRightText, {width: wp('33%')}]}>
-                {this.getNames(value.get_users)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'amount'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>€{value.target_achive}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'launch_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.start_date)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'last_round_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.end_date)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'progress_status'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              {value.completed_round == value.estimate_round ? (
-                <Text style={styles.listRightText}>
-                  {Language[this.state.selectedLanguage]['common']['completed']}
-                </Text>
-              ) : (
-                <Text style={styles.listRightText}>
-                  {value.completed_round +
-                    ' ' +
-                    Language[this.state.selectedLanguage][
-                      'circle_completed_screen'
-                    ]['round_over_out'] +
-                    ' ' +
-                    value.estimate_round}
-                </Text>
-              )}
-            </View>
-          </View>
-
-          <View
-            style={{
-              alignItems: 'center',
-              flex: 1,
-              paddingTop: 10,
-            }}>
-            <ProgressCircle
-              percent={CommonService.getPercentage(
-                value.completed_round,
-                value.estimate_round,
-              )}
-              radius={hp('5%')}
-              borderWidth={8}
-              color="#3bdfde"
-              shadowColor="#ececec"
-              bgColor="#fff">
-              <Text style={{fontSize: 18}}>
-                {CommonService.getPercentage(
-                  value.completed_round,
-                  value.estimate_round,
-                ) + '%'}
-              </Text>
-            </ProgressCircle>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  // blockListComponent = (response) => {
-  //   return (
-  //     <FlatList
-  //       showsHorizontalScrollIndicator={false}
-  //       showsVerticalScrollIndicator={false}
-  //       keyExtractor={(item) => item.id.toString()}
-  //       ListHeaderComponent={<View style={{height: 10}} />}
-  //       ListFooterComponent={<View style={{height: 10}} />}
-  //       data={response}
-  //       renderItem={({item, index}) => (
-  //         <TouchableOpacity
-  //           activeOpacity={1}
-  //           onPress={() => this.onPressBlockTab(item)}>
-  //           <View style={styles.listItemWrapper}>
-  //             <View style={styles.listLeftWrapper}>
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.circle_code}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle_admin'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.admin}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'participants'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text
-  //                   numberOfLines={1}
-  //                   style={[styles.listRightText, {width: wp('33%')}]}>
-  //                   {this.getNames(item.get_users)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'amount'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   €{item.target_achive}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'launch_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.start_date)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'last_round_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.end_date)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'progress_status'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 {item.completed_round == item.estimate_round ? (
-  //                   <Text style={styles.listRightText}>
-  //                     {
-  //                       Language[this.state.selectedLanguage]['common'][
-  //                         'completed'
-  //                       ]
-  //                     }
-  //                   </Text>
-  //                 ) : (
-  //                   <Text style={styles.listRightText}>
-  //                     {item.completed_round +
-  //                       ' ' +
-  //                       Language[this.state.selectedLanguage][
-  //                         'circle_completed_screen'
-  //                       ]['round_over_out'] +
-  //                       ' ' +
-  //                       item.estimate_round}
-  //                   </Text>
-  //                 )}
-  //               </View>
-  //             </View>
-
-  //             <View
-  //               style={{
-  //                 alignItems: 'center',
-  //                 flex: 1,
-  //                 paddingTop: 10,
-  //               }}>
-  //               <ProgressCircle
-  //                 percent={CommonService.getPercentage(
-  //                   item.completed_round,
-  //                   item.estimate_round,
-  //                 )}
-  //                 radius={hp('5%')}
-  //                 borderWidth={8}
-  //                 color="#3bdfde"
-  //                 shadowColor="#ececec"
-  //                 bgColor="#fff">
-  //                 <Text style={{fontSize: 18}}>
-  //                   {CommonService.getPercentage(
-  //                     item.completed_round,
-  //                     item.estimate_round,
-  //                   ) + '%'}
-  //                 </Text>
-  //               </ProgressCircle>
-  //             </View>
-  //           </View>
-  //         </TouchableOpacity>
-  //       )}
-  //       numColumns={1}
-  //     />
-  //   );
-  // };
-
-  suspendListRender = (value, index) => {
-    return (
-      <TouchableOpacity
-        key={index}
-        onPress={() => this.onPressSuspended(value)}>
-        <View style={styles.listItemWrapper}>
-          <View style={styles.listLeftWrapper}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.circle_code}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'circle_admin'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>{value.admin}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'participants'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[styles.listRightText, {width: wp('33%')}]}>
-                {this.getNames(value.get_users)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'amount'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>€{value.target_achive}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'launch_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.start_date)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'last_round_date'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              <Text style={styles.listRightText}>
-                {CommonService.formatDate(value.end_date)}
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.listLeftText}>
-                {
-                  Language[this.state.selectedLanguage]['dashboard_screen'][
-                    'progress_status'
-                  ]
-                }{' '}
-                :{' '}
-              </Text>
-              {value.completed_round > 1 ? (
-                <Text style={styles.listRightText}>
-                  {value.completed_round +
-                    ' rounds over out of ' +
-                    value.estimate_round}
-                </Text>
-              ) : (
-                <Text style={styles.listRightText}>
-                  {value.completed_round +
-                    ' ' +
-                    Language[this.state.selectedLanguage][
-                      'circle_completed_screen'
-                    ]['round_over_out'] +
-                    ' ' +
-                    value.estimate_round}
-                </Text>
-              )}
-            </View>
-          </View>
-
-          <View
-            style={{
-              alignItems: 'center',
-              flex: 1,
-              paddingTop: 10,
-            }}>
-            <ProgressCircle
-              percent={CommonService.getPercentage(
-                value.completed_round,
-                value.estimate_round,
-              )}
-              radius={hp('5%')}
-              borderWidth={8}
-              color="#3bdfde"
-              shadowColor="#ececec"
-              bgColor="#fff">
-              <Text style={{fontSize: 18}}>
-                {CommonService.getPercentage(
-                  value.completed_round,
-                  value.estimate_round,
-                ) + '%'}
-              </Text>
-            </ProgressCircle>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  // suspendListComponent = (response) => {
-  //   return (
-  //     <FlatList
-  //       showsHorizontalScrollIndicator={false}
-  //       showsVerticalScrollIndicator={false}
-  //       keyExtractor={(item) => item.id.toString()}
-  //       ListHeaderComponent={<View style={{height: 10}} />}
-  //       ListFooterComponent={<View style={{height: 10}} />}
-  //       data={response}
-  //       renderItem={({item, index}) => (
-  //         <TouchableOpacity
-  //           activeOpacity={1}
-  //           onPress={() => this.onPressSuspended(item)}>
-  //           <View style={styles.listItemWrapper}>
-  //             <View style={styles.listLeftWrapper}>
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.circle_code}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'circle_admin'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>{item.admin}</Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'participants'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text
-  //                   numberOfLines={1}
-  //                   style={[styles.listRightText, {width: wp('33%')}]}>
-  //                   {this.getNames(item.get_users)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'amount'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   €{item.target_achive}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'launch_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.start_date)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'last_round_date'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 <Text style={styles.listRightText}>
-  //                   {CommonService.formatDate(item.end_date)}
-  //                 </Text>
-  //               </View>
-
-  //               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //                 <Text style={styles.listLeftText}>
-  //                   {
-  //                     Language[this.state.selectedLanguage]['dashboard_screen'][
-  //                       'progress_status'
-  //                     ]
-  //                   }{' '}
-  //                   :{' '}
-  //                 </Text>
-  //                 {item.completed_round > 1 ? (
-  //                   <Text style={styles.listRightText}>
-  //                     {item.completed_round +
-  //                       ' rounds over out of ' +
-  //                       item.estimate_round}
-  //                   </Text>
-  //                 ) : (
-  //                   <Text style={styles.listRightText}>
-  //                     {item.completed_round +
-  //                       ' ' +
-  //                       Language[this.state.selectedLanguage][
-  //                         'circle_completed_screen'
-  //                       ]['round_over_out'] +
-  //                       ' ' +
-  //                       item.estimate_round}
-  //                   </Text>
-  //                 )}
-  //               </View>
-  //             </View>
-
-  //             <View
-  //               style={{
-  //                 alignItems: 'center',
-  //                 flex: 1,
-  //                 paddingTop: 10,
-  //               }}>
-  //               <ProgressCircle
-  //                 percent={CommonService.getPercentage(
-  //                   item.completed_round,
-  //                   item.estimate_round,
-  //                 )}
-  //                 radius={hp('5%')}
-  //                 borderWidth={8}
-  //                 color="#3bdfde"
-  //                 shadowColor="#ececec"
-  //                 bgColor="#fff">
-  //                 <Text style={{fontSize: 18}}>
-  //                   {CommonService.getPercentage(
-  //                     item.completed_round,
-  //                     item.estimate_round,
-  //                   ) + '%'}
-  //                 </Text>
-  //               </ProgressCircle>
-  //             </View>
-  //           </View>
-  //         </TouchableOpacity>
-  //       )}
-  //       numColumns={1}
-  //     />
-  //   );
-  // };
 }
 
 export default DashboardScreen;
@@ -1591,14 +325,15 @@ const styles = StyleSheet.create({
   },
 
   sendButtonBlock: {
-    marginTop: 20,
-    height: 50,
+    //marginTop: 20,
+    //height: 50,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#5AC6C6',
     elevation: 2,
     flexDirection: 'row',
+    padding: 10,
   },
   sendButtonText: {
     color: '#FFFFFF',
@@ -1647,8 +382,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   block1Active: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    //height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#21c995',
@@ -1663,8 +398,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   block1InActive: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    // height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#21c995',
@@ -1680,8 +415,8 @@ const styles = StyleSheet.create({
   },
 
   block2Active: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    // height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#e3832f',
@@ -1696,8 +431,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   block2InActive: {
-    width: width / 4.7,
-    height: 60,
+    //width: width / 4.7,
+    //height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#e3832f',
@@ -1713,8 +448,8 @@ const styles = StyleSheet.create({
   },
 
   block3Active: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    //  height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#7792f9',
@@ -1729,8 +464,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   block3InActive: {
-    width: width / 4.7,
-    height: 60,
+    //width: width / 4.7,
+    // height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#7792f9',
@@ -1745,8 +480,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   block4Active: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    // height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#de4b5b',
@@ -1761,8 +496,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   block4InActive: {
-    width: width / 4.7,
-    height: 60,
+    // width: width / 4.7,
+    //  height: 60,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#de4b5b',
@@ -1807,5 +542,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+
+  tabBlockDefault: {
+    padding: 10,
   },
 });

@@ -1,24 +1,24 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 
-import axios from "axios";
+import axios from 'axios';
 
-import URL from "../config/url";
+import URL from '../config/url';
 const ApiConfig = URL;
-import EventEmitter from "react-native-eventemitter";
-import CommonService from "../services/common/commonService";
+import EventEmitter from 'react-native-eventemitter';
+import CommonService from '../services/common/commonService';
 
-import Language from "../translations/index";
+import Language from '../translations/index';
 class CreateCircle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedLanguage: "en",
+      selectedLanguage: 'en',
     };
   }
 
   componentDidMount() {
     this.setState({
-      selectedLanguage: "fr",
+      selectedLanguage: 'fr',
     });
   }
 
@@ -35,17 +35,17 @@ class CreateCircle extends Component {
 
     let that = this;
 
-    console.log(ApiConfig.base_url + "create-circle");
-    console.log("req", obj);
+    console.log(ApiConfig.base_url + 'create-circle');
+    console.log('req', obj);
 
     axios
-      .post(ApiConfig.base_url + "create-circle", JSON.stringify(obj), {
+      .post(ApiConfig.base_url + 'create-circle', JSON.stringify(obj), {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: 'Bearer ' + token,
         },
       })
       .then(function (response) {
-        EventEmitter.emit("validatedCircleCreation", true);
+        EventEmitter.emit('validatedCircleCreation', true);
         CommonService.getSmsPermission((res) => {
           if (res) {
             item.unsafe_participants.forEach((element) => {
@@ -57,17 +57,17 @@ class CreateCircle extends Component {
                   element.mobile_country_code.toString() +
                     element.mobile_number.toString(),
                   `${
-                    Language[that.state.selectedLanguage]["common"]["hello"]
+                    Language[that.state.selectedLanguage]['common']['hello']
                   }` +
-                    ",\n" +
+                    ',\n' +
                     `${
                       Language[that.state.selectedLanguage][
-                        "create_circle_screen"
-                      ]["sms_text"]
+                        'create_circle_screen'
+                      ]['sms_text']
                     }` +
-                    "(" +
+                    '(' +
                     item.circle_code +
-                    ")"
+                    ')',
                 );
 
                 // CommonService.sendDirectSms(
@@ -80,19 +80,19 @@ class CreateCircle extends Component {
 
           //console.log("res=============================="+JSON.stringify(response))
           CommonService.showConfirmAlert(
-            Language[that.state.selectedLanguage]["status"][
+            Language[that.state.selectedLanguage]['status'][
               response.data.message
             ],
             (response) => {
               if (response) {
-                navigation.navigate("dashboardPage");
+                navigation.push('dashboardPage');
               }
-            }
+            },
           );
         });
       })
       .catch(function (error) {
-        console.log("err", error);
+        console.log('err', error);
       });
   }
 }

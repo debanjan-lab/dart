@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -7,20 +7,20 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
-  ScrollView
-} from "react-native";
+  ScrollView,
+} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-community/async-storage";
-import FooterTabComponent from "../../components/footerTab/footerTabComponent";
-const statusBarBackgroundColor = "#1CCBE6";
-const barStyle = "light-content";
-import URL from "../../config/url";
+} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+import FooterTabComponent from '../../components/footerTab/footerTabComponent';
+const statusBarBackgroundColor = '#1CCBE6';
+const barStyle = 'light-content';
+import URL from '../../config/url';
 const ApiConfig = URL;
-import HeaderCurve from "../includes/headercurve";
-import Language from "../../translations/index";
+import HeaderCurve from '../includes/headercurve';
+import Language from '../../translations/index';
 
 export default class MoreScreen extends Component {
   constructor(props) {
@@ -28,9 +28,9 @@ export default class MoreScreen extends Component {
     this.state = {
       loader: false,
       rememberToken: null,
-      first_name: "",
-      avatar_location: "",
-      selectedLanguage: "en",
+      first_name: '',
+      avatar_location: '',
+      selectedLanguage: 'en',
     };
   }
 
@@ -40,46 +40,46 @@ export default class MoreScreen extends Component {
 
   _bootstrapAsync = async () => {
     AsyncStorage.multiGet([
-      "rememberToken",
-      "circle_code",
-      "first_name",
-      "avatar_location",
-      "mobile_number",
+      'rememberToken',
+      'circle_code',
+      'first_name',
+      'avatar_location',
+      'mobile_number',
     ]).then((response) => {
       this.setState({
         rememberToken: response[0][1],
         first_name: response[2][1],
         avatar_location: {
-          uri: ApiConfig.public_url + "storage/" + response[3][1],
+          uri: ApiConfig.public_url + 'storage/' + response[3][1],
         },
-        selectedLanguage: "fr",
+        selectedLanguage: 'fr',
       });
     });
   };
 
   _doLogout = () => {
     Alert.alert(
-      Language[this.state.selectedLanguage]["more_screen"]["logout"],
-      Language[this.state.selectedLanguage]["more_screen"]["logout_confirm"],
+      Language[this.state.selectedLanguage]['more_screen']['logout'],
+      Language[this.state.selectedLanguage]['more_screen']['logout_confirm'],
       [
         {
-          text: Language[this.state.selectedLanguage]["common"]["cancel"],
-          style: "cancel",
+          text: Language[this.state.selectedLanguage]['common']['cancel'],
+          style: 'cancel',
         },
         {
-          text: Language[this.state.selectedLanguage]["common"]["ok"],
+          text: Language[this.state.selectedLanguage]['common']['ok'],
           onPress: () => {
             AsyncStorage.clear();
-            this.props.navigation.navigate("Auth");
+            this.props.navigation.navigate('Auth');
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
   gotoEditProfile() {
-    this.props.navigation.navigate("EditProfileScreen");
+    this.props.navigation.push('EditProfileScreen');
   }
 
   render() {
@@ -99,50 +99,38 @@ export default class MoreScreen extends Component {
           props={this.props}
         />
 
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-
-
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
           <View
             style={{
               flex: 1,
-              padding: 20
-            }}
-          >
+              padding: 20,
+            }}>
             <TouchableOpacity
               onPress={() => this._doLogout()}
-              style={styles.sendButtonBlock}
-            >
+              style={styles.sendButtonBlock}>
               <Text style={styles.sendButtonText}>
-                {
-                  Language[this.state.selectedLanguage]["more_screen"][
-                  "logout"
-                  ]
-                }
+                {Language[this.state.selectedLanguage]['more_screen']['logout']}
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => this.gotoEditProfile()}
-              style={styles.sendButtonBlock}
-            >
+              style={styles.sendButtonBlock}>
               <Text style={styles.sendButtonText}>
                 {
-                  Language[this.state.selectedLanguage]["more_screen"][
-                  "edit_profile"
+                  Language[this.state.selectedLanguage]['more_screen'][
+                    'edit_profile'
                   ]
                 }
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate("completedCircle")
-              }
-              style={styles.sendButtonBlock}
-            >
+              onPress={() => this.props.navigation.push('completedCircle')}
+              style={styles.sendButtonBlock}>
               <Text style={styles.sendButtonText}>
                 {
-                  Language[this.state.selectedLanguage]["more_screen"][
-                  "past_circles"
+                  Language[this.state.selectedLanguage]['more_screen'][
+                    'past_circles'
                   ]
                 }
               </Text>
@@ -151,27 +139,19 @@ export default class MoreScreen extends Component {
             <View style={styles.versionBlock}>
               <Text
                 style={{
-                  fontWeight: "bold",
-                  color: "#5AC6C6",
+                  fontWeight: 'bold',
+                  color: '#5AC6C6',
                   fontSize: 25,
-                }}
-              >
+                }}>
                 {
-                  Language[this.state.selectedLanguage]["more_screen"][
-                  "version"
+                  Language[this.state.selectedLanguage]['more_screen'][
+                    'version'
                   ]
-                }{" "}
-                    - 1.0
-                  </Text>
+                }{' '}
+                - 1.0
+              </Text>
             </View>
-
-
-
           </View>
-
-
-
-
         </ScrollView>
 
         <FooterTabComponent props={this.props} />
@@ -183,59 +163,59 @@ export default class MoreScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   containerBackBlock: {
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 70,
   },
   versionBlock: {
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sendButtonBlock: {
     marginTop: 20,
     height: 50,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5AC6C6",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5AC6C6',
     elevation: 2,
   },
   sendButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
   },
 
   headerMenu: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 40,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 20,
-    top: hp("3%"),
+    top: hp('3%'),
   },
   headingBold: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   headingLight: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "200",
+    fontWeight: '200',
   },
   loading: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

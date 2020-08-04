@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -8,20 +8,20 @@ import {
   ActivityIndicator,
   Dimensions,
   ScrollView,
-} from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
+} from 'react-native';
+import {ToastMessage} from '../../components/ToastMessage';
 
-import suspendedSavingOneStyle from "./suspendedSavingOneStyle";
-import HeaderCurve from "../includes/headercurve";
-import headerStyle from "../../assets/css/header/headerStyle";
-import axios from "axios";
-import URL from "../../config/url";
-import AsyncStorage from "@react-native-community/async-storage";
-import CommonService from "../../services/common/commonService";
+import suspendedSavingOneStyle from './suspendedSavingOneStyle';
+import HeaderCurve from '../includes/headercurve';
+import headerStyle from '../../assets/css/header/headerStyle';
+import axios from 'axios';
+import URL from '../../config/url';
+import AsyncStorage from '@react-native-community/async-storage';
+import CommonService from '../../services/common/commonService';
 
-const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
-import Language from "../../translations/index";
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
+import Language from '../../translations/index';
 
 const ApiConfig = URL;
 
@@ -29,71 +29,71 @@ export default class SuspendedSavingOneScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      item: "",
-      userName: "",
-      token: "",
-      currency: "",
-      payableBalance: "",
-      avatar_location: "",
+      item: '',
+      userName: '',
+      token: '',
+      currency: '',
+      payableBalance: '',
+      avatar_location: '',
       btnLoader: false,
-      selectedLanguage: "en",
+      selectedLanguage: 'en',
     };
   }
 
   componentDidMount() {
-    let item = this.props.navigation.getParam("result");
+    let item = this.props.navigation.getParam('result');
     AsyncStorage.multiGet([
-      "rememberToken",
-      "circle_code",
-      "first_name",
-      "avatar_location",
+      'rememberToken',
+      'circle_code',
+      'first_name',
+      'avatar_location',
     ]).then((response) => {
       this.setState(
         {
           token: response[0][1],
           userName: response[2][1],
-          selectedLanguage: "fr",
+          selectedLanguage: 'fr',
           avatar_location: {
-            uri: URL.public_url + "storage/" + response[3][1],
+            uri: URL.public_url + 'storage/' + response[3][1],
           },
         },
         () => {
           this.onGetItemDetails(item.circle_code, this.state.token);
           this.onGetCurrency(this.state.token);
-        }
+        },
       );
-      console.log("avatar_location===" + this.state.avatar_location.uri);
+      console.log('avatar_location===' + this.state.avatar_location.uri);
     });
   }
   onGetItemDetails = (circle_code, token) => {
-    console.log(ApiConfig.base_url + "ongoing-circle-details");
-    console.log("circle_code", circle_code);
-    console.log("token", token);
+    console.log(ApiConfig.base_url + 'ongoing-circle-details');
+    console.log('circle_code', circle_code);
+    console.log('token', token);
     if (circle_code) {
       let data = {
         circle_code: circle_code,
       };
       axios
         .post(
-          ApiConfig.base_url + "ongoing-circle-details",
+          ApiConfig.base_url + 'ongoing-circle-details',
           JSON.stringify(data),
           {
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization: 'Bearer ' + token,
             },
-          }
+          },
         )
         .then((res) => {
-          console.log("res", res.data);
+          console.log('res', res.data);
           if (res.data) {
-            this.setState({ item: res.data.result });
+            this.setState({item: res.data.result});
           }
         })
         .catch((err) => {
-          console.log("err", err);
+          console.log('err', err);
 
           ToastMessage(
-            Language[this.state.selectedLanguage]["status"][err.message]
+            Language[this.state.selectedLanguage]['status'][err.message],
           );
         });
     }
@@ -101,24 +101,24 @@ export default class SuspendedSavingOneScreen extends Component {
 
   onGetCurrency = (token) => {
     axios
-      .get(ApiConfig.base_url + "get-currency", {
+      .get(ApiConfig.base_url + 'get-currency', {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: 'Bearer ' + token,
         },
       })
       .then((currencyData) => {
-        this.setState({ currency: currencyData.data.result });
+        this.setState({currency: currencyData.data.result});
       })
       .catch((err) => {
         ToastMessage(
-          Language[this.state.selectedLanguage]["status"][err.message]
+          Language[this.state.selectedLanguage]['status'][err.message],
         );
       });
   };
 
   onCircleReportOrIncident = (user_type) => {
-    const { item, token } = this.state;
-    this.setState({ btnLoader: true });
+    const {item, token} = this.state;
+    this.setState({btnLoader: true});
     if (item.circle_code && token) {
       let obj = {
         circle_code: item.circle_code,
@@ -128,38 +128,36 @@ export default class SuspendedSavingOneScreen extends Component {
       // console.log("api=======", ApiConfig.base_url + "circle-report");
 
       axios
-        .post(ApiConfig.base_url + "circle-report", JSON.stringify(obj), {
+        .post(ApiConfig.base_url + 'circle-report', JSON.stringify(obj), {
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: 'Bearer ' + token,
           },
         })
         .then((res) => {
-          this.setState({ btnLoader: false });
+          this.setState({btnLoader: false});
           ToastMessage(
-            Language[this.state.selectedLanguage]["status"][res.data.message]
+            Language[this.state.selectedLanguage]['status'][res.data.message],
           );
 
-          this.props.navigation.navigate("suspendedScreen");
+          this.props.navigation.navigate('suspendedScreen');
         })
         .catch((err) => {
-          this.setState({ btnLoader: false });
+          this.setState({btnLoader: false});
           //console.log("err=======", err.response);
           ToastMessage(
-            Language[this.state.selectedLanguage]["status"][err.message]
+            Language[this.state.selectedLanguage]['status'][err.message],
           );
         });
     } else {
-      this.setState({ btnLoader: false });
+      this.setState({btnLoader: false});
     }
   };
 
   render() {
-    const { item, currency, userName } = this.state;
-    console.log("suspended item", item);
+    const {item, currency, userName} = this.state;
+    console.log('suspended item', item);
     return (
-      <View
-        style={{ backgroundColor: "#fff", flex: 1 }}
-      >
+      <View style={{backgroundColor: '#fff', flex: 1}}>
         <HeaderCurve
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
@@ -170,30 +168,29 @@ export default class SuspendedSavingOneScreen extends Component {
           props={this.props}
         />
         <ScrollView
-          contentContainerStyle={{ backgroundColor: "#fff", flexGrow: 1 }}
-        >
+          contentContainerStyle={{backgroundColor: '#fff', flexGrow: 1}}>
           <View style={[suspendedSavingOneStyle.mainContent]}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>
                 {
-                  Language[this.state.selectedLanguage]["common"][
-                  "circle_dismantled"
+                  Language[this.state.selectedLanguage]['common'][
+                    'circle_dismantled'
                   ]
                 }
               </Text>
               <Text>N° {item.circle_code}</Text>
             </View>
-            <View style={{ marginTop: 15 }}>
+            <View style={{marginTop: 15}}>
               <View style={suspendedSavingOneStyle.rowView}>
                 <View style={suspendedSavingOneStyle.rowViewLeftItem}>
                   <Text style={suspendedSavingOneStyle.rowText}>
                     {
                       Language[this.state.selectedLanguage][
-                      "create_circle_screen"
-                      ]["target_achieve"]
+                        'create_circle_screen'
+                      ]['target_achieve']
                     }
-                  :
-                </Text>
+                    :
+                  </Text>
                 </View>
                 <View style={suspendedSavingOneStyle.rowViewRightItem}>
                   <Text style={suspendedSavingOneStyle.rowTextValue}>
@@ -207,11 +204,11 @@ export default class SuspendedSavingOneScreen extends Component {
                   <Text style={suspendedSavingOneStyle.rowText}>
                     {
                       Language[this.state.selectedLanguage][
-                      "create_circle_screen"
-                      ]["round_settlement"]
+                        'create_circle_screen'
+                      ]['round_settlement']
                     }
-                  :
-                </Text>
+                    :
+                  </Text>
                 </View>
                 <View style={suspendedSavingOneStyle.rowViewRightItem}>
                   <Text style={suspendedSavingOneStyle.rowTextValue}>
@@ -224,18 +221,18 @@ export default class SuspendedSavingOneScreen extends Component {
                 <View style={suspendedSavingOneStyle.rowViewLeftItem}>
                   <Text style={suspendedSavingOneStyle.rowText}>
                     {
-                      Language[this.state.selectedLanguage]["dashboard_screen"][
-                      "circle"
+                      Language[this.state.selectedLanguage]['dashboard_screen'][
+                        'circle'
                       ]
                     }
-                  :
-                </Text>
+                    :
+                  </Text>
                 </View>
                 <View style={suspendedSavingOneStyle.rowViewRightItem}>
                   <Text style={suspendedSavingOneStyle.rowTextValue}>
                     {
                       Language[this.state.selectedLanguage][
-                      "create_circle_screen"
+                        'create_circle_screen'
                       ][item.p_round]
                     }
                   </Text>
@@ -246,15 +243,16 @@ export default class SuspendedSavingOneScreen extends Component {
                   <Text style={suspendedSavingOneStyle.rowText}>
                     {
                       Language[this.state.selectedLanguage][
-                      "create_circle_screen"
-                      ]["start_date"]
+                        'create_circle_screen'
+                      ]['start_date']
                     }
-                  :
-                </Text>
+                    :
+                  </Text>
                 </View>
                 <View style={suspendedSavingOneStyle.rowViewRightItem}>
                   <Text style={suspendedSavingOneStyle.rowTextValue}>
-                    {CommonService.formatDate(item.start_date)}
+                    {item.start_date &&
+                      CommonService.formatDate(item.start_date)}
                   </Text>
                 </View>
               </View>
@@ -263,11 +261,11 @@ export default class SuspendedSavingOneScreen extends Component {
                   <Text style={suspendedSavingOneStyle.rowText}>
                     {
                       Language[this.state.selectedLanguage][
-                      "suspended_circle_screen"
-                      ]["blocked_round"]
+                        'suspended_circle_screen'
+                      ]['blocked_round']
                     }
-                  :
-                </Text>
+                    :
+                  </Text>
                 </View>
                 <View style={suspendedSavingOneStyle.rowViewRightItem}>
                   <Text style={suspendedSavingOneStyle.rowTextValue}>
@@ -275,15 +273,15 @@ export default class SuspendedSavingOneScreen extends Component {
                   </Text>
                 </View>
               </View>
-              <View style={{ paddingTop: 20 }}>
+              <View style={{paddingTop: 20}}>
                 <Text style={suspendedSavingOneStyle.rowText}>
                   {
                     Language[this.state.selectedLanguage][
-                    "suspended_circle_screen"
-                    ]["balance_circle"]
+                      'suspended_circle_screen'
+                    ]['balance_circle']
                   }
-                :
-              </Text>
+                  :
+                </Text>
                 {item.circleUsers !== undefined ? (
                   <View style={suspendedSavingOneStyle.tableContainer}>
                     {/* table header start */}
@@ -291,75 +289,67 @@ export default class SuspendedSavingOneScreen extends Component {
                       <View
                         style={[
                           suspendedSavingOneStyle.rowViewCommon,
-                          { flex: 1, alignSelf: "stretch" },
-                        ]}
-                      >
+                          {flex: 1, alignSelf: 'stretch'},
+                        ]}>
                         <Text
                           style={[
                             suspendedSavingOneStyle.thText,
-                            { color: "white" },
-                          ]}
-                        >
+                            {color: 'white'},
+                          ]}>
                           {
-                            Language[this.state.selectedLanguage]["common"][
-                            "name"
+                            Language[this.state.selectedLanguage]['common'][
+                              'name'
                             ]
                           }
                         </Text>
                       </View>
                       <View
                         style={[
-                          { flex: 1, alignSelf: "stretch" },
+                          {flex: 1, alignSelf: 'stretch'},
                           suspendedSavingOneStyle.rowViewCommon,
-                        ]}
-                      >
+                        ]}>
                         <Text
                           style={[
                             suspendedSavingOneStyle.thText,
-                            { color: "white" },
-                          ]}
-                        >
+                            {color: 'white'},
+                          ]}>
                           {
                             Language[this.state.selectedLanguage][
-                            "suspended_circle_screen"
-                            ]["round_status_payment"]
+                              'suspended_circle_screen'
+                            ]['round_status_payment']
                           }
                         </Text>
                       </View>
                       <View
                         style={[
-                          { flex: 1, alignSelf: "stretch" },
+                          {flex: 1, alignSelf: 'stretch'},
                           suspendedSavingOneStyle.rowViewCommon,
-                        ]}
-                      >
+                        ]}>
                         <Text
                           style={[
                             suspendedSavingOneStyle.thText,
-                            { color: "white" },
-                          ]}
-                        >
+                            {color: 'white'},
+                          ]}>
                           {
-                            Language[this.state.selectedLanguage]["common"][
-                            "paid"
+                            Language[this.state.selectedLanguage]['common'][
+                              'paid'
                             ]
                           }
                         </Text>
                       </View>
                       <View
                         style={[
-                          { flex: 1, alignSelf: "stretch" },
+                          {flex: 1, alignSelf: 'stretch'},
                           suspendedSavingOneStyle.rowViewCommon,
-                        ]}
-                      >
+                        ]}>
                         <Text
                           style={[
                             suspendedSavingOneStyle.thText,
-                            { color: "white" },
-                          ]}
-                        >
+                            {color: 'white'},
+                          ]}>
                           {
-                            Language[this.state.selectedLanguage]["common"][
-                            "collected"
+                            Language[this.state.selectedLanguage]['common'][
+                              'collected'
                             ]
                           }
                         </Text>
@@ -368,31 +358,29 @@ export default class SuspendedSavingOneScreen extends Component {
                         style={[
                           {
                             flex: 1,
-                            alignSelf: "stretch",
+                            alignSelf: 'stretch',
                             paddingLeft: 5,
                             paddingRight: 5,
                           },
-                        ]}
-                      >
+                        ]}>
                         <Text
                           style={[
                             suspendedSavingOneStyle.thText,
-                            { color: "white" },
-                          ]}
-                        >
+                            {color: 'white'},
+                          ]}>
                           {
-                            Language[this.state.selectedLanguage]["common"][
-                            "balance"
+                            Language[this.state.selectedLanguage]['common'][
+                              'balance'
                             ]
                           }
-                          {"\n"}(
-                        {
+                          {'\n'}(
+                          {
                             Language[this.state.selectedLanguage][
-                            "suspended_circle_screen"
-                            ]["excluding_deposit"]
+                              'suspended_circle_screen'
+                            ]['excluding_deposit']
                           }
-                        )
-                      </Text>
+                          )
+                        </Text>
                       </View>
                     </View>
                     {/* table header end */}
@@ -400,47 +388,47 @@ export default class SuspendedSavingOneScreen extends Component {
                     {/* table row start */}
                     {item.circleUsers.map((user, index) => {
                       return (
-                        <View style={suspendedSavingOneStyle.tdView} key={index}>
+                        <View
+                          style={suspendedSavingOneStyle.tdView}
+                          key={index}>
                           <View
                             style={[
                               suspendedSavingOneStyle.rowViewCommon,
-                              { flex: 1, alignSelf: "stretch" },
-                            ]}
-                          >
+                              {flex: 1, alignSelf: 'stretch'},
+                            ]}>
                             <Text style={suspendedSavingOneStyle.thText}>
                               {user.username}
                             </Text>
                           </View>
                           <View
                             style={[
-                              { flex: 1, alignSelf: "stretch" },
+                              {flex: 1, alignSelf: 'stretch'},
                               suspendedSavingOneStyle.rowViewCommon,
-                            ]}
-                          >
+                            ]}>
                             {user.current_round_payment_status === 1 ? (
                               <Text style={suspendedSavingOneStyle.thText}>
                                 {
                                   Language[this.state.selectedLanguage][
-                                  "suspended_circle_screen"
-                                  ]["up_to_date"]
+                                    'suspended_circle_screen'
+                                  ]['up_to_date']
                                 }
                               </Text>
                             ) : (
-                                <Text style={suspendedSavingOneStyle.thTextNotPaid}>
-                                  {
-                                    Language[this.state.selectedLanguage][
-                                    "ongoing_circle_screen"
-                                    ]["not_paid"]
-                                  }
-                                </Text>
-                              )}
+                              <Text
+                                style={suspendedSavingOneStyle.thTextNotPaid}>
+                                {
+                                  Language[this.state.selectedLanguage][
+                                    'ongoing_circle_screen'
+                                  ]['not_paid']
+                                }
+                              </Text>
+                            )}
                           </View>
                           <View
                             style={[
-                              { flex: 1, alignSelf: "stretch" },
+                              {flex: 1, alignSelf: 'stretch'},
                               suspendedSavingOneStyle.rowViewCommon,
-                            ]}
-                          >
+                            ]}>
                             <Text style={suspendedSavingOneStyle.thText}>
                               {currency.curr_code}
                               {user.totalPaymentDetails}
@@ -448,10 +436,9 @@ export default class SuspendedSavingOneScreen extends Component {
                           </View>
                           <View
                             style={[
-                              { flex: 1, alignSelf: "stretch" },
+                              {flex: 1, alignSelf: 'stretch'},
                               suspendedSavingOneStyle.rowViewCommon,
-                            ]}
-                          >
+                            ]}>
                             <Text style={suspendedSavingOneStyle.thText}>
                               {currency.curr_code}
                               {user.withdrawDetails}
@@ -461,12 +448,11 @@ export default class SuspendedSavingOneScreen extends Component {
                             style={[
                               {
                                 flex: 1,
-                                alignSelf: "stretch",
+                                alignSelf: 'stretch',
                                 paddingLeft: 5,
                                 paddingRight: 5,
                               },
-                            ]}
-                          >
+                            ]}>
                             <Text style={suspendedSavingOneStyle.thText}>
                               {currency.curr_code} {user.balance}
                             </Text>
@@ -477,27 +463,27 @@ export default class SuspendedSavingOneScreen extends Component {
                   </View>
                 ) : null}
                 {item.receive_amount !== 0 ? (
-                  <View style={{ padding: 5, marginTop: 5 }}>
+                  <View style={{padding: 5, marginTop: 5}}>
                     <Text style={suspendedSavingOneStyle.rowTextValue}>
                       {
                         Language[this.state.selectedLanguage][
-                        "suspended_circle_screen"
-                        ]["hint1"]
-                      }{" "}
+                          'suspended_circle_screen'
+                        ]['hint1']
+                      }{' '}
                       {item.receive_amount}
                       {
                         Language[this.state.selectedLanguage][
-                        "suspended_circle_screen"
-                        ]["hint2"]
-                      }{" "}
+                          'suspended_circle_screen'
+                        ]['hint2']
+                      }{' '}
                       {item.round_set}
                       {
                         Language[this.state.selectedLanguage][
-                        "suspended_circle_screen"
-                        ]["hint3"]
+                          'suspended_circle_screen'
+                        ]['hint3']
                       }
-                    .
-                  </Text>
+                      .
+                    </Text>
                   </View>
                 ) : null}
               </View>
@@ -505,23 +491,22 @@ export default class SuspendedSavingOneScreen extends Component {
                 <View style={suspendedSavingOneStyle.sendButtonView}>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate("bankDetailsPage", {
+                      this.props.navigation.navigate('bankDetailsPage', {
                         result: item,
-                        navigate_from: "suspend_details",
+                        navigate_from: 'suspend_details',
                       });
                     }}
                     style={{
-                      width: "100%",
+                      width: '100%',
                       borderRadius: 50,
-                      backgroundColor: "#ffffff",
-                      alignItems: "center",
+                      backgroundColor: '#ffffff',
+                      alignItems: 'center',
                       padding: 14,
-                      borderColor: "#5AC6C6",
+                      borderColor: '#5AC6C6',
                       borderWidth: 1,
-                    }}
-                  >
+                    }}>
                     <Text style={suspendedSavingOneStyle.sendButtonText1}>
-                      {Language[this.state.selectedLanguage]["common"]["pay"]}{" "}
+                      {Language[this.state.selectedLanguage]['common']['pay']}{' '}
                       {item.refund_amount}
                       {currency.curr_code}
                     </Text>
@@ -534,46 +519,44 @@ export default class SuspendedSavingOneScreen extends Component {
                   <TouchableOpacity
                     style={suspendedSavingOneStyle.sendButton}
                     onPress={() => this.onCircleReportOrIncident(1)}
-                  >
+                    disabled={this.state.btnLoader}>
                     <Text style={suspendedSavingOneStyle.sendButtonText}>
                       {
                         Language[this.state.selectedLanguage][
-                        "suspended_circle_screen"
-                        ]["report_incident"]
+                          'suspended_circle_screen'
+                        ]['report_incident']
                       }
                     </Text>
                     {this.state.btnLoader ? (
-                      <View style={{ marginLeft: 10 }}>
-                        <ActivityIndicator size="small" color={"#FFFFFF"} />
+                      <View style={{marginLeft: 10}}>
+                        <ActivityIndicator size="small" color={'#FFFFFF'} />
                       </View>
                     ) : null}
                   </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity
-                      style={suspendedSavingOneStyle.sendButton}
-                      onPress={() => this.onCircleReportOrIncident(2)}
-                    >
-                      <Text style={suspendedSavingOneStyle.sendButtonText}>
-                        {
-                          Language[this.state.selectedLanguage][
-                          "suspended_circle_screen"
-                          ]["report_circle"]
-                        }
-                      </Text>
-                      {this.state.btnLoader ? (
-                        <View style={{ marginLeft: 10 }}>
-                          <ActivityIndicator size="small" color={"#FFFFFF"} />
-                        </View>
-                      ) : null}
-                    </TouchableOpacity>
-                  )}
+                  <TouchableOpacity
+                    style={suspendedSavingOneStyle.sendButton}
+                    onPress={() => this.onCircleReportOrIncident(2)}
+                    disabled={this.state.btnLoader}>
+                    <Text style={suspendedSavingOneStyle.sendButtonText}>
+                      {
+                        Language[this.state.selectedLanguage][
+                          'suspended_circle_screen'
+                        ]['report_circle']
+                      }
+                    </Text>
+                    {this.state.btnLoader ? (
+                      <View style={{marginLeft: 10}}>
+                        <ActivityIndicator size="small" color={'#FFFFFF'} />
+                      </View>
+                    ) : null}
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
-
         </ScrollView>
       </View>
-    )
-
+    );
   }
 }
