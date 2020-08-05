@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -52,9 +52,6 @@ export default class CreateCirclePreviewScreen extends Component {
   }
 
   componentDidMount() {
-    commonService.getSmsPermission(() => {
-      //Sleep
-    });
     this._bootstrapAsync();
   }
 
@@ -66,6 +63,8 @@ export default class CreateCirclePreviewScreen extends Component {
       'avatar_location',
       'mobile_number',
     ]).then((response) => {
+
+      //alert(response[1][1])
       this.setState({
         rememberToken: response[0][1],
         cicle_code: response[1][1],
@@ -75,6 +74,8 @@ export default class CreateCirclePreviewScreen extends Component {
         },
         mobile_number: response[4][1],
         selectedLanguage: 'fr',
+      }, () => {
+        // alert("circle" + this.state.cicle_code)
       });
     });
   };
@@ -91,6 +92,7 @@ export default class CreateCirclePreviewScreen extends Component {
     });
   };
 
+
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -100,6 +102,8 @@ export default class CreateCirclePreviewScreen extends Component {
   };
 
   _doSubmitFinal = () => {
+    console.log("cicle 1111=====", this.state.cicle_code)
+
     this.setState({
       errorMessage: '',
     });
@@ -120,10 +124,17 @@ export default class CreateCirclePreviewScreen extends Component {
       this.setState({
         errorMessage:
           Language[this.state.selectedLanguage]['circle_preview_screen'][
-            'circle_validation_hint1'
+          'circle_validation_hint1'
           ],
       });
     } else {
+
+
+
+      console.log("cicle 222=====", this.state.cicle_code)
+
+
+
       let obj = {
         circle_user_id: 1,
         circle_code: this.state.cicle_code,
@@ -143,12 +154,19 @@ export default class CreateCirclePreviewScreen extends Component {
 
       console.log('objjjj', obj);
 
-      this.props.navigation.navigate('bankDetailsPage', {
+      //return false;
+
+      this.props.navigation.push('bankDetailsPage', {
         result: obj,
         reason_id: '',
         other_reason: '',
         navigate_from: 'accept_screen',
       });
+
+
+
+
+
     }
   };
 
@@ -156,7 +174,7 @@ export default class CreateCirclePreviewScreen extends Component {
     const participants = this.props.navigation.getParam('participants', {});
     const joinParticipantList = participants.map(function (data, i) {
       return (
-        <Text key={i} style={[styles.frmLabelRight, {marginTop: 5}]}>
+        <Text key={i} style={[styles.frmLabelRight, { marginTop: 5 }]}>
           {i + 1}. {data.username} ({data.mobile_country_code}
           {data.mobile_number})
         </Text>
@@ -178,7 +196,15 @@ export default class CreateCirclePreviewScreen extends Component {
       '0',
     );
     return (
-      <View style={{backgroundColor: '#fff', flex: 1}}>
+
+
+
+
+
+
+
+
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
         <StatusBar
           backgroundColor={statusBarBackgroundColor}
           barStyle={barStyle}
@@ -192,7 +218,7 @@ export default class CreateCirclePreviewScreen extends Component {
           bellIcon={false}
         />
         <ScrollView
-          contentContainerStyle={{backgroundColor: '#fff', flexGrow: 1}}>
+          contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
           <View
             style={{
               flex: 1,
@@ -206,7 +232,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.headingText}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['create_circle_preview']
                 }
               </Text>
@@ -216,7 +242,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['target_achieve']
                 }
                 :
@@ -227,7 +253,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['round_settlement']
                 }
                 :
@@ -238,7 +264,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['periodicity_round']
                 }
                 :
@@ -246,7 +272,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabelRight}>
                 {
                   Language[this.state.selectedLanguage]['create_circle_screen'][
-                    p_round
+                  p_round
                   ]
                 }
               </Text>
@@ -255,12 +281,12 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['personal_reason']
                 }
                 :
               </Text>
-              <Text style={[styles.frmLabelRight, {marginTop: 5}]}>
+              <Text style={[styles.frmLabelRight, { marginTop: 5 }]}>
                 {reason_for_circle}
               </Text>
             </View>
@@ -268,7 +294,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['wishing_start']
                 }
                 :
@@ -287,7 +313,7 @@ export default class CreateCirclePreviewScreen extends Component {
                 <Text style={styles.frmLabel}>
                   {
                     Language[this.state.selectedLanguage][
-                      'circle_preview_screen'
+                    'circle_preview_screen'
                     ]['circle_participants']
                   }
                   :
@@ -299,21 +325,21 @@ export default class CreateCirclePreviewScreen extends Component {
                   <Text style={styles.changeOrderButtonText}>
                     {
                       Language[this.state.selectedLanguage][
-                        'circle_preview_screen'
+                      'circle_preview_screen'
                       ]['change_order']
                     }
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <View style={{padding: 10}}>{joinParticipantList}</View>
+              <View style={{ padding: 10 }}>{joinParticipantList}</View>
             </View>
 
             <View style={styles.frmInputWrapper}>
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['num_round']
                 }
                 :
@@ -325,7 +351,7 @@ export default class CreateCirclePreviewScreen extends Component {
               <Text style={styles.frmLabel}>
                 {
                   Language[this.state.selectedLanguage][
-                    'circle_preview_screen'
+                  'circle_preview_screen'
                   ]['end_date']
                 }
                 :
@@ -366,7 +392,7 @@ export default class CreateCirclePreviewScreen extends Component {
                 <Text style={styles.validateButtonText}>
                   {
                     Language[this.state.selectedLanguage][
-                      'circle_preview_screen'
+                    'circle_preview_screen'
                     ]['pay_deposit']
                   }
                 </Text>

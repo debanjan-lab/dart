@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import axios from 'axios';
 
@@ -23,6 +23,8 @@ class CreateCircle extends Component {
   }
 
   create(item, token, navigation) {
+
+
     let obj = {
       circle_user_id: item.circle_user_id,
       circle_code: item.circle_code,
@@ -45,51 +47,20 @@ class CreateCircle extends Component {
         },
       })
       .then(function (response) {
-        EventEmitter.emit('validatedCircleCreation', true);
-        CommonService.getSmsPermission((res) => {
-          if (res) {
-            item.unsafe_participants.forEach((element) => {
-              if (
-                element.mobile_number.toString() !==
-                item.login_user_mobile.toString()
-              ) {
-                CommonService.sendDirectSms(
-                  element.mobile_country_code.toString() +
-                    element.mobile_number.toString(),
-                  `${
-                    Language[that.state.selectedLanguage]['common']['hello']
-                  }` +
-                    ',\n' +
-                    `${
-                      Language[that.state.selectedLanguage][
-                        'create_circle_screen'
-                      ]['sms_text']
-                    }` +
-                    '(' +
-                    item.circle_code +
-                    ')',
-                );
 
-                // CommonService.sendDirectSms(
-                //   element.mobile_country_code.toString() + element.mobile_number.toString(),
-                //     `hello`+",\n"+`'sms_text`+"(" +item.circle_code +")"
-                // );
-              }
-            });
-          }
 
-          //console.log("res=============================="+JSON.stringify(response))
-          CommonService.showConfirmAlert(
-            Language[that.state.selectedLanguage]['status'][
-              response.data.message
-            ],
-            (response) => {
-              if (response) {
-                navigation.push('dashboardPage');
-              }
-            },
-          );
-        });
+        //console.log("res=============================="+JSON.stringify(response))
+        CommonService.showConfirmAlert(
+          Language[that.state.selectedLanguage]['status'][
+          response.data.message
+          ],
+          (response) => {
+            if (response) {
+              navigation.push('dashboardPage');
+            }
+          },
+        );
+
       })
       .catch(function (error) {
         console.log('err', error);

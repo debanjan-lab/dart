@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,7 +12,7 @@ import Stripe from 'react-native-stripe-api';
 import moment from 'moment';
 import CreateCircle from '../../components/createCircle';
 
-import {ToastMessage} from '../ToastMessage';
+import { ToastMessage } from '../ToastMessage';
 // const apiKey = "";
 // const client = new Stripe(apiKey);
 
@@ -59,7 +59,7 @@ export default class OnlinePaymentModal extends Component {
         } else {
           ToastMessage(
             Language[this.state.selectedLanguage]['online_payment_screen'][
-              'payment_key_error'
+            'payment_key_error'
             ],
           );
         }
@@ -70,29 +70,30 @@ export default class OnlinePaymentModal extends Component {
   };
 
   onlinePyament = async () => {
+
     const client = new Stripe(this.state.apiKey);
 
-    this.setState({loader: true});
+    this.setState({ loader: true });
     let onlinePaymentUrl = '';
     let paymentdata = {};
 
-    const {number, exp_month, exp_year, cvc} = this.state;
+    const { number, exp_month, exp_year, cvc } = this.state;
     if (number === '') {
       ToastMessage(
         Language[this.state.selectedLanguage]['online_payment_screen'][
-          'card_name'
+        'card_name'
         ],
       );
     } else if (exp_month === '') {
       ToastMessage(
         Language[this.state.selectedLanguage]['online_payment_screen'][
-          'expiry_month'
+        'expiry_month'
         ],
       );
     } else if (exp_year === '') {
       ToastMessage(
         Language[this.state.selectedLanguage]['online_payment_screen'][
-          'expiry_year'
+        'expiry_year'
         ],
       );
     } else if (cvc === '') {
@@ -109,12 +110,12 @@ export default class OnlinePaymentModal extends Component {
 
       if (token.error) {
         ToastMessage(token.error.message);
-        this.setState({loader: false});
+        this.setState({ loader: false });
       } else {
         if (
           this.props.buttonText ===
           Language[this.state.selectedLanguage]['bank_details_screen'][
-            'pay_deposit'
+          'pay_deposit'
           ]
         ) {
           onlinePaymentUrl = API_URL + 'circle-request-accept';
@@ -136,7 +137,7 @@ export default class OnlinePaymentModal extends Component {
         if (
           this.props.buttonText ===
           Language[this.state.selectedLanguage]['bank_details_screen'][
-            'pay_your_round'
+          'pay_your_round'
           ]
         ) {
           onlinePaymentUrl = API_URL + 'circle-payment';
@@ -156,7 +157,7 @@ export default class OnlinePaymentModal extends Component {
         if (
           this.props.buttonText ===
           Language[this.state.selectedLanguage]['bank_details_screen'][
-            'pay_my_round'
+          'pay_my_round'
           ]
         ) {
           onlinePaymentUrl = API_URL + 'block-circle-payment';
@@ -176,7 +177,7 @@ export default class OnlinePaymentModal extends Component {
         if (
           this.props.buttonText ===
           Language[this.state.selectedLanguage]['bank_details_screen'][
-            'suspend_pay'
+          'suspend_pay'
           ]
         ) {
           onlinePaymentUrl = API_URL + 'circle-refund-payment';
@@ -204,7 +205,7 @@ export default class OnlinePaymentModal extends Component {
           .then((res) => {
             console.log('onlinePyament()==' + JSON.stringify(res));
 
-            this.setState({loader: false});
+            //this.setState({loader: false});
             if (res.data.status === 100) {
               if (
                 paymentdata.circle_user_id !== undefined ||
@@ -221,24 +222,24 @@ export default class OnlinePaymentModal extends Component {
                 if (res.data.message)
                   ToastMessage(
                     Language[this.state.selectedLanguage]['status'][
-                      res.data.message
+                    res.data.message
                     ],
                   );
 
-                this.props.navigation.navigate('dashboardPage');
+                this.props.navigation.push('dashboardPage');
               }
             } else {
               if (res.data.message)
                 ToastMessage(
                   Language[this.state.selectedLanguage]['status'][
-                    res.data.message
+                  res.data.message
                   ],
                 );
             }
           })
           .catch((err) => {
             console.log('onlinePyament() err==' + err);
-            this.setState({loader: false});
+            //this.setState({loader: false});
           });
       }
     }
@@ -250,17 +251,17 @@ export default class OnlinePaymentModal extends Component {
         <Text>
           {
             Language[this.state.selectedLanguage]['bank_details_screen'][
-              'pay_payment'
+            'pay_payment'
             ]
           }
         </Text>
         <View style={styles.mainView}>
           <View style={styles.nestedView}>
-            <View style={{width: 100}}>
+            <View style={{ width: 100 }}>
               <Text style={styles.textStyle}>
                 {
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                    'card_number'
+                  'card_number'
                   ]
                 }
                 :
@@ -273,15 +274,15 @@ export default class OnlinePaymentModal extends Component {
               placeholder={'Card number'}
               keyboardType="numeric"
               autoFocus={true}
-              onChangeText={(evt) => this.setState({number: evt})}
+              onChangeText={(evt) => this.setState({ number: evt })}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{width: 100}}>
+            <View style={{ width: 100 }}>
               <Text style={styles.textStyle}>
                 {
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                    'exp_month'
+                  'exp_month'
                   ]
                 }
                 :
@@ -293,15 +294,15 @@ export default class OnlinePaymentModal extends Component {
               value={this.state.exp_month}
               placeholder={'Expiry month'}
               keyboardType="numeric"
-              onChangeText={(evt) => this.setState({exp_month: evt})}
+              onChangeText={(evt) => this.setState({ exp_month: evt })}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{width: 100}}>
+            <View style={{ width: 100 }}>
               <Text style={styles.textStyle}>
                 {
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                    'exp_year'
+                  'exp_year'
                   ]
                 }
                 :
@@ -313,16 +314,16 @@ export default class OnlinePaymentModal extends Component {
               value={this.state.exp_year}
               placeholder={'Expiry year'}
               keyboardType="numeric"
-              onChangeText={(evt) => this.setState({exp_year: evt})}
+              onChangeText={(evt) => this.setState({ exp_year: evt })}
             />
           </View>
 
           <View style={styles.nestedView}>
-            <View style={{width: 100}}>
+            <View style={{ width: 100 }}>
               <Text style={styles.textStyle}>
                 {
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                    'cvc'
+                  'cvc'
                   ]
                 }
                 :
@@ -334,15 +335,15 @@ export default class OnlinePaymentModal extends Component {
               value={this.state.cvc}
               keyboardType="numeric"
               placeholder={'Cvc number'}
-              onChangeText={(evt) => this.setState({cvc: evt})}
+              onChangeText={(evt) => this.setState({ cvc: evt })}
             />
           </View>
           <View style={styles.nestedView}>
-            <View style={{width: 100}}>
+            <View style={{ width: 100 }}>
               <Text style={styles.textStyle}>
                 {
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                    'pay_amount'
+                  'pay_amount'
                   ]
                 }
                 :
@@ -362,7 +363,7 @@ export default class OnlinePaymentModal extends Component {
           disabled={this.state.loader}>
           <Text style={styles.dipositButtnText}>{this.props.buttonText}</Text>
           {this.state.loader ? (
-            <View style={{marginLeft: 10}}>
+            <View style={{ marginLeft: 10 }}>
               <ActivityIndicator size="small" color={'#FFFFFF'} />
             </View>
           ) : null}
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  textStyle: {fontSize: 15, fontWeight: 'bold', color: '#494949'},
+  textStyle: { fontSize: 15, fontWeight: 'bold', color: '#494949' },
   inputStyle: {
     backgroundColor: '#ede4e4',
     width: '70%',
@@ -406,5 +407,5 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: 50,
   },
-  dipositButtnText: {color: '#ffffff', fontSize: 16},
+  dipositButtnText: { color: '#ffffff', fontSize: 16 },
 });

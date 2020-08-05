@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import FooterTabComponent from '../../components/footerTab/footerTabComponent';
 import {
   StyleSheet,
@@ -20,14 +20,14 @@ import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-community/async-storage';
 import httpService from '../../services/http/httpService';
 import CommonService from '../../services/common/commonService';
-import {ErrorTemplate} from '../../components/error/errorComponent';
+import { ErrorTemplate } from '../../components/error/errorComponent';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 import URL from '../../config/url';
 const ApiConfig = URL;
 import Language from '../../translations/index';
 
-import {ToastMessage} from '../../components/ToastMessage';
+import { ToastMessage } from '../../components/ToastMessage';
 class WaitingList extends Component {
   constructor(props) {
     super(props);
@@ -76,7 +76,7 @@ class WaitingList extends Component {
     httpService
       .postHttpCall(payload)
       .then((res) => {
-        console.log(res);
+        console.log("list", res);
 
         this.setState({
           list: res.result,
@@ -109,7 +109,7 @@ class WaitingList extends Component {
   }
 
   onPresswaitingTab = (item) => {
-    this.props.navigation.navigate('rejectJoinPage', {result: item});
+    this.props.navigation.navigate('rejectJoinPage', { result: item });
   };
 
   render() {
@@ -148,21 +148,21 @@ class WaitingList extends Component {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={<View style={{height: 10}} />}
-          ListFooterComponent={<View style={{height: 10}} />}
+          ListHeaderComponent={<View style={{ height: 10 }} />}
+          ListFooterComponent={<View style={{ height: 10 }} />}
           data={this.state.list}
           numColumns={1}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => this.onPresswaitingTab(item)}>
               <View style={[styles.listItemWrapper]}>
                 <View style={styles.listLeftWrapper}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['circle']
                       }{' '}
                       :{' '}
@@ -170,11 +170,11 @@ class WaitingList extends Component {
                     <Text style={styles.listRightText}>{item.circle_code}</Text>
                   </View>
 
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['circle_admin']
                       }{' '}
                       :{' '}
@@ -182,27 +182,27 @@ class WaitingList extends Component {
                     <Text style={styles.listRightText}>{item.admin}</Text>
                   </View>
 
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['participants']
                       }{' '}
                       :{' '}
                     </Text>
                     <Text
                       numberOfLines={1}
-                      style={[styles.listRightText, {paddingRight: 20}]}>
+                      style={[styles.listRightText, { paddingRight: 20 }]}>
                       {this.getNames(item.get_users)}
                     </Text>
                   </View>
 
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['amount']
                       }{' '}
                       :{' '}
@@ -212,11 +212,11 @@ class WaitingList extends Component {
                     </Text>
                   </View>
 
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['launch_date']
                       }{' '}
                       :{' '}
@@ -226,11 +226,11 @@ class WaitingList extends Component {
                     </Text>
                   </View>
 
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.listLeftText}>
                       {
                         Language[this.state.selectedLanguage][
-                          'dashboard_screen'
+                        'dashboard_screen'
                         ]['last_round_date']
                       }{' '}
                       :{' '}
