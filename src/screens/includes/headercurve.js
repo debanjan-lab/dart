@@ -33,7 +33,7 @@ export default class HeaderCurve extends Component {
   render() {
     //console.log('==================lo', this.props.avatar_location);
     return (
-      <View style={{height: 100}}>
+      <View style={{height: 120}}>
         <ImageBackground
           source={require('../../../assets/images/header.png')}
           style={{width: '100%', height: '100%'}}>
@@ -98,7 +98,7 @@ export default class HeaderCurve extends Component {
 
 const styles = StyleSheet.create({
   headerWrapper: {
-    height: 80,
+    height: 120,
     //top: '10%',
     paddingLeft: 20,
     paddingRight: 20,

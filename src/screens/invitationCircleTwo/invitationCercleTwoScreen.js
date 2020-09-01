@@ -446,8 +446,8 @@ export default class InvitationCercleTwoScreen extends Component {
                                       <Image
                                         source={require('../../../assets/images/clock.png')}
                                         style={{
-                                          width: 20,
-                                          height: 20,
+                                          width: 15,
+                                          height: 15,
                                         }}
                                       />
                                     ) : null}

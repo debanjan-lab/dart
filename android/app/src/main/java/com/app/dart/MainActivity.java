@@ -1,4 +1,4 @@
-package com.dart;
+package com.app.dart;
 
 import com.facebook.react.ReactActivity;
 

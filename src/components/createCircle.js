@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import axios from 'axios';
 
@@ -23,8 +23,6 @@ class CreateCircle extends Component {
   }
 
   create(item, token, navigation) {
-
-
     let obj = {
       circle_user_id: item.circle_user_id,
       circle_code: item.circle_code,
@@ -47,20 +45,17 @@ class CreateCircle extends Component {
         },
       })
       .then(function (response) {
-
-
         //console.log("res=============================="+JSON.stringify(response))
         CommonService.showConfirmAlert(
           Language[that.state.selectedLanguage]['status'][
-          response.data.message
+            response.data.message
           ],
           (response) => {
             if (response) {
-              navigation.push('dashboardPage');
+              navigation.navigate('AuthLoading');
             }
           },
         );
-
       })
       .catch(function (error) {
         console.log('err', error);

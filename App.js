@@ -4,7 +4,7 @@ import OneSignal from 'react-native-onesignal'; // Import package from node modu
 
 // 9748116201
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
 //AUTH
@@ -179,6 +179,9 @@ const AppStack = createStackNavigator(
     },
   },
   {
+    defaultNavigationOptions: {
+      ...TransitionPresets.SlideFromRightIOS,
+    },
     initialRouteName: 'dashboardPage',
     headerMode: 'none',
     navigationOptions: {
@@ -208,6 +211,9 @@ const AuthStack = createStackNavigator(
     },
   },
   {
+    defaultNavigationOptions: {
+      ...TransitionPresets.SlideFromRightIOS,
+    },
     initialRouteName: 'StartPage',
     headerMode: 'none',
     navigationOptions: {

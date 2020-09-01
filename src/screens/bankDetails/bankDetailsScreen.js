@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import { Picker } from '@react-native-community/picker';
+import {Picker} from '@react-native-community/picker';
 
 import bankDetailsStyle from './bankDetailsStyle';
 import moment from 'moment';
@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import HeaderCurve from '../includes/headercurve';
 import CommonService from '../../services/common/commonService';
 import httpService from '../../services/http/httpService';
-import { ErrorTemplate } from '../../components/error/errorComponent';
+import {ErrorTemplate} from '../../components/error/errorComponent';
 import OnlinePaymentModal from '../../components/onlinePayment/onlinePayment';
 import ModalSelector from 'react-native-modal-selector';
 let selectedId = 1;
@@ -65,7 +65,6 @@ export default class BankDetailsScreen extends Component {
       'user_id',
       'mobile_country_code',
     ]).then((response) => {
-
       //alert(response[1][1])
       this.setState(
         {
@@ -91,7 +90,7 @@ export default class BankDetailsScreen extends Component {
                 index: 0,
                 option:
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                  'offline'
+                    'offline'
                   ],
                 value: 'offline',
               },
@@ -99,14 +98,14 @@ export default class BankDetailsScreen extends Component {
                 index: 1,
                 option:
                   Language[this.state.selectedLanguage]['bank_details_screen'][
-                  'online'
+                    'online'
                   ],
                 value: 'online',
               },
             ],
             randamCircleNum:
               Language[this.state.selectedLanguage]['bank_details_screen'][
-              'payment_circle'
+                'payment_circle'
               ] +
               ' - ' +
               Math.floor(Math.random() * 1000000) +
@@ -127,7 +126,7 @@ export default class BankDetailsScreen extends Component {
       .then((res) => {
         if (res.status !== undefined) {
           if (res.status == 100) {
-            this.setState({ bankDetails: res.result });
+            this.setState({bankDetails: res.result});
           } else {
             this.setState({
               errorText: res.message
@@ -141,7 +140,7 @@ export default class BankDetailsScreen extends Component {
             subMessage: httpService.appMessege.working_progress,
           });
         }
-        this.setState({ apiExecute: true });
+        this.setState({apiExecute: true});
       })
       .catch((err) => {
         this.setState({
@@ -151,7 +150,7 @@ export default class BankDetailsScreen extends Component {
           apiExecute: true,
         });
         if (err.status == 4) {
-          this.setState({ subMessage: httpService.appMessege.internet_sub });
+          this.setState({subMessage: httpService.appMessege.internet_sub});
         }
       });
   }
@@ -160,7 +159,7 @@ export default class BankDetailsScreen extends Component {
     let selectedId =
       this.state.paymentTypes[itemIndex].value == 'offline' ? 1 : 2;
     let txt = this.state.paymentTypes[itemIndex].value.toString();
-    this.setState({ optionId: selectedId, optionTxt: txt, errPaymentMsg: '' });
+    this.setState({optionId: selectedId, optionTxt: txt, errPaymentMsg: ''});
   }
 
   doPaymentDeposit() {
@@ -217,7 +216,8 @@ export default class BankDetailsScreen extends Component {
                   }
                 },
               );
-              this.props.navigation.push('dashboardPage');
+
+              this.props.navigation.navigate('AuthLoading');
             }
           } else {
             this.setState({
@@ -276,7 +276,7 @@ export default class BankDetailsScreen extends Component {
                 : '',
               (response) => {
                 if (response) {
-                  this.props.navigation.push('dashboardPage');
+                  this.props.navigation.navigate('AuthLoading');
                 }
               },
             );
@@ -336,7 +336,7 @@ export default class BankDetailsScreen extends Component {
                 : '',
               (response) => {
                 if (response) {
-                  this.props.navigation.push('dashboardPage');
+                  this.props.navigation.navigate('AuthLoading');
                 }
               },
             );
@@ -395,7 +395,7 @@ export default class BankDetailsScreen extends Component {
                 : '',
               (response) => {
                 if (response) {
-                  this.props.navigation.push('dashboardPage');
+                  this.props.navigation.navigate('AuthLoading');
                 }
               },
             );
@@ -435,7 +435,7 @@ export default class BankDetailsScreen extends Component {
     });
 
     return (
-      <View style={{ backgroundColor: '#fff', flex: 1 }}>
+      <View style={{backgroundColor: '#fff', flex: 1}}>
         <HeaderCurve
           navigation={this.props.navigation}
           avatar_location={this.state.avatar_location}
@@ -445,339 +445,339 @@ export default class BankDetailsScreen extends Component {
           bellIcon={true}
         />
         <ScrollView
-          contentContainerStyle={{ backgroundColor: '#fff', flexGrow: 1 }}>
+          contentContainerStyle={{backgroundColor: '#fff', flexGrow: 1}}>
           {this.state.errorText != '' ? (
-            <View style={{ alignItems: 'center' }}>
+            <View style={{alignItems: 'center'}}>
               <ErrorTemplate
                 message={this.state.errorText}
                 subMessage={this.state.subMessage}
               />
             </View>
           ) : (
-              <View style={bankDetailsStyle.mainContent}>
-                {this.state.apiExecute ? (
-                  <View>
-                    <View style={bankDetailsStyle.headerText}>
-                      <Text style={bankDetailsStyle.title}>
-                        {
-                          Language[this.state.selectedLanguage][
+            <View style={bankDetailsStyle.mainContent}>
+              {this.state.apiExecute ? (
+                <View>
+                  <View style={bankDetailsStyle.headerText}>
+                    <Text style={bankDetailsStyle.title}>
+                      {
+                        Language[this.state.selectedLanguage][
                           'bank_details_screen'
-                          ]['bank_details']
-                        }
-                      </Text>
-                    </View>
-                    <View style={bankDetailsStyle.headerText}>
-                      <Text>
-                        {
-                          Language[this.state.selectedLanguage][
+                        ]['bank_details']
+                      }
+                    </Text>
+                  </View>
+                  <View style={bankDetailsStyle.headerText}>
+                    <Text>
+                      {
+                        Language[this.state.selectedLanguage][
                           'dashboard_screen'
-                          ]['circle']
-                        }{' '}
+                        ]['circle']
+                      }{' '}
                       ({item.circle_code})
                     </Text>
-                    </View>
-                    <View style={bankDetailsStyle.rowView}>
-                      <View style={[bankDetailsStyle.rowViewLeftItem]}>
-                        <Text style={{ fontSize: 14 }}>
-                          {
-                            Language[this.state.selectedLanguage][
+                  </View>
+                  <View style={bankDetailsStyle.rowView}>
+                    <View style={[bankDetailsStyle.rowViewLeftItem]}>
+                      <Text style={{fontSize: 14}}>
+                        {
+                          Language[this.state.selectedLanguage][
                             'bank_details_screen'
-                            ]['payment_mode']
-                          }
+                          ]['payment_mode']
+                        }
                         :
                       </Text>
-                      </View>
-                      <View style={[bankDetailsStyle.rowViewRightItem]}>
-                        <View>
-                          <View style={bankDetailsStyle.unSelectText}>
-                            {Platform.OS == 'ios' ? (
-                              <ModalSelector
-                                optionTextStyle={{
+                    </View>
+                    <View style={[bankDetailsStyle.rowViewRightItem]}>
+                      <View>
+                        <View style={bankDetailsStyle.unSelectText}>
+                          {Platform.OS == 'ios' ? (
+                            <ModalSelector
+                              optionTextStyle={{
+                                fontSize: 14,
+                                color: '#000000',
+                              }}
+                              data={this.state.paymentTypes}
+                              initValue={this.state.optionTxt}
+                              onChange={(option) =>
+                                this.selectOption(option.index)
+                              }
+                              keyExtractor={(option) => option.option}
+                              labelExtractor={(option) => option.option}
+                              cancelText={
+                                Language[this.state.selectedLanguage]['common'][
+                                  'cancel'
+                                ]
+                              }
+                              overlayStyle={{
+                                flex: 1,
+                                padding: '5%',
+                                justifyContent: 'center',
+                                backgroundColor: 'rgba(0,0,0,0.7)',
+                              }}>
+                              <TextInput
+                                style={{
                                   fontSize: 14,
                                   color: '#000000',
+                                  height: 50,
                                 }}
-                                data={this.state.paymentTypes}
-                                initValue={this.state.optionTxt}
-                                onChange={(option) =>
-                                  this.selectOption(option.index)
-                                }
-                                keyExtractor={(option) => option.option}
-                                labelExtractor={(option) => option.option}
-                                cancelText={
-                                  Language[this.state.selectedLanguage]['common'][
-                                  'cancel'
-                                  ]
-                                }
-                                overlayStyle={{
-                                  flex: 1,
-                                  padding: '5%',
-                                  justifyContent: 'center',
-                                  backgroundColor: 'rgba(0,0,0,0.7)',
-                                }}>
-                                <TextInput
-                                  style={{
-                                    fontSize: 14,
-                                    color: '#000000',
-                                    height: 50,
-                                  }}
-                                  editable={false}
-                                  value={
-                                    Language[this.state.selectedLanguage][
+                                editable={false}
+                                value={
+                                  Language[this.state.selectedLanguage][
                                     'bank_details_screen'
-                                    ][this.state.optionTxt]
-                                  }
-                                />
-                              </ModalSelector>
-                            ) : (
-                                <Picker
-                                  selectedValue={this.state.optionTxt}
-                                  style={{ height: 50, width: '100%', marginLeft: 5 }}
-                                  onValueChange={(itemValue, itemIndex) => {
-                                    this.selectOption(itemIndex);
-                                  }}>
-                                  {paymentType}
-                                </Picker>
-                              )}
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-
-                    <View style={bankDetailsStyle.otherResonView}>
-                      {this.state.optionId === 1 ? (
-                        <View>
-                          <Text>
-                            {' '}
-                            {
-                              Language[this.state.selectedLanguage]['common'][
-                              'details'
-                              ]
-                            }
-                          </Text>
-                          <View
-                            style={[
-                              bankDetailsStyle.rowView,
-                              { alignItems: 'center' },
-                            ]}>
-                            <View style={bankDetailsStyle.rowViewLeftItem}>
-                              <Text style={bankDetailsStyle.rowText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['account_number']
+                                  ][this.state.optionTxt]
                                 }
-                              :
-                            </Text>
-                            </View>
-                            <View style={bankDetailsStyle.rowViewRightItem}>
-                              <Text style={bankDetailsStyle.rowTextValue}>
-                                {this.state.bankDetails[0].value}
-                              </Text>
-                            </View>
-                          </View>
-                          <View
-                            style={[
-                              bankDetailsStyle.rowView,
-                              { alignItems: 'center' },
-                            ]}>
-                            <View style={[bankDetailsStyle.rowViewLeftItem]}>
-                              <Text style={bankDetailsStyle.rowText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['payment_reason']
-                                }
-                              :
-                            </Text>
-                            </View>
-                            <View style={bankDetailsStyle.rowViewRightItem}>
-                              <Text style={bankDetailsStyle.rowTextValue}>
-                                {this.state.randamCircleNum}
-                              </Text>
-                            </View>
-                          </View>
-                          <View
-                            style={[
-                              bankDetailsStyle.rowView,
-                              { alignItems: 'center' },
-                            ]}>
-                            <View style={bankDetailsStyle.rowViewLeftItem}>
-                              <Text style={bankDetailsStyle.rowText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['bank_address']
-                                }
-                              :
-                            </Text>
-                            </View>
-                            <View style={bankDetailsStyle.rowViewRightItem}>
-                              <Text style={bankDetailsStyle.rowTextValue}>
-                                {this.state.bankDetails[2].value}
-                              </Text>
-                            </View>
-                          </View>
-                          <View
-                            style={[
-                              bankDetailsStyle.rowView,
-                              { alignItems: 'center' },
-                            ]}>
-                            <View style={bankDetailsStyle.rowViewLeftItem}>
-                              <Text style={bankDetailsStyle.rowText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['ifsc_code']
-                                }
-                              :
-                            </Text>
-                            </View>
-                            <View style={bankDetailsStyle.rowViewRightItem}>
-                              <Text style={bankDetailsStyle.rowTextValue}>
-                                {this.state.bankDetails[3].value}
-                              </Text>
-                            </View>
-                          </View>
-
-                          {this.state.navigateFrom == 'accept_screen' ? (
-                            <TouchableOpacity
-                              onPress={() => this.doPaymentDeposit()}
-                              disabled={this.state.loadingBtn}
-                              style={[bankDetailsStyle.paymentButton]}>
-                              <Text style={bankDetailsStyle.paymentText}>
-                                {' '}
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_deposit']
-                                }
-                              </Text>
-                            </TouchableOpacity>
-                          ) : this.state.navigateFrom == 'on_going_details' ? (
-                            <TouchableOpacity
-                              onPress={() => this.doPaymentRound()}
-                              disabled={this.state.loadingBtn}
-                              style={[bankDetailsStyle.paymentButton]}>
-                              <Text style={bankDetailsStyle.paymentText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_your_round']
-                                }
-                              </Text>
-                            </TouchableOpacity>
-                          ) : this.state.navigateFrom == 'block_details' ? (
-                            <TouchableOpacity
-                              onPress={() => this.doPayMyRound()}
-                              disabled={this.state.loadingBtn}
-                              style={[bankDetailsStyle.paymentButton]}>
-                              <Text style={bankDetailsStyle.paymentText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_my_round']
-                                }
-                              </Text>
-                            </TouchableOpacity>
-                          ) : this.state.navigateFrom === 'suspend_details' ? (
-                            <TouchableOpacity
-                              onPress={() => this.doPayMySuspend()}
-                              disabled={this.state.loadingBtn}
-                              style={[bankDetailsStyle.paymentButton]}>
-                              <Text style={bankDetailsStyle.paymentText}>
-                                {
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['suspend_pay']
-                                }
-                              </Text>
-                            </TouchableOpacity>
-                          ) : null}
-                        </View>
-                      ) : (
-                          <View>
-                            {this.state.navigateFrom == 'accept_screen' ? (
-                              <OnlinePaymentModal
-                                buttonText={
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_deposit']
-                                }
-                                circle_code={this.state.details.circle_code}
-                                amount={this.state.details.round_set}
-                                mobileNo={this.state.details.login_user_mobile}
-                                token={this.state.rememberToken}
-                                navigation={this.props.navigation}
-                                current_round={this.state.details.current_round}
-                                item={item}
                               />
-                            ) : this.state.navigateFrom == 'on_going_details' ? (
-                              <OnlinePaymentModal
-                                buttonText={
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_your_round']
-                                }
-                                circle_code={this.state.details.circle_code}
-                                amount={this.state.details.round_set}
-                                mobileNo={this.state.details.login_user_mobile}
-                                token={this.state.rememberToken}
-                                navigation={this.props.navigation}
-                                current_round={this.state.details.current_round}
-                              />
-                            ) : this.state.navigateFrom == 'block_details' ? (
-                              <OnlinePaymentModal
-                                buttonText={
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['pay_my_round']
-                                }
-                                circle_code={this.state.details.circle_code}
-                                amount={this.state.details.round_set}
-                                mobileNo={this.state.details.login_user_mobile}
-                                token={this.state.rememberToken}
-                                navigation={this.props.navigation}
-                                current_round={this.state.details.current_round}
-                              />
-                            ) : this.state.navigateFrom === 'suspend_details' ? (
-                              <OnlinePaymentModal
-                                buttonText={
-                                  Language[this.state.selectedLanguage][
-                                  'bank_details_screen'
-                                  ]['suspend_pay']
-                                }
-                                circle_code={this.state.details.circle_code}
-                                amount={item.refund_amount}
-                                mobileNo={this.state.details.login_user_mobile}
-                                token={this.state.rememberToken}
-                                navigation={this.props.navigation}
-                              //current_round = {this.state.details.current_round}
-                              />
-                            ) : null}
-                          </View>
-                        )}
-
-                      <View style={bankDetailsStyle.paymentButtonView}>
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Text
-                            style={{
-                              color: 'red',
-                              //fontFamily: 'Roboto-Reguler',
-                              fontSize: 16,
-                            }}>
-                            {this.state.errPaymentMsg}
-                          </Text>
+                            </ModalSelector>
+                          ) : (
+                            <Picker
+                              selectedValue={this.state.optionTxt}
+                              style={{height: 50, width: '100%', marginLeft: 5}}
+                              onValueChange={(itemValue, itemIndex) => {
+                                this.selectOption(itemIndex);
+                              }}>
+                              {paymentType}
+                            </Picker>
+                          )}
                         </View>
                       </View>
                     </View>
                   </View>
-                ) : null}
-              </View>
-            )}
+
+                  <View style={bankDetailsStyle.otherResonView}>
+                    {this.state.optionId === 1 ? (
+                      <View>
+                        <Text>
+                          {' '}
+                          {
+                            Language[this.state.selectedLanguage]['common'][
+                              'details'
+                            ]
+                          }
+                        </Text>
+                        <View
+                          style={[
+                            bankDetailsStyle.rowView,
+                            {alignItems: 'center'},
+                          ]}>
+                          <View style={bankDetailsStyle.rowViewLeftItem}>
+                            <Text style={bankDetailsStyle.rowText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['account_number']
+                              }
+                              :
+                            </Text>
+                          </View>
+                          <View style={bankDetailsStyle.rowViewRightItem}>
+                            <Text style={bankDetailsStyle.rowTextValue}>
+                              {this.state.bankDetails[0].value}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={[
+                            bankDetailsStyle.rowView,
+                            {alignItems: 'center'},
+                          ]}>
+                          <View style={[bankDetailsStyle.rowViewLeftItem]}>
+                            <Text style={bankDetailsStyle.rowText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['payment_reason']
+                              }
+                              :
+                            </Text>
+                          </View>
+                          <View style={bankDetailsStyle.rowViewRightItem}>
+                            <Text style={bankDetailsStyle.rowTextValue}>
+                              {this.state.randamCircleNum}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={[
+                            bankDetailsStyle.rowView,
+                            {alignItems: 'center'},
+                          ]}>
+                          <View style={bankDetailsStyle.rowViewLeftItem}>
+                            <Text style={bankDetailsStyle.rowText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['bank_address']
+                              }
+                              :
+                            </Text>
+                          </View>
+                          <View style={bankDetailsStyle.rowViewRightItem}>
+                            <Text style={bankDetailsStyle.rowTextValue}>
+                              {this.state.bankDetails[2].value}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={[
+                            bankDetailsStyle.rowView,
+                            {alignItems: 'center'},
+                          ]}>
+                          <View style={bankDetailsStyle.rowViewLeftItem}>
+                            <Text style={bankDetailsStyle.rowText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['ifsc_code']
+                              }
+                              :
+                            </Text>
+                          </View>
+                          <View style={bankDetailsStyle.rowViewRightItem}>
+                            <Text style={bankDetailsStyle.rowTextValue}>
+                              {this.state.bankDetails[3].value}
+                            </Text>
+                          </View>
+                        </View>
+
+                        {this.state.navigateFrom == 'accept_screen' ? (
+                          <TouchableOpacity
+                            onPress={() => this.doPaymentDeposit()}
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
+                            <Text style={bankDetailsStyle.paymentText}>
+                              {' '}
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['pay_deposit']
+                              }
+                            </Text>
+                          </TouchableOpacity>
+                        ) : this.state.navigateFrom == 'on_going_details' ? (
+                          <TouchableOpacity
+                            onPress={() => this.doPaymentRound()}
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
+                            <Text style={bankDetailsStyle.paymentText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['pay_your_round']
+                              }
+                            </Text>
+                          </TouchableOpacity>
+                        ) : this.state.navigateFrom == 'block_details' ? (
+                          <TouchableOpacity
+                            onPress={() => this.doPayMyRound()}
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
+                            <Text style={bankDetailsStyle.paymentText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['pay_my_round']
+                              }
+                            </Text>
+                          </TouchableOpacity>
+                        ) : this.state.navigateFrom === 'suspend_details' ? (
+                          <TouchableOpacity
+                            onPress={() => this.doPayMySuspend()}
+                            disabled={this.state.loadingBtn}
+                            style={[bankDetailsStyle.paymentButton]}>
+                            <Text style={bankDetailsStyle.paymentText}>
+                              {
+                                Language[this.state.selectedLanguage][
+                                  'bank_details_screen'
+                                ]['suspend_pay']
+                              }
+                            </Text>
+                          </TouchableOpacity>
+                        ) : null}
+                      </View>
+                    ) : (
+                      <View>
+                        {this.state.navigateFrom == 'accept_screen' ? (
+                          <OnlinePaymentModal
+                            buttonText={
+                              Language[this.state.selectedLanguage][
+                                'bank_details_screen'
+                              ]['pay_deposit']
+                            }
+                            circle_code={this.state.details.circle_code}
+                            amount={this.state.details.round_set}
+                            mobileNo={this.state.details.login_user_mobile}
+                            token={this.state.rememberToken}
+                            navigation={this.props.navigation}
+                            current_round={this.state.details.current_round}
+                            item={item}
+                          />
+                        ) : this.state.navigateFrom == 'on_going_details' ? (
+                          <OnlinePaymentModal
+                            buttonText={
+                              Language[this.state.selectedLanguage][
+                                'bank_details_screen'
+                              ]['pay_your_round']
+                            }
+                            circle_code={this.state.details.circle_code}
+                            amount={this.state.details.round_set}
+                            mobileNo={this.state.details.login_user_mobile}
+                            token={this.state.rememberToken}
+                            navigation={this.props.navigation}
+                            current_round={this.state.details.current_round}
+                          />
+                        ) : this.state.navigateFrom == 'block_details' ? (
+                          <OnlinePaymentModal
+                            buttonText={
+                              Language[this.state.selectedLanguage][
+                                'bank_details_screen'
+                              ]['pay_my_round']
+                            }
+                            circle_code={this.state.details.circle_code}
+                            amount={this.state.details.round_set}
+                            mobileNo={this.state.details.login_user_mobile}
+                            token={this.state.rememberToken}
+                            navigation={this.props.navigation}
+                            current_round={this.state.details.current_round}
+                          />
+                        ) : this.state.navigateFrom === 'suspend_details' ? (
+                          <OnlinePaymentModal
+                            buttonText={
+                              Language[this.state.selectedLanguage][
+                                'bank_details_screen'
+                              ]['suspend_pay']
+                            }
+                            circle_code={this.state.details.circle_code}
+                            amount={item.refund_amount}
+                            mobileNo={this.state.details.login_user_mobile}
+                            token={this.state.rememberToken}
+                            navigation={this.props.navigation}
+                            //current_round = {this.state.details.current_round}
+                          />
+                        ) : null}
+                      </View>
+                    )}
+
+                    <View style={bankDetailsStyle.paymentButtonView}>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{
+                            color: 'red',
+                            //fontFamily: 'Roboto-Reguler',
+                            fontSize: 16,
+                          }}>
+                          {this.state.errPaymentMsg}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ) : null}
+            </View>
+          )}
         </ScrollView>
       </View>
     );

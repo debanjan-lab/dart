@@ -409,267 +409,244 @@ export default class EditProfileScreen extends Component {
           bellIcon={true}
         />
         <KeyboardAwareScrollView
-          contentContainerStyle={{flexGrow: 1}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingLeft: 20,
+            paddingRight: 20,
+            paddingBottom: 20,
+          }}
           keyboardShouldPersistTaps="handled">
+          <View style={styles.avatarWrapper}>
+            <TouchableOpacity
+              style={styles.avatarImageWrapper}
+              onPress={() => this._openImagePicker()}>
+              <Image
+                source={{
+                  uri: this.state.uri ? this.state.uri : this.state.avatar,
+                }}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                }}
+              />
+
+              {this.state.loaderAvatar ? (
+                <View style={styles.loadingCenter}>
+                  <ActivityIndicator size="large" color={'#2ba685'} />
+                </View>
+              ) : null}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                top: hp('10%'),
+                left: wp('50%'),
+                position: 'absolute',
+              }}
+              onPress={() => this._openImagePicker()}>
+              <Image
+                style={{
+                  width: 35,
+                  height: 35,
+                }}
+                source={require('../../../assets/images/edit.png')}
+              />
+            </TouchableOpacity>
+          </View>
+
           <View
-            style={{
-              flex: 1,
-              position: 'relative',
-            }}>
+            style={[
+              styles.frmInputWrapper,
+              {flexDirection: 'row', justifyContent: null},
+            ]}>
+            <Text style={[styles.frmLabel, {width: width / 2.5}]}>
+              {Language[this.state.selectedLanguage]['login_screen']['email']}
+            </Text>
+            <Text
+              style={[styles.frmLabel, {color: '#000000', width: width / 2}]}>
+              {this.state.email}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.frmInputWrapper,
+              {flexDirection: 'row', justifyContent: null},
+            ]}>
+            <Text style={[styles.frmLabel, {width: width / 2.5}]}>
+              {
+                Language[this.state.selectedLanguage]['register_screen1'][
+                  'phone'
+                ]
+              }
+            </Text>
+            <Text style={[styles.frmLabel, {color: '#000000'}]}>
+              {this.state.mobile_country_code}
+              {this.state.phone}
+            </Text>
+          </View>
+
+          <View style={styles.frmInputWrapper}>
+            <Text style={styles.frmLabel}>
+              {
+                Language[this.state.selectedLanguage]['register_screen2'][
+                  'first_name'
+                ]
+              }
+            </Text>
+            <TextInput
+              style={errorFirstName}
+              value={this.state.first_name}
+              onChangeText={(first_name) => this.setState({first_name})}
+            />
+          </View>
+
+          <View style={styles.frmInputWrapper}>
+            <Text style={styles.frmLabel}>
+              {
+                Language[this.state.selectedLanguage]['register_screen2'][
+                  'last_name'
+                ]
+              }
+            </Text>
+            <TextInput
+              style={errorLastName}
+              value={this.state.last_name}
+              onChangeText={(last_name) => this.setState({last_name})}
+            />
+          </View>
+
+          <View style={styles.frmInputWrapper}>
+            <Text style={styles.frmLabel}>
+              {Language[this.state.selectedLanguage]['profile_screen']['iban']}
+            </Text>
+            <TextInput
+              style={errIban}
+              value={this.state.iban}
+              onChangeText={(iban) => this.setState({iban})}
+            />
+          </View>
+
+          <View style={styles.frmInputWrapper}>
             <View
               style={{
-                flex: 1,
-                marginBottom: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}>
-              <View
-                style={{
-                  flex: 1,
-                  marginLeft: 20,
-                  marginRight: 20,
-                }}>
-                <View style={styles.avatarWrapper}>
-                  <TouchableOpacity
-                    style={styles.avatarImageWrapper}
-                    onPress={() => this._openImagePicker()}>
-                    <Image
-                      source={{
-                        uri: this.state.uri
-                          ? this.state.uri
-                          : this.state.avatar,
-                      }}
-                      style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: 50,
-                      }}
-                    />
+              <Text style={styles.frmLabel}>
+                {
+                  Language[this.state.selectedLanguage]['register_screen2'][
+                    'date_of_birth'
+                  ]
+                }
+              </Text>
 
-                    {this.state.loaderAvatar ? (
-                      <View style={styles.loadingCenter}>
-                        <ActivityIndicator size="large" color={'#2ba685'} />
-                      </View>
-                    ) : null}
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{
-                      top: hp('10%'),
-                      left: wp('50%'),
-                      position: 'absolute',
-                    }}
-                    onPress={() => this._openImagePicker()}>
-                    <Image
-                      style={{
-                        width: 35,
-                        height: 35,
-                      }}
-                      source={require('../../../assets/images/edit.png')}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View
-                  style={[
-                    styles.frmInputWrapper,
-                    {flexDirection: 'row', justifyContent: null},
-                  ]}>
-                  <Text style={[styles.frmLabel, {width: width / 2.5}]}>
-                    {
-                      Language[this.state.selectedLanguage]['login_screen'][
-                        'email'
-                      ]
-                    }
-                  </Text>
-                  <Text style={[styles.frmLabel, {color: '#000000'}]}>
-                    {this.state.email}
-                  </Text>
-                </View>
-
-                <View
-                  style={[
-                    styles.frmInputWrapper,
-                    {flexDirection: 'row', justifyContent: null},
-                  ]}>
-                  <Text style={[styles.frmLabel, {width: width / 2.5}]}>
-                    {
-                      Language[this.state.selectedLanguage]['register_screen1'][
-                        'phone'
-                      ]
-                    }
-                  </Text>
-                  <Text style={[styles.frmLabel, {color: '#000000'}]}>
-                    {this.state.mobile_country_code}
-                    {this.state.phone}
-                  </Text>
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]['register_screen2'][
-                        'first_name'
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errorFirstName}
-                    value={this.state.first_name}
-                    onChangeText={(first_name) => this.setState({first_name})}
-                  />
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]['register_screen2'][
-                        'last_name'
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errorLastName}
-                    value={this.state.last_name}
-                    onChangeText={(last_name) => this.setState({last_name})}
-                  />
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]['profile_screen'][
-                        'iban'
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errIban}
-                    value={this.state.iban}
-                    onChangeText={(iban) => this.setState({iban})}
-                  />
-                </View>
-
-                <View style={styles.frmInputWrapper}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={styles.frmLabel}>
-                      {
-                        Language[this.state.selectedLanguage][
-                          'register_screen2'
-                        ]['date_of_birth']
-                      }
-                    </Text>
-
-                    <TouchableOpacity onPress={() => this.showDateTimePicker()}>
-                      <Image
-                        source={require('../../../assets/images/calendar.png')}
-                        style={{
-                          width: 25,
-                          height: 25,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <TextInput
-                    style={errorDob}
-                    editable={false}
-                    value={this.state.dob}
-                  />
-
-                  <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onConfirm={this.handleDatePicked}
-                    onCancel={this.hideDateTimePicker}
-                    datePickerModeAndroid={'spinner'}
-                    date={this.state.selectedDate}
-                    maximumDate={new Date()}
-                  />
-                </View>
-                <View style={[styles.frmInputWrapper, {position: 'relative'}]}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]['login_screen'][
-                        'password'
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={[errorPassword, {paddingRight: 40}]}
-                    value={this.state.password}
-                    secureTextEntry={this.state.isSecured}
-                    onChangeText={(password) => this.setState({password})}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      position: 'absolute',
-                      left: width - 70,
-                    }}
-                    onPress={() => this._doChangeView()}>
-                    <Image
-                      source={eyeIcon}
-                      style={{
-                        width: 25,
-                        height: 25,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.frmInputWrapper}>
-                  <Text style={styles.frmLabel}>
-                    {
-                      Language[this.state.selectedLanguage]['profile_screen'][
-                        'confirm_password'
-                      ]
-                    }
-                  </Text>
-                  <TextInput
-                    style={errorPassword}
-                    value={this.state.confirmPassword}
-                    secureTextEntry={true}
-                    onChangeText={(confirmPassword) =>
-                      this.setState({confirmPassword})
-                    }
-                  />
-                </View>
-                <View
+              <TouchableOpacity onPress={() => this.showDateTimePicker()}>
+                <Image
+                  source={require('../../../assets/images/calendar.png')}
                   style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 20,
-                  }}>
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontSize: 16,
-                    }}>
-                    {this.state.errorMessage}
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => this._doRegister()}
-                  style={styles.sendButtonBlock}
-                  disabled={this.state.loader}>
-                  <Text style={styles.sendButtonText}>
-                    {
-                      Language[this.state.selectedLanguage]['profile_screen'][
-                        'update_now'
-                      ]
-                    }
-                  </Text>
-
-                  {this.state.loader ? (
-                    <View style={styles.loading}>
-                      <ActivityIndicator size="small" color={'#FFFFFF'} />
-                    </View>
-                  ) : null}
-                </TouchableOpacity>
-              </View>
+                    width: 25,
+                    height: 25,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
+
+            <TextInput
+              style={errorDob}
+              editable={false}
+              value={this.state.dob}
+            />
+
+            <DateTimePicker
+              isVisible={this.state.isDateTimePickerVisible}
+              onConfirm={this.handleDatePicked}
+              onCancel={this.hideDateTimePicker}
+              datePickerModeAndroid={'spinner'}
+              date={this.state.selectedDate}
+              maximumDate={new Date()}
+            />
           </View>
+          <View style={[styles.frmInputWrapper, {position: 'relative'}]}>
+            <Text style={styles.frmLabel}>
+              {
+                Language[this.state.selectedLanguage]['login_screen'][
+                  'password'
+                ]
+              }
+            </Text>
+            <TextInput
+              style={[errorPassword, {paddingRight: 40}]}
+              value={this.state.password}
+              secureTextEntry={this.state.isSecured}
+              onChangeText={(password) => this.setState({password})}
+            />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                left: width - 70,
+              }}
+              onPress={() => this._doChangeView()}>
+              <Image
+                source={eyeIcon}
+                style={{
+                  width: 25,
+                  height: 25,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.frmInputWrapper}>
+            <Text style={styles.frmLabel}>
+              {
+                Language[this.state.selectedLanguage]['profile_screen'][
+                  'confirm_password'
+                ]
+              }
+            </Text>
+            <TextInput
+              style={errorPassword}
+              value={this.state.confirmPassword}
+              secureTextEntry={true}
+              onChangeText={(confirmPassword) =>
+                this.setState({confirmPassword})
+              }
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 20,
+            }}>
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 16,
+              }}>
+              {this.state.errorMessage}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => this._doRegister()}
+            style={styles.sendButtonBlock}
+            disabled={this.state.loader}>
+            <Text style={styles.sendButtonText}>
+              {
+                Language[this.state.selectedLanguage]['profile_screen'][
+                  'update_now'
+                ]
+              }
+            </Text>
+
+            {this.state.loader ? (
+              <View style={styles.loading}>
+                <ActivityIndicator size="small" color={'#FFFFFF'} />
+              </View>
+            ) : null}
+          </TouchableOpacity>
         </KeyboardAwareScrollView>
       </View>
     );

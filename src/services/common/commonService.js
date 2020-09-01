@@ -1,35 +1,30 @@
-import colorCode from "../../config/commonColor";
-import {
-  Alert,
-  Linking,
-  NativeModules,
-  PermissionsAndroid,
-} from "react-native";
-import { ToastMessage } from "../../components/ToastMessage";
-import global from "../../services/global/globalService";
+import colorCode from '../../config/commonColor';
+import {Alert, Linking, NativeModules, PermissionsAndroid} from 'react-native';
+import {ToastMessage} from '../../components/ToastMessage';
+import global from '../../services/global/globalService';
 
 let DirectSms = NativeModules.DirectSms;
 class CommonService {
-  defaultImagePath = "../../../assets/images/edit.png";
+  defaultImagePath = '../../../assets/images/edit.png';
   loaderObj = {
     color: colorCode.lightBlue,
     size: 50,
-    overlayColor: "transparent",
+    overlayColor: 'transparent',
     closeOnTouch: false,
-    loadingType: "Spinner",
+    loadingType: 'Spinner',
   };
 
   formatDate(date) {
     let newdate = date.split(/-|\./);
-    return newdate[2] + "/" + newdate[1] + "/" + newdate[0];
+    return newdate[2] + '/' + newdate[1] + '/' + newdate[0];
   }
 
   allInOneFormatDate(date, delimiter, separator, order) {
     let newdate = date.split(delimiter);
-    if (order == "default") {
+    if (order == 'default') {
       return newdate[0] + separator + newdate[1] + separator + newdate[2];
     }
-    if (order == "reverse") {
+    if (order == 'reverse') {
       return newdate[2] + separator + newdate[1] + separator + newdate[0];
     }
   }
@@ -40,12 +35,12 @@ class CommonService {
     let month = newdate.getMonth() + 1;
     let year = newdate.getFullYear();
     if (day < 10) {
-      day = "0" + day;
+      day = '0' + day;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = '0' + month;
     }
-    return day + "/" + month + "/" + year;
+    return day + '/' + month + '/' + year;
   }
 
   getDateMonthFirst() {
@@ -54,17 +49,17 @@ class CommonService {
     let month = newdate.getMonth() + 1;
     let year = newdate.getFullYear();
     if (day < 10) {
-      day = "0" + day;
+      day = '0' + day;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = '0' + month;
     }
-    return month + "/" + day + "/" + year;
+    return month + '/' + day + '/' + year;
   }
 
   formatDateMontFirst(date) {
-    let newdate = date.split("/");
-    return newdate[1] + "/" + newdate[0] + "/" + newdate[2];
+    let newdate = date.split('/');
+    return newdate[1] + '/' + newdate[0] + '/' + newdate[2];
   }
 
   getPercentage(completedRound, estimateRound) {
@@ -74,71 +69,77 @@ class CommonService {
 
   showConfirmAlert = (msg, cb) => {
     Alert.alert(
-      "",
+      '',
       msg,
       [
         {
-          text: "OK",
+          text: 'OK',
           onPress: () => {
             cb(true);
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
   __showConfirmAlert = (obj, callback) => {
     let msg =
       obj.message == undefined
-        ? "Are you sure you want to continue?"
+        ? 'Are you sure you want to continue?'
         : obj.message;
-    let title = obj.title == undefined ? "" : obj.title;
-    let cancelTxt = obj.cancelTxt == undefined ? "Cancel" : obj.cancelTxt;
-    let submitTxt = obj.submitTxt == undefined ? "OK" : obj.submitTxt;
+    let title = obj.title == undefined ? '' : obj.title;
+    let cancelTxt = obj.cancelTxt == undefined ? 'Cancel' : obj.cancelTxt;
+    let submitTxt = obj.submitTxt == undefined ? 'OK' : obj.submitTxt;
     Alert.alert(
       title,
       msg,
       [
-        { text: cancelTxt, onPress: () => callback(false), style: "cancel" },
-        { text: submitTxt, onPress: () => callback(true) },
+        {text: cancelTxt, onPress: () => callback(false), style: 'cancel'},
+        {text: submitTxt, onPress: () => callback(true)},
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
   showSimpleAlert = (msg) => {
-    Alert.alert("", msg);
+    Alert.alert('', msg);
   };
 
   openWhatsApp = (countryCode, whatsapp_no) => {
+    //whatsapp_no = '643387373';
+    // countryCode = '0';
+    if (countryCode == '0') {
+      countryCode = '+33';
+    }
     let substrCountryCode = countryCode.substr(1);
     let phoneNo = substrCountryCode + whatsapp_no;
     const url = `whatsapp://send?phone=${phoneNo}`;
+    //alert(phoneNo);
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
           Linking.openURL(url);
         } else {
           Alert.alert(
-            "WhatsApp",
-            "WhatsApp is not installed. Opening on web page",
-            [{ text: "Ok", onPress: () => this.openWebWhatsApp() }]
+            'WhatsApp',
+            'WhatsApp is not installed. Opening on web page',
+            [{text: 'Ok', onPress: () => this.openWebWhatsApp()}],
           );
         }
       })
       .catch((err) => alert(err));
-    // Linking.openURL(`whatsapp://send?&phone=${phoneNo}`);
+    Linking.openURL(`whatsapp://send?&phone=${phoneNo}`);
   };
 
   openWebWhatsApp = () => {
-    Linking.openURL("http://api.whatsapp.com/");
+    Linking.openURL('http://api.whatsapp.com/');
   };
 
   async getSmsPermission(cb) {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.SEND_SMS
+        PermissionsAndroid.PERMISSIONS.SEND_SMS,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         cb(true);
@@ -153,7 +154,7 @@ class CommonService {
   async sendDirectSms(mobile_number, message) {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.SEND_SMS
+        PermissionsAndroid.PERMISSIONS.SEND_SMS,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         DirectSms.sendDirectSms(mobile_number, message);

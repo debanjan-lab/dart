@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import FooterTabComponent from '../../components/footerTab/footerTabComponent';
 import {
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   FlatList,
   ScrollView,
   RefreshControl,
+  BackHandler,
 } from 'react-native';
 import EventEmitter from 'react-native-eventemitter';
 import {
@@ -19,11 +20,12 @@ import {
 } from 'react-native-responsive-screen';
 import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-community/async-storage';
+import global from '../../services/global/globalService';
 
 import HeaderCurve from '../includes/headercurve';
 import httpService from '../../services/http/httpService';
 import CommonService from '../../services/common/commonService';
-import { ErrorTemplate } from '../../components/error/errorComponent';
+import {ErrorTemplate} from '../../components/error/errorComponent';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 const statusBarBackgroundColor = '#1CCBE6';
@@ -31,7 +33,7 @@ const barStyle = 'light-content';
 let tabIndex = 0;
 import URL from '../../config/url';
 const ApiConfig = URL;
-import { withNavigationFocus } from 'react-navigation';
+import {withNavigationFocus} from 'react-navigation';
 import Language from '../../translations/index';
 
 import OngoingList from './onGoingList';
@@ -45,19 +47,38 @@ class DashboardScreen extends Component {
       selectedLanguage: 'en',
       tabIndex: 0,
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
+
+  UNSAFE_componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  handleBackButtonClick() {
+    //alert('1111111');
+    this.props.navigation.goBack(null);
+    return true;
   }
 
   componentDidMount() {
-    this.setState(
-      {
-        selectedLanguage: 'fr',
-        tabIndex: 0,
-      },
-      () => {
-        this.onGetUserInfo();
-        //alert(this.state.tabIndex);
-      },
-    );
+    this.onGetUserInfo();
+    //alert(this.state.tabIndex);
+
+    //alert(global.active_dashboard_tab);
+    this.setState({
+      tabIndex: global.active_dashboard_tab,
+      selectedLanguage: 'fr',
+    });
   }
 
   onGetUserInfo = () => {
@@ -79,9 +100,15 @@ class DashboardScreen extends Component {
   };
 
   _doActive = (tabNo) => {
-    this.setState({
-      tabIndex: tabNo,
-    });
+    this.setState(
+      {
+        tabIndex: tabNo,
+      },
+      () => {
+        global.active_dashboard_tab = tabNo;
+        //AsyncStorage.multiSet([['active_dashboard_tab', tabNo.toString()]]);
+      },
+    );
   };
 
   _btnTabWaiting = () => {
@@ -168,14 +195,13 @@ class DashboardScreen extends Component {
           ]}>
           {
             Language[this.state.selectedLanguage]['dashboard_screen'][
-            'suspended'
+              'suspended'
             ]
           }
         </Text>
       </TouchableOpacity>
     );
   };
-
 
   _doLaunchCircle = () => {
     CommonService.resetDataForLaunchNewCircle();
@@ -206,7 +232,7 @@ class DashboardScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <View style={[styles.container]}>
           <HeaderCurve
             first_name={this.state.first_name}
@@ -221,7 +247,7 @@ class DashboardScreen extends Component {
             barStyle={barStyle}
           />
 
-          <View style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 20 }}>
+          <View style={{paddingLeft: 20, paddingRight: 20, paddingTop: 20}}>
             <TouchableOpacity
               onPress={this._doLaunchCircle}
               style={styles.sendButtonBlock}
@@ -229,12 +255,12 @@ class DashboardScreen extends Component {
               <Text style={styles.sendButtonText}>
                 {
                   Language[this.state.selectedLanguage]['dashboard_screen'][
-                  'launch_new_circle'
+                    'launch_new_circle'
                   ]
                 }
               </Text>
               {this.state.loader ? (
-                <View style={{ marginLeft: 10 }}>
+                <View style={{marginLeft: 10}}>
                   <ActivityIndicator size="small" color={'#FFFFFF'} />
                 </View>
               ) : null}
@@ -253,7 +279,7 @@ class DashboardScreen extends Component {
             </View>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             {this.state.tabIndex == 0 && (
               <WaitingList navigation={this.props.navigation} />
             )}

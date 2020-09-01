@@ -6,6 +6,6 @@ export default {
   phone_data: Object.create(null),
   contacts_data: [],
   contacts_data_details: [],
-  update_contact_data: false
-
+  update_contact_data: false,
+  active_dashboard_tab: 0,
 };

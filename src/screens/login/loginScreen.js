@@ -172,7 +172,7 @@ export default class LoginScreen extends Component {
                         result: notificationDetails,
                       });
                     } else {
-                      thatNavigation.navigate('App');
+                      thatNavigation.navigate('dashboardPage');
                     }
                   });
                 } else {
